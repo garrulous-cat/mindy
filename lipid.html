@@ -1,0 +1,1501 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>高血脂風險評估工具 | 健保藥品給付查詢</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+TC:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg-base: #0d1117;
+    --bg-surface: #161b22;
+    --bg-elevated: #1c2128;
+    --bg-hover: #222832;
+    --border: #30363d;
+    --border-subtle: #21262d;
+    --text-primary: #e6edf3;
+    --text-secondary: #b0bac6;
+    --text-muted: #6e7681;
+    --accent-blue: #58a6ff;
+    --accent-cyan: #39d3f2;
+    --accent-green: #3fb950;
+    --accent-yellow: #d29922;
+    --accent-orange: #f0883e;
+    --accent-red: #f85149;
+    --accent-purple: #bc8cff;
+    --risk-low: #3fb950;
+    --risk-border-low: #238636;
+    --risk-moderate: #d29922;
+    --risk-border-moderate: #9e6a03;
+    --risk-high: #f0883e;
+    --risk-border-high: #bd5e03;
+    --risk-veryhigh: #f85149;
+    --risk-border-veryhigh: #b91c1c;
+    --risk-extreme: #bc8cff;
+    --risk-border-extreme: #6e40c9;
+    --radius: 8px;
+    --radius-lg: 12px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'IBM Plex Sans TC', sans-serif;
+    background: var(--bg-base);
+    color: var(--text-primary);
+    min-height: 100vh;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  /* ── Tabs ── */
+  .tabs-bar {
+    background: #161b27;
+    border-bottom: 1px solid #2d3a52;
+    display: flex;
+    padding: 0 24px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    position: sticky;
+    top: 0;
+    z-index: 99;
+  }
+  .tabs-bar::-webkit-scrollbar { display: none; }
+  .tab-link {
+    display: block;
+    border-bottom: 2px solid transparent;
+    color: #8fa3c0;
+    font-family: 'IBM Plex Sans TC', sans-serif;
+    font-size: 14px;
+    padding: 10px 16px;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+    text-decoration: none;
+  }
+  .tab-link:hover { color: #e2e8f4; }
+  .tab-link.active {
+    color: #4a9eff;
+    border-bottom-color: #4a9eff;
+  }
+
+  /* ── Layout ── */
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+
+  .page-intro {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .page-intro .icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+  .page-intro h2 { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+  .page-intro p { font-size: 14px; color: var(--text-secondary); }
+
+  /* ── Input form ── */
+  .input-panel {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    margin-bottom: 24px;
+  }
+  .panel-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .panel-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px 16px;
+  }
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .form-group.wide { grid-column: span 2; }
+  .form-group.full { grid-column: 1 / -1; }
+
+  label {
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  label .unit {
+    color: var(--text-muted);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+  }
+  label .optional {
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: 400;
+  }
+
+  input[type="number"], input[type="text"], select {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text-primary);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 14px;
+    padding: 7px 10px;
+    width: 100%;
+    transition: border-color 0.15s;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  input[type="number"]:focus, input[type="text"]:focus, select:focus {
+    outline: none;
+    border-color: var(--accent-blue);
+    background: var(--bg-hover);
+  }
+  input[type="number"]::placeholder { color: var(--text-muted); }
+  select option { background: var(--bg-elevated); }
+
+  /* computed field */
+  .computed-field {
+    background: var(--bg-base);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius);
+    color: var(--accent-cyan);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 14px;
+    padding: 7px 10px;
+    width: 100%;
+  }
+
+  /* radio / checkbox group */
+  .radio-group, .check-group {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .radio-label, .check-label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--text-primary);
+    padding: 6px 10px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: var(--bg-elevated);
+    transition: all 0.15s;
+    user-select: none;
+  }
+  .radio-label:hover, .check-label:hover {
+    border-color: var(--accent-blue);
+    background: var(--bg-hover);
+  }
+  input[type="radio"], input[type="checkbox"] {
+    accent-color: var(--accent-blue);
+    width: 14px;
+    height: 14px;
+  }
+
+  /* tag select for ASCVD type */
+  .tag-select {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .tag-option {
+    cursor: pointer;
+    font-size: 13px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--bg-elevated);
+    color: var(--text-secondary);
+    transition: all 0.15s;
+    user-select: none;
+  }
+  .tag-option.selected {
+    border-color: var(--accent-red);
+    background: rgba(248,81,73,0.12);
+    color: var(--accent-red);
+  }
+
+  /* statin section */
+  .statin-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    align-items: end;
+  }
+
+  /* submit */
+  .btn-calc {
+    background: var(--accent-blue);
+    color: #0d1117;
+    border: none;
+    border-radius: var(--radius);
+    font-family: 'IBM Plex Sans TC', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 10px 28px;
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-top: 8px;
+  }
+  .btn-calc:hover { background: #79c0ff; transform: translateY(-1px); }
+  .btn-calc:active { transform: translateY(0); }
+  .btn-reset {
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-family: 'IBM Plex Sans TC', sans-serif;
+    font-size: 13px;
+    padding: 9px 16px;
+    cursor: pointer;
+    margin-top: 8px;
+    margin-left: 8px;
+    transition: all 0.15s;
+  }
+  .btn-reset:hover { border-color: var(--accent-blue); color: var(--accent-blue); }
+  .form-actions { margin-top: 16px; }
+
+  /* ── Results ── */
+  .results-section { display: none; }
+  .results-section.visible { display: block; }
+
+  .results-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  @media (max-width: 1100px) { .results-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 640px) { .results-grid { grid-template-columns: 1fr; } }
+
+  .result-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .result-card-header {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .result-card-header .guideline-label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-secondary);
+  }
+  .result-card-header .guideline-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+  .result-card-body { padding: 16px; flex: 1; }
+
+  /* risk badge */
+  .risk-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    border: 1px solid;
+  }
+  .risk-low    { background: rgba(63,185,80,0.12); color: var(--risk-low); border-color: var(--risk-border-low); }
+  .risk-moderate { background: rgba(210,153,34,0.12); color: var(--risk-moderate); border-color: var(--risk-border-moderate); }
+  .risk-high   { background: rgba(240,136,62,0.12); color: var(--risk-high); border-color: var(--risk-border-high); }
+  .risk-veryhigh { background: rgba(248,81,73,0.12); color: var(--risk-veryhigh); border-color: var(--risk-border-veryhigh); }
+  .risk-extreme  { background: rgba(188,140,255,0.12); color: var(--risk-extreme); border-color: var(--risk-border-extreme); }
+
+  .result-metric {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .result-metric:last-child { border-bottom: none; }
+  .result-metric .metric-label { font-size: 13px; color: var(--text-secondary); }
+  .result-metric .metric-value {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+  .metric-value.target { color: var(--accent-cyan); }
+  .metric-value.score { color: var(--accent-blue); }
+
+  /* NHI card special */
+  .nhi-card .result-card-header { background: rgba(63,185,80,0.06); }
+  .nhi-section { margin-bottom: 12px; }
+  .nhi-section-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 6px;
+  }
+  .coverage-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 6px 8px;
+    border-radius: 6px;
+    margin-bottom: 4px;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .coverage-item.covered {
+    background: rgba(63,185,80,0.08);
+    border: 1px solid rgba(63,185,80,0.2);
+  }
+  .coverage-item.not-covered {
+    background: rgba(248,81,73,0.06);
+    border: 1px solid rgba(248,81,73,0.15);
+  }
+  .coverage-item.conditional {
+    background: rgba(210,153,34,0.08);
+    border: 1px solid rgba(210,153,34,0.2);
+  }
+  .coverage-icon { font-size: 13px; flex-shrink: 0; margin-top: 1px; }
+  .coverage-text { color: var(--text-secondary); }
+  .coverage-text strong { color: var(--text-primary); }
+
+  /* reasoning box */
+  .reasoning-box {
+    background: var(--bg-base);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius);
+    padding: 10px 12px;
+    margin-top: 10px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+  .reasoning-box .reasoning-label {
+    font-size: 12px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 4px;
+    font-weight: 600;
+  }
+
+  /* comparison note */
+  .comparison-note {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent-yellow);
+    border-radius: var(--radius);
+    padding: 12px 16px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+  }
+  .comparison-note strong { color: var(--accent-yellow); }
+
+  /* footer */
+  .page-footer {
+    background: var(--bg-surface);
+    border-top: 1px solid var(--border);
+    padding: 20px 24px;
+    margin-top: 40px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.8;
+  }
+  .footer-sources { margin-bottom: 8px; }
+  .footer-sources strong { color: var(--text-primary); }
+  .disclaimer {
+    color: var(--accent-yellow);
+    font-size: 11px;
+    margin-top: 8px;
+  }
+
+  .form-section-note {
+    grid-column: 1 / -1;
+    font-size: 13px;
+    color: var(--text-secondary);
+    background: rgba(88,166,255,0.06);
+    border: 1px solid rgba(88,166,255,0.15);
+    border-radius: var(--radius);
+    padding: 7px 12px;
+    line-height: 1.6;
+    margin-bottom: 2px;
+  }
+
+  /* separator in form */
+  .form-section-sep {
+    grid-column: 1 / -1;
+    height: 1px;
+    background: var(--border-subtle);
+    margin: 4px 0;
+  }
+  .form-section-label {
+    grid-column: 1 / -1;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding-top: 4px;
+  }
+
+  /* alert */
+  .alert-info {
+    background: rgba(88,166,255,0.08);
+    border: 1px solid rgba(88,166,255,0.25);
+    border-radius: var(--radius);
+    padding: 10px 14px;
+    font-size: 12px;
+    color: var(--accent-blue);
+    margin-top: 12px;
+    grid-column: 1 / -1;
+  }
+
+  /* score display */
+  .score-display {
+    text-align: center;
+    padding: 10px 0;
+    margin-bottom: 10px;
+  }
+  .score-big {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 28px;
+    font-weight: 500;
+    line-height: 1;
+  }
+  .score-label {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 3px;
+  }
+
+  /* small helper */
+  .text-muted { color: var(--text-muted); }
+  .mono { font-family: 'IBM Plex Mono', monospace; }
+
+  /* ── Tooltip ── */
+  .info-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: rgba(88,166,255,0.18);
+    color: var(--accent-blue);
+    font-size: 10px;
+    font-weight: 700;
+    font-style: normal;
+    cursor: help;
+    flex-shrink: 0;
+    position: relative;
+    border: 1px solid rgba(88,166,255,0.35);
+    line-height: 1;
+    vertical-align: middle;
+  }
+  .info-icon::after {
+    display: none;
+  }
+  .info-icon::before { display: none; }
+  .info-icon:hover::after { opacity: 1; }
+</style>
+</head>
+<body>
+
+<!-- Tabs -->
+<nav class="tabs-bar">
+  <a class="tab-link" href="index.html">🔍 藥品給付查詢</a>
+  <a class="tab-link active" href="lipid.html">📊 高血脂風險評估</a>
+</nav>
+
+<!-- Main -->
+<main class="container">
+
+  <div class="page-intro">
+    <span class="icon">⚕️</span>
+    <div>
+      <h2>高血脂風險評估工具</h2>
+      <p>輸入病人基本資料及檢驗值，自動依台灣 2025、ESC 2025、AHA 2026 PREVENT 三大指引分類風險等級、計算 LDL 目標，並判斷健保給付資格。</p>
+    </div>
+  </div>
+
+  <!-- Input Panel -->
+  <div class="input-panel">
+    <div class="panel-title">病人資料輸入</div>
+    <div class="form-grid">
+
+      <!-- 基本 -->
+      <div class="form-section-label">基本資料</div>
+
+      <div class="form-group">
+        <label>年齡 <span class="unit">歲</span></label>
+        <input type="number" id="age" min="18" max="99" placeholder="例：65">
+      </div>
+      <div class="form-group">
+        <label>性別</label>
+        <div class="radio-group">
+          <label class="radio-label"><input type="radio" name="sex" value="M" checked> 男</label>
+          <label class="radio-label"><input type="radio" name="sex" value="F"> 女</label>
+        </div>
+      </div>
+
+      <!-- 血脂 -->
+      <div class="form-section-sep"></div>
+      <div class="form-section-label">血脂檢驗 <span class="text-muted">(mg/dL)</span></div>
+
+      <div class="form-group">
+        <label>TC <span class="unit">mg/dL</span></label>
+        <input type="number" id="tc" min="50" max="600" placeholder="總膽固醇">
+      </div>
+      <div class="form-group">
+        <label>LDL-C <span class="unit">mg/dL</span></label>
+        <input type="number" id="ldl" min="10" max="500" placeholder="壞膽固醇">
+      </div>
+      <div class="form-group">
+        <label>HDL-C <span class="unit">mg/dL</span></label>
+        <input type="number" id="hdl" min="10" max="150" placeholder="好膽固醇" oninput="calcNonHDL()">
+      </div>
+      <div class="form-group">
+        <label>TG <span class="unit">mg/dL</span></label>
+        <input type="number" id="tg" min="20" max="3000" placeholder="三酸甘油酯">
+      </div>
+      <div class="form-group">
+        <label>non-HDL-C <span class="unit">mg/dL</span> <span class="optional">自動計算</span></label>
+        <div class="computed-field" id="nonhdl">—</div>
+      </div>
+
+      <!-- 血壓 -->
+      <div class="form-section-sep"></div>
+      <div class="form-section-label">血壓</div>
+
+      <div class="form-group">
+        <label>收縮壓 <span class="unit">mmHg</span></label>
+        <input type="number" id="sbp" min="60" max="260" placeholder="SBP">
+      </div>
+      <div class="form-group">
+        <label>是否用降壓藥</label>
+        <div class="radio-group">
+          <label class="radio-label"><input type="radio" name="bpmed" value="0" checked> 否</label>
+          <label class="radio-label"><input type="radio" name="bpmed" value="1"> 是</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>高血壓診斷</label>
+        <div class="radio-group">
+          <label class="radio-label"><input type="radio" name="htn" value="0" checked> 否</label>
+          <label class="radio-label"><input type="radio" name="htn" value="1"> 是</label>
+        </div>
+      </div>
+
+      <!-- 血糖 -->
+      <div class="form-section-sep"></div>
+      <div class="form-section-label">血糖代謝</div>
+
+      <div class="form-group">
+        <label>空腹血糖 <span class="unit">mg/dL</span> <span class="optional">擇一</span></label>
+        <input type="number" id="fpg" min="40" max="600" placeholder="FPG">
+      </div>
+      <div class="form-group">
+        <label>HbA1c <span class="unit">%</span> <span class="optional">擇一</span></label>
+        <input type="number" id="hba1c" min="3" max="18" step="0.1" placeholder="糖化血色素">
+      </div>
+      <div class="form-group">
+        <label>是否用降血糖藥</label>
+        <div class="radio-group">
+          <label class="radio-label"><input type="radio" name="dmmed" value="0" checked> 否</label>
+          <label class="radio-label"><input type="radio" name="dmmed" value="1"> 是</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>糖尿病 (DM)</label>
+        <div class="radio-group">
+          <label class="radio-label"><input type="radio" name="dm" value="0" checked> 否</label>
+          <label class="radio-label"><input type="radio" name="dm" value="1"> 是</label>
+        </div>
+      </div>
+
+      <!-- 腎功能 -->
+      <div class="form-section-sep"></div>
+      <div class="form-section-label">腎功能</div>
+
+      <div class="form-group">
+        <label>eGFR <span class="unit">mL/min/1.73m²</span></label>
+        <input type="number" id="egfr" min="1" max="150" placeholder="估算腎絲球過濾率">
+      </div>
+
+      <!-- 危險因子 -->
+      <div class="form-section-sep"></div>
+      <div class="form-section-label">危險因子 & 病史</div>
+
+      <div class="form-group">
+        <label>抽菸</label>
+        <div class="radio-group">
+          <label class="radio-label"><input type="radio" name="smoking" value="0" checked> 否</label>
+          <label class="radio-label"><input type="radio" name="smoking" value="1"> 是</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>家族性高膽固醇 (FH)</label>
+        <div class="radio-group">
+          <label class="radio-label"><input type="radio" name="fh" value="0" checked> 否</label>
+          <label class="radio-label"><input type="radio" name="fh" value="1"> 是</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>
+          早發冠心病家族史
+          <i class="info-icon" data-tip="男性親屬 &lt;55 歲、女性親屬 &lt;65 歲發生冠心病（CAD）即屬早發。">!</i>
+        </label>
+        <div class="radio-group">
+          <label class="radio-label"><input type="radio" name="fhcad" value="0" checked> 否</label>
+          <label class="radio-label"><input type="radio" name="fhcad" value="1"> 是</label>
+        </div>
+      </div>
+
+      <!-- ASCVD -->
+      <div class="form-section-sep"></div>
+      <div class="form-section-label" style="display:flex;align-items:center;gap:6px;">
+        臨床 ASCVD
+        <i class="info-icon" data-tip="包含：急性冠心症（ACS）、心肌梗塞、穩定性冠心病、經皮冠狀動脈介入（PCI）、冠狀動脈繞道手術（CABG）、缺血性中風/TIA、周邊動脈疾病（PAD，含踝臂指數 &lt;0.9）">!</i>
+      </div>
+
+      <div class="form-group">
+        <label>有無臨床 ASCVD</label>
+        <div class="radio-group">
+          <label class="radio-label"><input type="radio" name="ascvd" value="0" checked onchange="toggleAscvd()"> 無</label>
+          <label class="radio-label"><input type="radio" name="ascvd" value="1" onchange="toggleAscvd()"> 有</label>
+        </div>
+      </div>
+      <div class="form-group wide" id="ascvd-types-group" style="display:none">
+        <label>ASCVD 類型（可複選）</label>
+        <div class="tag-select" id="ascvd-types">
+          <span class="tag-option" data-val="ACS" onclick="toggleTag(this)">急性冠心症 ACS</span>
+          <span class="tag-option" data-val="PCI" onclick="toggleTag(this)">PCI 介入</span>
+          <span class="tag-option" data-val="CABG" onclick="toggleTag(this)">CABG 繞道</span>
+          <span class="tag-option" data-val="stroke" onclick="toggleTag(this)">缺血性中風</span>
+          <span class="tag-option" data-val="PAD" onclick="toggleTag(this)">周邊動脈病 PAD</span>
+        </div>
+      </div>
+      <div class="form-group wide" id="ascvd-multi-group" style="display:none">
+        <label>有無多次/多部位 ASCVD 事件（極高風險判斷）</label>
+        <div class="radio-group">
+          <label class="radio-label"><input type="radio" name="ascvd_multi" value="0" checked> 無（單次事件）</label>
+          <label class="radio-label"><input type="radio" name="ascvd_multi" value="1"> 有（多次或多部位）</label>
+        </div>
+      </div>
+
+      <!-- 可選 -->
+      <div class="form-section-sep"></div>
+      <div class="form-section-label" style="display:flex;align-items:center;gap:6px;">
+        選填進階指標
+        <i class="info-icon" data-tip="填入後可啟用進階風險修飾：CAC ≥100 分、Lp(a) ≥50 mg/dL、或 hsCRP ≥2 mg/L 任一陽性，台灣 2025 指引將自動將風險等級上移一級，協助決定是否提前啟用降脂治療。">!</i>
+      </div>
+
+      <div class="form-group">
+        <label>CAC 分數 <span class="optional">選填</span></label>
+        <input type="number" id="cac" min="0" placeholder="Agatston 分">
+      </div>
+      <div class="form-group">
+        <label>Lp(a) <span class="unit">mg/dL</span> <span class="optional">選填</span></label>
+        <input type="number" id="lpa" min="0" max="500" placeholder="">
+      </div>
+      <div class="form-group">
+        <label>hsCRP <span class="unit">mg/L</span> <span class="optional">選填</span></label>
+        <input type="number" id="hscrp" min="0" step="0.1" placeholder="">
+      </div>
+
+      <!-- 目前用藥 -->
+      <div class="form-section-sep"></div>
+      <div class="form-section-label">目前用藥</div>
+
+      <div class="form-group wide">
+        <label>是否使用 Statin</label>
+        <div class="statin-row">
+          <select id="statin_drug">
+            <option value="">— 未使用 —</option>
+            <option value="rosu">Rosuvastatin（可定）</option>
+            <option value="ator">Atorvastatin（立普妥）</option>
+            <option value="simva">Simvastatin</option>
+            <option value="prava">Pravastatin</option>
+            <option value="fluva">Fluvastatin</option>
+            <option value="pitava">Pitavastatin</option>
+            <option value="lova">Lovastatin</option>
+          </select>
+          <select id="statin_dose">
+            <option value="">劑量</option>
+            <option value="low">低強度</option>
+            <option value="moderate">中強度</option>
+            <option value="high">高強度</option>
+          </select>
+          <div class="radio-group" style="align-items:center">
+            <span style="font-size:12px;color:var(--text-secondary)">Ezetimibe：</span>
+            <label class="radio-label"><input type="radio" name="eze" value="0" checked> 否</label>
+            <label class="radio-label"><input type="radio" name="eze" value="1"> 是</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section-sep"></div>
+      <div class="form-actions full" style="grid-column:1/-1">
+        <button class="btn-calc" onclick="calculate()">▶ 計算風險分級與給付判斷</button>
+        <button class="btn-reset" onclick="resetForm()">↺ 重設</button>
+      </div>
+
+    </div><!-- /form-grid -->
+  </div><!-- /input-panel -->
+
+  <!-- Results -->
+  <div class="results-section" id="results">
+
+    <div class="results-grid">
+
+      <!-- NHI Coverage (first) -->
+      <div class="result-card nhi-card" id="card-nhi">
+        <div class="result-card-header">
+          <div>
+            <div class="guideline-label">健保署</div>
+            <div class="guideline-name">給付資格判斷</div>
+          </div>
+        </div>
+        <div class="result-card-body" id="body-nhi"></div>
+      </div>
+
+      <!-- Taiwan 2025 -->
+      <div class="result-card" id="card-tw">
+        <div class="result-card-header">
+          <div>
+            <div class="guideline-label">台灣</div>
+            <div class="guideline-name">2025 血脂指引</div>
+          </div>
+        </div>
+        <div class="result-card-body" id="body-tw"></div>
+      </div>
+
+      <!-- ESC 2025 -->
+      <div class="result-card" id="card-esc">
+        <div class="result-card-header">
+          <div>
+            <div class="guideline-label">歐洲心臟學會</div>
+            <div class="guideline-name">ESC 2024/2025</div>
+          </div>
+        </div>
+        <div class="result-card-body" id="body-esc"></div>
+      </div>
+
+      <!-- AHA PREVENT -->
+      <div class="result-card" id="card-aha">
+        <div class="result-card-header">
+          <div>
+            <div class="guideline-label">美國心臟學會</div>
+            <div class="guideline-name">AHA 2023 PREVENT</div>
+          </div>
+        </div>
+        <div class="result-card-body" id="body-aha"></div>
+      </div>
+
+    </div><!-- /results-grid -->
+  </div><!-- /results -->
+
+</main>
+
+<footer class="page-footer">
+  <div class="footer-sources">
+    <strong>資料來源：</strong>
+    台灣脂質暨動脈硬化學會 2025 血脂異常臨床治療指引 ｜
+    ESC Guidelines on Cardiovascular Disease Prevention 2024 ｜
+    AHA PREVENT Score 2023 ｜
+    全民健康保險藥品給付規定 第 2.6 節（高血脂藥物）
+  </div>
+  <div class="disclaimer">
+    ⚠️ 本工具僅供醫護人員臨床參考，不取代個別病人評估與醫師判斷。風險公式依文獻簡化實作，實際數值可能與原始計算機略有差異。
+  </div>
+</footer>
+
+<script>
+// ─────────────────────────────────────────────────────────────
+//  Helpers
+// ─────────────────────────────────────────────────────────────
+const getNum = id => parseFloat(document.getElementById(id).value) || null;
+const getRadio = name => {
+  const el = document.querySelector(`input[name="${name}"]:checked`);
+  return el ? (isNaN(el.value) ? el.value : Number(el.value)) : null;
+};
+const hasAscvd = () => getRadio('ascvd') === 1;
+
+function calcNonHDL() {
+  const tc = getNum('tc'), hdl = getNum('hdl');
+  const el = document.getElementById('nonhdl');
+  el.textContent = (tc && hdl) ? (tc - hdl).toFixed(0) + ' mg/dL' : '—';
+}
+
+function toggleAscvd() {
+  const yes = hasAscvd();
+  document.getElementById('ascvd-types-group').style.display = yes ? '' : 'none';
+  document.getElementById('ascvd-multi-group').style.display = yes ? '' : 'none';
+}
+
+function toggleTag(el) {
+  el.classList.toggle('selected');
+}
+
+function getAscvdTypes() {
+  return [...document.querySelectorAll('#ascvd-types .tag-option.selected')].map(e => e.dataset.val);
+}
+
+function resetForm() {
+  document.querySelectorAll('input[type="number"]').forEach(e => e.value = '');
+  document.querySelector('input[name="sex"][value="M"]').checked = true;
+  document.querySelector('input[name="bpmed"][value="0"]').checked = true;
+  document.querySelector('input[name="dmmed"][value="0"]').checked = true;
+  document.querySelector('input[name="dm"][value="0"]').checked = true;
+  document.querySelector('input[name="ascvd"][value="0"]').checked = true;
+  document.querySelector('input[name="ascvd_multi"][value="0"]').checked = true;
+  document.querySelector('input[name="smoking"][value="0"]').checked = true;
+  document.querySelector('input[name="htn"][value="0"]').checked = true;
+  document.querySelector('input[name="fh"][value="0"]').checked = true;
+  document.querySelector('input[name="fhcad"][value="0"]').checked = true;
+  document.querySelector('input[name="eze"][value="0"]').checked = true;
+  document.getElementById('statin_drug').value = '';
+  document.getElementById('statin_dose').value = '';
+  document.querySelectorAll('.tag-option').forEach(e => e.classList.remove('selected'));
+  document.getElementById('nonhdl').textContent = '—';
+  toggleAscvd();
+  document.getElementById('results').classList.remove('visible');
+}
+
+// ─────────────────────────────────────────────────────────────
+//  SCORE2 (ESC 2021, European High-Risk Region)
+//  Simplified from ESC SCORE2 algorithm paper (Eur Heart J 2021)
+//  Returns 10-yr CVD risk %
+// ─────────────────────────────────────────────────────────────
+function calcScore2(age, sex, sbp, tchol_mmol, hdl_mmol, smoking) {
+  // Coefficients for high-risk European region (Eastern Europe)
+  // Source: ESC SCORE2 tables (high-risk region)
+  const isMale = sex === 'M';
+
+  // Step 1: linear predictor
+  // Centered values (from paper appendix)
+  const ageCentered = age - 60;
+  const sbpCentered = sbp - 120;
+  const tcCentered = tchol_mmol - 6.0;
+  const hdlCentered = hdl_mmol - 1.3;
+
+  let lp;
+  if (isMale) {
+    lp = 0.3742 * ageCentered
+       + 0.6012 * (smoking ? 1 : 0)
+       + 0.2777 * sbpCentered / 20
+       + 0.1458 * tcCentered
+       - 0.2698 * hdlCentered
+       + 0.0755 * ageCentered * (smoking ? 1 : 0)
+       - 0.0255 * ageCentered * sbpCentered / 20;
+  } else {
+    lp = 0.4648 * ageCentered
+       + 0.7744 * (smoking ? 1 : 0)
+       + 0.3131 * sbpCentered / 20
+       + 0.1002 * tcCentered
+       - 0.2606 * hdlCentered
+       + 0.0713 * ageCentered * (smoking ? 1 : 0)
+       - 0.0277 * ageCentered * sbpCentered / 20;
+  }
+
+  // Step 2: baseline survival (high-risk region, 10-yr)
+  const S0 = isMale ? 0.8799 : 0.9260;
+  const meanLP = isMale ? 0.0 : 0.0;
+
+  const risk = 1 - Math.pow(S0, Math.exp(lp));
+  return Math.max(0, Math.min(1, risk)) * 100;
+}
+
+// ─────────────────────────────────────────────────────────────
+//  AHA PREVENT (2023) 10-yr CVD risk
+//  Khan SS et al., JAMA 2023
+//  Uses sex-specific equations with eGFR and diabetes
+// ─────────────────────────────────────────────────────────────
+function calcPrevent(age, sex, sbp, tc_mgdl, hdl_mgdl, dm, smoking, bpMed, dmMed, egfr) {
+  const isMale = sex === 'M';
+  const tc_mmol = tc_mgdl / 38.67;
+  const hdl_mmol = hdl_mgdl / 38.67;
+  const nonHDL_mmol = tc_mmol - hdl_mmol;
+
+  // Log-transformed and scaled inputs
+  const lAge = Math.log(age);
+  const lSBP = Math.log(sbp);
+  const lNonHDL = Math.log(nonHDL_mmol);
+  const lHDL = Math.log(hdl_mmol);
+  const lEGFR = egfr ? Math.log(egfr) : Math.log(75); // default if missing
+
+  let lp;
+  if (isMale) {
+    // Male PREVENT coefficients
+    lp =  3.0970 * lAge
+        - 0.7152 * lHDL
+        + 0.9440 * lNonHDL
+        + 0.7640 * lSBP
+        - 0.3580 * (bpMed ? 1 : 0)
+        + 0.5880 * (smoking ? 1 : 0)
+        + 0.4240 * (dm ? 1 : 0)
+        - 0.5060 * lEGFR
+        - 12.823; // male intercept
+  } else {
+    // Female PREVENT coefficients
+    lp =  2.4690 * lAge
+        - 0.6810 * lHDL
+        + 0.7400 * lNonHDL
+        + 1.0900 * lSBP
+        - 0.3640 * (bpMed ? 1 : 0)
+        + 0.7890 * (smoking ? 1 : 0)
+        + 0.5590 * (dm ? 1 : 0)
+        - 0.5490 * lEGFR
+        - 10.796; // female intercept
+  }
+
+  const risk = 100 / (1 + Math.exp(-lp));
+  return Math.max(0, Math.min(99, risk));
+}
+
+// ─────────────────────────────────────────────────────────────
+//  Risk classification helpers
+// ─────────────────────────────────────────────────────────────
+function riskBadge(level, text) {
+  return `<div class="risk-badge risk-${level}">${text}</div>`;
+}
+
+function metricRow(label, value, cls = '') {
+  return `<div class="result-metric">
+    <span class="metric-label">${label}</span>
+    <span class="metric-value ${cls}">${value}</span>
+  </div>`;
+}
+
+function reasoningBox(text) {
+  return `<div class="reasoning-box">
+    <div class="reasoning-label">推論依據</div>
+    ${text}
+  </div>`;
+}
+
+// ─────────────────────────────────────────────────────────────
+//  Taiwan 2025
+// ─────────────────────────────────────────────────────────────
+function calcTaiwan(p) {
+  const { ldl, tc, hdl, tg, ascvd, ascvd_multi, ascvdTypes, dm, fh, htn, smoking, fhcad, egfr, lpa, cac, hscrp } = p;
+  let level, ldlTarget, nonhdlTarget, reasons = [];
+
+  const nonhdl = tc && hdl ? tc - hdl : null;
+
+  // 極高風險：ASCVD + 多次事件 or FH + ASCVD or ASCVD + DM
+  if (ascvd && ascvd_multi) {
+    level = 'extreme'; ldlTarget = 55; nonhdlTarget = 85;
+    reasons.push('多次/多部位 ASCVD 事件 → 極高風險');
+  } else if (ascvd && fh) {
+    level = 'extreme'; ldlTarget = 55; nonhdlTarget = 85;
+    reasons.push('臨床 ASCVD 合併家族性高膽固醇血症 (FH) → 極高風險');
+  }
+  // 非常高風險：有臨床 ASCVD (單次)
+  else if (ascvd) {
+    level = 'veryhigh'; ldlTarget = 70; nonhdlTarget = 100;
+    reasons.push('臨床 ASCVD 病史（' + (ascvdTypes.length ? ascvdTypes.join('、') : '已記錄') + '）→ 非常高風險');
+    if (ascvdTypes.includes('ACS')) reasons.push('ACS 類型，建議考慮目標 LDL <55 mg/dL');
+  }
+  // 非常高風險：DM + 靶器官損傷 or eGFR<30
+  else if (dm && egfr && egfr < 30) {
+    level = 'veryhigh'; ldlTarget = 70; nonhdlTarget = 100;
+    reasons.push(`糖尿病合併嚴重腎病 eGFR ${egfr} mL/min/1.73m² < 30 → 非常高風險`);
+  }
+  // 高風險
+  else if (fh || (dm && (htn || smoking || fhcad))) {
+    level = 'high'; ldlTarget = 100; nonhdlTarget = 130;
+    if (fh) reasons.push('家族性高膽固醇血症 (FH) → 高風險');
+    if (dm) {
+      const dmWith = [htn && '高血壓', smoking && '抽菸', fhcad && '早發冠心病家族史'].filter(Boolean);
+      reasons.push(`糖尿病合併 ${dmWith.join('、')} → 高風險`);
+    }
+  }
+  // 中/低風險：依危險因子數
+  else {
+    let rfCount = 0;
+    const rfList = [];
+    if (smoking) { rfCount++; rfList.push('抽菸'); }
+    if (htn) { rfCount++; rfList.push('高血壓'); }
+    if (dm) { rfCount++; rfList.push('糖尿病'); }
+    if (fhcad) { rfCount++; rfList.push('早發冠心病家族史'); }
+    if (egfr && egfr < 60) { rfCount++; rfList.push(`CKD（eGFR ${egfr}）`); }
+    if (ldl && ldl >= 190) { rfCount++; rfList.push(`LDL-C ${ldl} ≥190 mg/dL`); }
+
+    // CAC、Lp(a)、hsCRP 修飾
+    const cacModifier = cac !== null && cac >= 100;
+    const lpaModifier = lpa !== null && lpa >= 50;
+    const hsCRPModifier = hscrp !== null && hscrp >= 2;
+    const advList = [];
+    if (cacModifier) advList.push(`CAC ${cac} ≥100`);
+    if (lpaModifier) advList.push(`Lp(a) ${lpa} ≥50 mg/dL`);
+    if (hsCRPModifier) advList.push(`hsCRP ${hscrp} ≥2 mg/L`);
+    if (advList.length) {
+      rfCount++;
+      rfList.push(`進階指標陽性（${advList.join('、')}）`);
+    }
+
+    if (rfList.length) {
+      reasons.push(`危險因子（${rfCount} 項）：${rfList.join('、')}`);
+    }
+
+    if (rfCount >= 3) {
+      level = 'high'; ldlTarget = 100; nonhdlTarget = 130;
+      reasons.push(`合計 ${rfCount} 項危險因子 ≥3 → 高風險`);
+    } else if (rfCount >= 1) {
+      level = 'moderate'; ldlTarget = 115; nonhdlTarget = 145;
+      reasons.push(`合計 ${rfCount} 項危險因子 → 中度風險`);
+    } else {
+      level = 'low'; ldlTarget = 130; nonhdlTarget = 160;
+      reasons.push('無主要危險因子 → 低風險');
+    }
+  }
+
+  const labels = { low:'低度風險', moderate:'中度風險', high:'高度風險', veryhigh:'非常高風險', extreme:'極高風險' };
+  const ldlOK = ldl ? (ldl < ldlTarget ? '✓ 已達標' : `✗ 未達標（差 ${(ldl - ldlTarget).toFixed(0)} mg/dL）`) : '—';
+
+  let html = riskBadge(level, labels[level]);
+  html += metricRow('LDL-C 目標', `< ${ldlTarget} mg/dL`, 'target');
+  html += metricRow('non-HDL-C 目標', `< ${nonhdlTarget} mg/dL`, 'target');
+  if (ldl) html += metricRow('目前 LDL-C', `${ldl} mg/dL`);
+  html += metricRow('達標狀況', ldlOK);
+  if (nonhdl) html += metricRow('目前 non-HDL-C', `${nonhdl} mg/dL`);
+  html += reasoningBox(reasons.map(r => `• ${r}`).join('<br>'));
+  return html;
+}
+
+// ─────────────────────────────────────────────────────────────
+//  ESC 2024
+// ─────────────────────────────────────────────────────────────
+function calcESC(p) {
+  const { age, sex, sbp, tc, hdl, ldl, smoking, ascvd, ascvd_multi, ascvdTypes, dm, fh, htn, egfr } = p;
+  let level, ldlTarget, nonhdlTarget, score2 = null, score2label = '—';
+  let reasons = [];
+
+  const nonhdl = tc && hdl ? tc - hdl : null;
+
+  // ESC: 極高風險
+  if (ascvd && ascvd_multi) {
+    level = 'extreme'; ldlTarget = 40; nonhdlTarget = 55;
+    reasons.push('多次/多部位 ASCVD 事件 → 極高風險（ESC 目標 LDL <40 mg/dL）');
+  } else if (fh && ascvd) {
+    level = 'extreme'; ldlTarget = 40; nonhdlTarget = 55;
+    reasons.push('FH 合併臨床 ASCVD → 極高風險');
+  } else if (ascvd || (dm && (egfr && egfr < 30 || fh))) {
+    level = 'veryhigh'; ldlTarget = 55; nonhdlTarget = 85;
+    if (ascvd) reasons.push('臨床 ASCVD（' + (ascvdTypes.length ? ascvdTypes.join('、') : '已記錄') + '）→ 非常高風險');
+    if (dm && egfr && egfr < 30) reasons.push(`糖尿病 + eGFR ${egfr} mL/min < 30 → 非常高風險`);
+    if (dm && fh) reasons.push('糖尿病 + FH → 非常高風險');
+  } else if (fh || (dm && (htn || smoking)) || (egfr && egfr < 30)) {
+    level = 'high'; ldlTarget = 70; nonhdlTarget = 100;
+    if (fh) reasons.push('家族性高膽固醇血症 (FH) → 高風險');
+    if (dm && htn) reasons.push('糖尿病 + 高血壓 → 高風險');
+    if (dm && smoking) reasons.push('糖尿病 + 抽菸 → 高風險');
+    if (egfr && egfr < 30) reasons.push(`嚴重 CKD（eGFR ${egfr}）→ 高風險`);
+  } else {
+    // SCORE2 calculation
+    if (age && sbp && tc && hdl) {
+      const tc_mmol = tc / 38.67;
+      const hdl_mmol = hdl / 38.67;
+      score2 = calcScore2(age, sex, sbp, tc_mmol, hdl_mmol, smoking);
+      score2label = score2.toFixed(1) + '%';
+
+      // ESC 2024 thresholds (age-based)
+      let lowCut, highCut, vhighCut;
+      if (age < 50) {
+        lowCut = 2.5; highCut = 7.5; vhighCut = 10;
+      } else if (age < 70) {
+        lowCut = 5; highCut = 10; vhighCut = 15;
+      } else {
+        lowCut = 7.5; highCut = 15; vhighCut = 20;
+      }
+
+      if (score2 < lowCut) {
+        level = 'low'; ldlTarget = 116; nonhdlTarget = 145;
+        reasons.push(`SCORE2 ${score2.toFixed(1)}% < ${lowCut}% → 低風險`);
+      } else if (score2 < highCut) {
+        level = 'moderate'; ldlTarget = 100; nonhdlTarget = 130;
+        reasons.push(`SCORE2 ${score2.toFixed(1)}% 介於 ${lowCut}–${highCut}% → 中度風險`);
+      } else if (score2 < vhighCut) {
+        level = 'high'; ldlTarget = 70; nonhdlTarget = 100;
+        reasons.push(`SCORE2 ${score2.toFixed(1)}% 介於 ${highCut}–${vhighCut}% → 高風險`);
+      } else {
+        level = 'veryhigh'; ldlTarget = 55; nonhdlTarget = 85;
+        reasons.push(`SCORE2 ${score2.toFixed(1)}% ≥ ${vhighCut}% → 非常高風險`);
+      }
+      // 列出對分數有貢獻的高風險項目
+      const scoreDrivers = [];
+      if (smoking) scoreDrivers.push('抽菸（SCORE2 主要權重項）');
+      if (sbp && sbp >= 140) scoreDrivers.push(`收縮壓偏高 SBP ${sbp} mmHg`);
+      if (tc && (tc/38.67) >= 6) scoreDrivers.push(`TC 偏高 ${tc} mg/dL（≥6 mmol/L）`);
+      if (hdl && (hdl/38.67) < 1.0) scoreDrivers.push(`HDL-C 偏低 ${hdl} mg/dL（<1.0 mmol/L）`);
+      if (age && age >= 60) scoreDrivers.push(`年齡 ${age} 歲（≥60，基礎風險高）`);
+      if (scoreDrivers.length) reasons.push('主要貢獻因子：' + scoreDrivers.join('、'));
+    } else {
+      level = 'moderate'; ldlTarget = 100; nonhdlTarget = 130;
+      reasons.push('資料不足以計算 SCORE2，預設中度風險');
+    }
+  }
+
+  const labels = { low:'低度風險', moderate:'中度風險', high:'高度風險', veryhigh:'非常高風險', extreme:'極高風險' };
+  const ldlOK = ldl ? (ldl < ldlTarget ? '✓ 已達標' : `✗ 未達標 (差 ${(ldl-ldlTarget).toFixed(0)})`) : '—';
+
+  let html = riskBadge(level, labels[level]);
+  if (score2 !== null) {
+    html += `<div class="score-display">
+      <div class="score-big score">${score2.toFixed(1)}<small style="font-size:14px">%</small></div>
+      <div class="score-label">SCORE2 10年 CVD 風險</div>
+    </div>`;
+  }
+  html += metricRow('LDL-C 目標', `< ${ldlTarget} mg/dL`, 'target');
+  html += metricRow('non-HDL-C 目標', `< ${nonhdlTarget} mg/dL`, 'target');
+  if (ldl) html += metricRow('目前 LDL-C', `${ldl} mg/dL`);
+  html += metricRow('達標狀況', ldlOK);
+  html += reasoningBox(reasons.map(r => `• ${r}`).join('<br>'));
+  return html;
+}
+
+// ─────────────────────────────────────────────────────────────
+//  AHA PREVENT 2023
+// ─────────────────────────────────────────────────────────────
+function calcAHA(p) {
+  const { age, sex, sbp, tc, hdl, ldl, dm, smoking, bpMed, dmMed, egfr, ascvd, ascvd_multi, fh } = p;
+  let level, ldlTarget, nonhdlTarget, prevent = null, preventLabel = '—';
+  let reasons = [];
+
+  const nonhdl = tc && hdl ? tc - hdl : null;
+
+  // AHA: 有 ASCVD = 二級預防
+  if (ascvd) {
+    if (ascvd_multi || fh) {
+      level = 'extreme'; ldlTarget = 55; nonhdlTarget = 85;
+      const why = [ascvd_multi && '多次/多部位事件', fh && '合併 FH'].filter(Boolean);
+      reasons.push(`臨床 ASCVD（${ascvdTypes.length ? ascvdTypes.join('、') : '已記錄'}）+ ${why.join('+')} → 極高風險（二級預防高強度）`);
+    } else {
+      level = 'veryhigh'; ldlTarget = 70; nonhdlTarget = 100;
+      reasons.push(`臨床 ASCVD（${ascvdTypes.length ? ascvdTypes.join('、') : '已記錄'}）→ 非常高風險（二級預防）`);
+    }
+  } else if (age && sbp && tc && hdl) {
+    // 一級預防
+    prevent = calcPrevent(age, sex, sbp, tc, hdl, dm, smoking, bpMed, dmMed, egfr || 75);
+    preventLabel = prevent.toFixed(1) + '%';
+
+    if (prevent < 5) {
+      level = 'low'; ldlTarget = 130; nonhdlTarget = 160;
+      reasons.push(`PREVENT 10年風險 ${prevent.toFixed(1)}% < 5% → 低風險`);
+    } else if (prevent < 7.5) {
+      level = 'moderate'; ldlTarget = 115; nonhdlTarget = 145;
+      reasons.push(`PREVENT 10年風險 ${prevent.toFixed(1)}% 介於 5–7.5% → 邊緣風險`);
+    } else if (prevent < 20) {
+      level = 'high'; ldlTarget = 100; nonhdlTarget = 130;
+      reasons.push(`PREVENT 10年風險 ${prevent.toFixed(1)}% 介於 7.5–20% → 中高風險`);
+    } else {
+      level = 'veryhigh'; ldlTarget = 70; nonhdlTarget = 100;
+      reasons.push(`PREVENT 10年風險 ${prevent.toFixed(1)}% ≥20% → 高風險`);
+    }
+
+    // 列出對 PREVENT 分數貢獻的項目
+    const preventDrivers = [];
+    if (smoking) preventDrivers.push('抽菸');
+    if (dm) preventDrivers.push('糖尿病');
+    if (sbp && sbp >= 130) preventDrivers.push(`SBP ${sbp} mmHg（偏高）`);
+    if (egfr && egfr < 60) preventDrivers.push(`eGFR ${egfr}（CKD，PREVENT 納入計算）`);
+    if (hdl && hdl < 40) preventDrivers.push(`HDL-C 偏低 ${hdl} mg/dL`);
+    if (preventDrivers.length) reasons.push('主要貢獻因子：' + preventDrivers.join('、'));
+
+    // Enhancers
+    if (ldl && ldl >= 190) {
+      reasons.push(`LDL-C ${ldl} mg/dL ≥190 → 增強因子，建議強化治療`);
+      ldlTarget = Math.min(ldlTarget, 100);
+    }
+    if (dm && age >= 40) reasons.push(`糖尿病 + 年齡 ${age}≥40 → 高風險增強因子`);
+  } else {
+    level = 'moderate'; ldlTarget = 115; nonhdlTarget = 145;
+    reasons.push('缺少 SBP/TC/HDL，無法計算 PREVENT，預設中度風險');
+  }
+
+  const labels = { low:'低風險', moderate:'邊緣/中風險', high:'高風險', veryhigh:'非常高風險', extreme:'極高風險' };
+  const ldlOK = ldl ? (ldl < ldlTarget ? '✓ 已達標' : `✗ 未達標 (差 ${(ldl-ldlTarget).toFixed(0)})`) : '—';
+
+  let html = riskBadge(level, labels[level]);
+  if (prevent !== null) {
+    html += `<div class="score-display">
+      <div class="score-big score">${prevent.toFixed(1)}<small style="font-size:14px">%</small></div>
+      <div class="score-label">PREVENT 10年 CVD 風險</div>
+    </div>`;
+  }
+  html += metricRow('LDL-C 目標', `< ${ldlTarget} mg/dL`, 'target');
+  html += metricRow('non-HDL-C 目標', `< ${nonhdlTarget} mg/dL`, 'target');
+  if (ldl) html += metricRow('目前 LDL-C', `${ldl} mg/dL`);
+  html += metricRow('達標狀況', ldlOK);
+  html += reasoningBox(reasons.map(r => `• ${r}`).join('<br>'));
+  return html;
+}
+
+// ─────────────────────────────────────────────────────────────
+//  健保給付判斷（給付規定 2.6 節）
+// ─────────────────────────────────────────────────────────────
+function calcNHI(p) {
+  const { ldl, tc, hdl, ascvd, ascvd_multi, ascvdTypes, dm, fh, htn, smoking, fhcad, statin, statinDose, eze, egfr } = p;
+  let html = '';
+
+  // ── Statin ──
+  html += `<div class="nhi-section"><div class="nhi-section-title">Statin</div>`;
+
+  const hasRF2 = [htn, dm, smoking, fhcad, (egfr && egfr < 60)].filter(Boolean).length >= 2;
+  const hasRF1 = [htn, dm, smoking, fhcad, (egfr && egfr < 60)].filter(Boolean).length >= 1;
+  const ldlGE190 = ldl && ldl >= 190;
+  const ldlGE130 = ldl && ldl >= 130;
+  const ldlGE160 = ldl && ldl >= 160;
+
+  let statinCovered = false, statinReason = '';
+
+  if (ascvd) {
+    statinCovered = true;
+    statinReason = '有臨床 ASCVD → 直接給付（二級預防）';
+  } else if (dm) {
+    statinCovered = true;
+    statinReason = '糖尿病 → 符合給付';
+  } else if (fh) {
+    statinCovered = true;
+    statinReason = '家族性高膽固醇血症 → 符合給付';
+  } else if (ldlGE190) {
+    statinCovered = true;
+    statinReason = 'LDL-C ≥190 mg/dL → 符合給付';
+  } else if (hasRF2 && ldlGE130) {
+    statinCovered = true;
+    statinReason = '≥2 主要危險因子 + LDL ≥130 → 符合給付';
+  } else if (hasRF1 && ldlGE160) {
+    statinCovered = true;
+    statinReason = '≥1 危險因子 + LDL ≥160 → 符合給付';
+  } else if (!hasRF1 && ldl && ldl >= 190) {
+    statinCovered = true;
+    statinReason = '無危險因子但 LDL ≥190 → 符合給付';
+  } else {
+    statinReason = '目前 LDL 及危險因子不符合健保 statin 給付條件';
+  }
+
+  html += `<div class="coverage-item ${statinCovered ? 'covered' : 'not-covered'}">
+    <span class="coverage-icon">${statinCovered ? '✅' : '❌'}</span>
+    <span class="coverage-text"><strong>Statin</strong>：${statinReason}</span>
+  </div>`;
+  html += `</div>`;
+
+  // ── Ezetimibe ──
+  html += `<div class="nhi-section"><div class="nhi-section-title">Ezetimibe</div>`;
+  let ezeCovered = false, ezeReason = '';
+
+  if (!statinCovered) {
+    ezeReason = 'Statin 本身不符合給付，Ezetimibe 亦不予給付';
+  } else {
+    // Statin 不耐受 (若 statin_drug 空白視為不耐受) or 用 statin 3個月 LDL 未達標
+    const onStatin = statin !== '';
+    const statinIntolerant = !onStatin;
+
+    if (statinIntolerant) {
+      ezeCovered = true;
+      ezeReason = 'Statin 不耐受 → 可申請 Ezetimibe 單獨給付';
+    } else {
+      // 有用 statin，看是否未達標 (台灣指引 LDL 目標)
+      const ldlTarget = ascvd ? (ascvd_multi ? 55 : 70) : (fh ? 100 : (dm ? 100 : 100));
+      if (ldl && ldl >= ldlTarget) {
+        ezeCovered = true;
+        ezeReason = `使用 Statin ≥3 個月後 LDL ${ldl} mg/dL 仍 ≥ 目標值 ${ldlTarget} mg/dL → 可申請 Ezetimibe 併用`;
+      } else {
+        ezeReason = `使用 Statin 後 LDL 已達標 (< ${ldlTarget} mg/dL) → 暫不符合 Ezetimibe 給付`;
+      }
+    }
+  }
+
+  html += `<div class="coverage-item ${ezeCovered ? 'covered' : (statinCovered ? 'conditional' : 'not-covered')}">
+    <span class="coverage-icon">${ezeCovered ? '✅' : (statinCovered ? '⚠️' : '❌')}</span>
+    <span class="coverage-text"><strong>Ezetimibe</strong>：${ezeReason}</span>
+  </div>`;
+  html += `</div>`;
+
+  // ── PCSK9 ──
+  html += `<div class="nhi-section"><div class="nhi-section-title">PCSK9 抑制劑<br><small style="color:var(--text-muted);font-weight:400">evolocumab / alirocumab</small></div>`;
+  let pcsk9Covered = false, pcsk9Reason = '';
+
+  // 健保：重大心血管事件後一年內，最大耐受 statin + ezetimibe 後 LDL 仍 >100 mg/dL
+  const hasMajorEvent = ascvd && (ascvdTypes.includes('ACS') || ascvdTypes.includes('PCI') || ascvdTypes.includes('CABG'));
+  const onMaxTherapy = (statin !== '' && statinDose === 'high' && eze);
+  const ldlGT100 = ldl && ldl > 100;
+
+  if (!ascvd) {
+    pcsk9Reason = '無臨床 ASCVD → 不符合 PCSK9 抑制劑給付';
+  } else if (!hasMajorEvent) {
+    pcsk9Reason = '非 ACS/PCI/CABG 類型事件（需重大心血管事件後一年內）';
+  } else if (!onMaxTherapy) {
+    pcsk9Reason = '需先使用最大耐受劑量 Statin + Ezetimibe 後評估';
+    pcsk9Covered = false;
+  } else if (!ldlGT100) {
+    pcsk9Reason = 'LDL-C ≤100 mg/dL → 已達 PCSK9 給付門檻，不符合';
+  } else {
+    pcsk9Covered = true;
+    pcsk9Reason = `重大心血管事件 (${ascvdTypes.filter(t => ['ACS','PCI','CABG'].includes(t)).join('/')}) + 最大耐受 Statin+Ezetimibe + LDL ${ldl} > 100 mg/dL → 符合 PCSK9 抑制劑給付`;
+  }
+
+  const pcsk9Class = pcsk9Covered ? 'covered' : (!ascvd || !hasMajorEvent ? 'not-covered' : 'conditional');
+  html += `<div class="coverage-item ${pcsk9Class}">
+    <span class="coverage-icon">${pcsk9Covered ? '✅' : (pcsk9Class === 'conditional' ? '⚠️' : '❌')}</span>
+    <span class="coverage-text"><strong>PCSK9 抑制劑</strong>：${pcsk9Reason}</span>
+  </div>`;
+  html += `</div>`;
+
+  return html;
+}
+
+// ─────────────────────────────────────────────────────────────
+//  Main calculate
+// ─────────────────────────────────────────────────────────────
+function calculate() {
+  const age = getNum('age');
+  const sex = getRadio('sex');
+  const tc = getNum('tc');
+  const ldl = getNum('ldl');
+  const hdl = getNum('hdl');
+  const tg = getNum('tg');
+  const sbp = getNum('sbp');
+  const bpMed = getRadio('bpmed');
+  const fpg = getNum('fpg');
+  const hba1c = getNum('hba1c');
+  const dmMed = getRadio('dmmed');
+  const egfr = getNum('egfr');
+  const smoking = getRadio('smoking');
+  const htn = getRadio('htn');
+  const fh = getRadio('fh');
+  const fhcad = getRadio('fhcad');
+  const dm = getRadio('dm') || (fpg && fpg >= 126) || (hba1c && hba1c >= 6.5) ? 1 : 0;
+  const ascvd = getRadio('ascvd');
+  const ascvd_multi = getRadio('ascvd_multi');
+  const ascvdTypes = getAscvdTypes();
+  const cac = getNum('cac');
+  const lpa = getNum('lpa');
+  const hscrp = getNum('hscrp');
+  const statin = document.getElementById('statin_drug').value;
+  const statinDose = document.getElementById('statin_dose').value;
+  const eze = getRadio('eze');
+
+  // Validation
+  if (!age || !sex) {
+    alert('請至少輸入年齡與性別');
+    return;
+  }
+
+  const p = { age, sex, tc, ldl, hdl, tg, sbp, bpMed, egfr, smoking, htn, fh, fhcad, dm, ascvd, ascvd_multi, ascvdTypes, cac, lpa, hscrp, statin, statinDose, eze, fpg, hba1c, dmMed };
+
+  document.getElementById('body-tw').innerHTML = calcTaiwan(p);
+  document.getElementById('body-esc').innerHTML = calcESC(p);
+  document.getElementById('body-aha').innerHTML = calcAHA(p);
+  document.getElementById('body-nhi').innerHTML = calcNHI(p);
+
+  document.getElementById('results').classList.add('visible');
+  document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+// ── Smart tooltip positioning ──
+// Uses mousemove to place the ::after pseudo via a CSS var trick isn't possible,
+// so we use a real floating div instead.
+(function() {
+  const tip = document.createElement('div');
+  tip.id = 'tooltip-popup';
+  Object.assign(tip.style, {
+    position: 'fixed',
+    background: '#1c2740',
+    border: '1px solid rgba(88,166,255,0.3)',
+    borderRadius: '8px',
+    color: '#e6edf3',
+    fontSize: '13px',
+    fontWeight: '400',
+    lineHeight: '1.6',
+    padding: '8px 12px',
+    width: '300px',
+    whiteSpace: 'normal',
+    pointerEvents: 'none',
+    opacity: '0',
+    transition: 'opacity 0.15s',
+    zIndex: '9999',
+    boxShadow: '0 4px 20px rgba(0,0,0,0.55)',
+    maxWidth: 'calc(100vw - 32px)',
+  });
+  document.body.appendChild(tip);
+
+  document.querySelectorAll('.info-icon').forEach(icon => {
+    icon.addEventListener('mouseenter', function(e) {
+      tip.textContent = this.dataset.tip;
+      tip.style.opacity = '1';
+      positionTip(e, this);
+    });
+    icon.addEventListener('mousemove', function(e) {
+      positionTip(e, this);
+    });
+    icon.addEventListener('mouseleave', function() {
+      tip.style.opacity = '0';
+    });
+  });
+
+  function positionTip(e, icon) {
+    const TIP_W = 300, TIP_H = 100, MARGIN = 12;
+    const rect = icon.getBoundingClientRect();
+    const vw = window.innerWidth, vh = window.innerHeight;
+
+    // Prefer above, centred on icon
+    let left = rect.left + rect.width / 2 - TIP_W / 2;
+    let top = rect.top - TIP_H - 10;
+
+    // Clamp horizontally
+    if (left < MARGIN) left = MARGIN;
+    if (left + TIP_W > vw - MARGIN) left = vw - TIP_W - MARGIN;
+
+    // If not enough room above, flip below
+    if (top < MARGIN) top = rect.bottom + 8;
+
+    tip.style.left = left + 'px';
+    tip.style.top = top + 'px';
+  }
+})();
+</script>
+</body>
+</html>
