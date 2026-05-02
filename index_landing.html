@@ -40,30 +40,27 @@
   }
 
   /* Warning banner */
-  .warning-banner {
-    background: rgba(240,192,64,0.08);
-    border: 1px solid rgba(240,192,64,0.3);
-    border-radius: 12px;
-    padding: 20px 24px;
-    margin-bottom: 32px;
-    display: flex;
-    gap: 14px;
-    align-items: flex-start;
+  .warning-section {
+    margin-bottom: 36px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--border);
   }
-  .warning-icon { font-size: 24px; flex-shrink: 0; margin-top: 2px; }
-  .warning-title {
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--yellow);
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    margin-bottom: 8px;
+  .warning-label {
     font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--yellow);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
   }
   .warning-text {
     font-size: 14px;
     color: var(--text-muted);
-    line-height: 1.75;
+    line-height: 1.8;
   }
   .warning-text strong { color: var(--text); }
 
@@ -74,11 +71,12 @@
   }
   .site-title {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 28px;
+    font-size: 42px;
     font-weight: 600;
     color: var(--accent);
-    letter-spacing: 0.05em;
-    margin-bottom: 8px;
+    letter-spacing: 0.04em;
+    margin-bottom: 10px;
+    line-height: 1.1;
   }
   .site-sub {
     font-size: 14px;
@@ -172,15 +170,12 @@
 <div class="wrapper">
 
   <!-- Warning -->
-  <div class="warning-banner">
-    <span class="warning-icon">⚠️</span>
-    <div>
-      <div class="warning-title">Warning — DR. YANG 的領地</div>
-      <div class="warning-text">
-        這裡的工具由家醫科醫師個人維護，<strong>資訊僅供參考，不保證完全正確</strong>。
-        醫療決策請保有自己的專業判斷，並以最新健保署公告及指引原文為準。
-        發現錯誤歡迎告知，感謝你的包容。
-      </div>
+  <div class="warning-section">
+    <div class="warning-label">⚠ Warning</div>
+    <div class="warning-text">
+      這裡的工具由 <strong>DR. YANG</strong> 個人維護，<strong>資訊僅供參考，不保證完全正確</strong>。
+      醫療決策請保有自己的專業判斷，並以最新健保署公告及指引原文為準。
+      發現錯誤歡迎告知，感謝你的包容。
     </div>
   </div>
 
@@ -213,9 +208,7 @@
 
   <!-- Footer -->
   <div class="footer">
-    工具由 DR. YANG 個人維護 · 資料來源：
-    <a href="https://www.nhi.gov.tw/ch/np-2505-1.html" target="_blank">衛生福利部中央健康保險署</a>
-    <br>本站不隸屬於任何醫療機構或政府機關
+    工具由 DR. YANG 個人維護 · 本站不隸屬於任何醫療機構或政府機關
   </div>
 
 </div>
