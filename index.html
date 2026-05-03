@@ -177,8 +177,10 @@
 
   /* Content blocks with indentation levels */
   .content-block { font-size: 14px; line-height: 1.8; color: #e2e8f4; padding: 2px 0; }
-  .block-l0 { font-size: 14px; font-weight: 500; margin-top: 6px; }
-  .block-l1 { font-size: 14px; padding-left: 20px; border-left: 2px solid #2d3a52; margin-left: 4px; }
+  .block-l0 { font-size: 14px; font-weight: 600; margin-top: 10px; padding-top: 4px;
+              border-top: 1px solid #2d3a52; }
+  .block-l0:first-child { border-top: none; margin-top: 2px; }
+  .block-l1 { font-size: 14px; padding-left: 20px; border-left: 2px solid #2d3a52; margin-left: 4px; margin-top: 2px; }
   .block-l2 { font-size: 13px; padding-left: 36px; border-left: 2px solid #1e2d45; margin-left: 4px; }
   .block-l3 { font-size: 13px; padding-left: 52px; border-left: 2px solid #182436; margin-left: 4px; color: #c8d8ec; }
   .content-block mark { background: var(--highlight); border-bottom: 2px solid var(--highlight-border); border-radius: 2px; color: #ffd23c; padding: 0 1px; }

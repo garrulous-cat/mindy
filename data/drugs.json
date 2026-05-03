@@ -560,7 +560,12 @@
       {
         "type": "text",
         "level": 0,
-        "text": "(SNRI)及其他抗憂鬱劑（fluvoxamine maleate、fluoxetine、paroxetine、 sertraline、venlafaxine、milnacipran、mirtazapine、citalopram、 escitalopram、duloxetine、agomelatine、vortioxetine 等製劑）：(88/12/1、 89/10/1、91/5/1、92/6/1、93/5/1、94/2/1、94/12/1、99/10/1、101/7/1、 107/3/1) 使用時病歷上應詳細註明診斷依據及使用理由。 1.2.1.1.Bupropion HCL：(92/1/1、99/10/1) 作為戒菸治療者不予給付。"
+        "text": "(SNRI)及其他抗憂鬱劑（fluvoxamine maleate、fluoxetine、paroxetine、 sertraline、venlafaxine、milnacipran、mirtazapine、citalopram、 escitalopram、duloxetine、agomelatine、vortioxetine 等製劑）：(88/12/1、 89/10/1、91/5/1、92/6/1、93/5/1、94/2/1、94/12/1、99/10/1、101/7/1、 107/3/1) 使用時病歷上應詳細註明診斷依據及使用理由。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "1.2.1.1.Bupropion HCL：(92/1/1、99/10/1) 作為戒菸治療者不予給付。"
       }
     ]
   },
@@ -595,7 +600,12 @@
       {
         "type": "text",
         "level": 1,
-        "text": "3.申報費用時，應檢附白血球檢驗報告。 1.2.2.2.Second generation antipsychotics(簡稱第二代抗精神病藥品，如 clozapine、olanzapine、risperidone、quetiapine、amisulpride、ziprasidone、 aripiprazole、paliperidone、lurasidone、brexpiprazole 等)：(91/9/1、 92/1/1、92/7/1、94/1/1、95/10/1、97/5/1、99/10/1、106/1/1、109/1/1、 109/6/1、112/7/1)"
+        "text": "3.申報費用時，應檢附白血球檢驗報告。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "1.2.2.2.Second generation antipsychotics(簡稱第二代抗精神病藥品，如 clozapine、olanzapine、risperidone、quetiapine、amisulpride、ziprasidone、 aripiprazole、paliperidone、lurasidone、brexpiprazole 等)：(91/9/1、 92/1/1、92/7/1、94/1/1、95/10/1、97/5/1、99/10/1、106/1/1、109/1/1、 109/6/1、112/7/1)"
       },
       {
         "type": "text",
@@ -733,7 +743,17 @@
       {
         "type": "text",
         "level": 1,
-        "text": "3.癲癇重積狀態(Status epilepticus) 之病患。 1.3.2.2.Gabapentin (如 Neurontin)、vigabatrin (如 Sabril)、tiagabine (如 Gabitril)、pregabalin(如 Lyrica)：(89/9/1、89/2/1、93/6/1、96/3/1、97/1/1、 97/10/1、101/2/1、102/1/1、104/6/1、104/11/1、107/2/1、107/8/1、110/5/1） 限用於其他抗癲癇藥物無法有效控制之局部癲癇發作之輔助性治療(add on therapy)。 1.3.2.3.Topiramate(如 Topamax 、Trokendi）：（90/9/1、92/11/1、93/6/1、94/3/1、 94/9/1、95/1/1、99/5/1、99/10/1、107/11/1、110/12/1)"
+        "text": "3.癲癇重積狀態(Status epilepticus) 之病患。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "1.3.2.2.Gabapentin (如 Neurontin)、vigabatrin (如 Sabril)、tiagabine (如 Gabitril)、pregabalin(如 Lyrica)：(89/9/1、89/2/1、93/6/1、96/3/1、97/1/1、 97/10/1、101/2/1、102/1/1、104/6/1、104/11/1、107/2/1、107/8/1、110/5/1） 限用於其他抗癲癇藥物無法有效控制之局部癲癇發作之輔助性治療(add on therapy)。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "1.3.2.3.Topiramate(如 Topamax 、Trokendi）：（90/9/1、92/11/1、93/6/1、94/3/1、 94/9/1、95/1/1、99/5/1、99/10/1、107/11/1、110/12/1)"
       },
       {
         "type": "text",
@@ -768,7 +788,12 @@
       {
         "type": "text",
         "level": 2,
-        "text": "(2)Topiramate 每日治療劑量超過100mg 時，需於病歷詳細記載使用理 由。 1.3.2.4.Levetiracetam（101/6/1、102/10/1、108/5/1、111/2/1)"
+        "text": "(2)Topiramate 每日治療劑量超過100mg 時，需於病歷詳細記載使用理 由。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "1.3.2.4.Levetiracetam（101/6/1、102/10/1、108/5/1、111/2/1)"
       },
       {
         "type": "text",
@@ -808,7 +833,12 @@
       {
         "type": "text",
         "level": 2,
-        "text": "(3)癲癇重積狀態(Status epilepticus) 之病患。 1.3.2.5.Lamotrigine (如 Lamictal) （97/10/1、111/2/1) 限下列病患使用："
+        "text": "(3)癲癇重積狀態(Status epilepticus) 之病患。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "1.3.2.5.Lamotrigine (如 Lamictal) （97/10/1、111/2/1) 限下列病患使用："
       },
       {
         "type": "text",
@@ -833,7 +863,12 @@
       {
         "type": "text",
         "level": 2,
-        "text": "(3)日劑量超過200mg 時，需於病歷記載理由。 1.3.2.6 Carbamazepine（100/8/1）"
+        "text": "(3)日劑量超過200mg 時，需於病歷記載理由。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "1.3.2.6 Carbamazepine（100/8/1）"
       },
       {
         "type": "text",
@@ -858,7 +893,22 @@
       {
         "type": "text",
         "level": 1,
-        "text": "3.醫師為病患處方使用 carbamazepine 成分藥品，以日劑藥費申報者，應依規定詳實 申報處方明細。 1.3.2.7.Rufinamide (如 Inovelon) (106/5/1、110/5/1) 限用於1歲以上病患之 Lennox-Gastaut 症候群相關癲癇發作之輔助治療，且使用 lamotrigine、topiramate 無效或無法耐受副作用者。 1.3.2.8.Zonisamide(如 Zonegran) (107/2/1) 限用於其他抗癲癇藥物無法有效控制之局部癲癇發作之輔助性治療(add on therapy)或作為新診斷成人局部癲癇發作之單一藥物治療。 1.3.2.9. Lacosamide (107/8/1）"
+        "text": "3.醫師為病患處方使用 carbamazepine 成分藥品，以日劑藥費申報者，應依規定詳實 申報處方明細。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "1.3.2.7.Rufinamide (如 Inovelon) (106/5/1、110/5/1) 限用於1歲以上病患之 Lennox-Gastaut 症候群相關癲癇發作之輔助治療，且使用 lamotrigine、topiramate 無效或無法耐受副作用者。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "1.3.2.8.Zonisamide(如 Zonegran) (107/2/1) 限用於其他抗癲癇藥物無法有效控制之局部癲癇發作之輔助性治療(add on therapy)或作為新診斷成人局部癲癇發作之單一藥物治療。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "1.3.2.9. Lacosamide (107/8/1）"
       },
       {
         "type": "text",
@@ -883,7 +933,12 @@
       {
         "type": "text",
         "level": 2,
-        "text": "(3)癲癇重積狀態(Status epilepticus)之病患。 1.3.2.10.Brivaracetam(如 Briviact)（110/1/1、111/3/1、112/3/1)"
+        "text": "(3)癲癇重積狀態(Status epilepticus)之病患。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "1.3.2.10.Brivaracetam(如 Briviact)（110/1/1、111/3/1、112/3/1)"
       },
       {
         "type": "text",
@@ -923,7 +978,12 @@
       {
         "type": "text",
         "level": 1,
-        "text": "3.口服液劑（如 Briviact Oral Solution)：(112/3/1) 限用於無法口服錠劑之4歲以上經使用其他抗癲癇藥物後仍然無法有效控制之局部癲 癇發作病人的單一療法或輔助性治療(addon therapy)。 1.3.2.11.Perampanel(如 Fycompa)"
+        "text": "3.口服液劑（如 Briviact Oral Solution)：(112/3/1) 限用於無法口服錠劑之4歲以上經使用其他抗癲癇藥物後仍然無法有效控制之局部癲 癇發作病人的單一療法或輔助性治療(addon therapy)。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "1.3.2.11.Perampanel(如 Fycompa)"
       },
       {
         "type": "text",
@@ -938,7 +998,12 @@
       {
         "type": "text",
         "level": 2,
-        "text": "(1)限用於其他抗癲癇藥物無法有效控制之局部癲癇發作之輔助性治療 (add on therapy)。 (2)12歲以上成人及青少年患者原發型全身性強直陣攣癲癇發作併有原發性全身發作 之輔助治療。 1.3.2.12.Stiripentol（如 Diacomit）：（113/2/1）"
+        "text": "(1)限用於其他抗癲癇藥物無法有效控制之局部癲癇發作之輔助性治療 (add on therapy)。 (2)12歲以上成人及青少年患者原發型全身性強直陣攣癲癇發作併有原發性全身發作 之輔助治療。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "1.3.2.12.Stiripentol（如 Diacomit）：（113/2/1）"
       },
       {
         "type": "text",
@@ -953,7 +1018,12 @@
       {
         "type": "text",
         "level": 1,
-        "text": "3.本藥品不能與 cannabidiol 合併使用。 1.3.2.13.Cannabidiol（如 Epidyolex）：（113/4/1）"
+        "text": "3.本藥品不能與 cannabidiol 合併使用。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "1.3.2.13.Cannabidiol（如 Epidyolex）：（113/4/1）"
       },
       {
         "type": "text",
@@ -1357,7 +1427,12 @@
       {
         "type": "text",
         "level": 0,
-        "text": "110/12/1、112/3/1) 1.3.6.1.Modafinil(如 Provigil)：(96/2/1、109/12/1、110/12/1、112/3/1) 同時需符合下列條件："
+        "text": "110/12/1、112/3/1)"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "1.3.6.1.Modafinil(如 Provigil)：(96/2/1、109/12/1、110/12/1、112/3/1) 同時需符合下列條件："
       },
       {
         "type": "text",
@@ -1407,7 +1482,12 @@
       {
         "type": "text",
         "level": 1,
-        "text": "8.Modafinil(如 Provigil)與 pitolisant(如 Wakix)兩者限擇一使用。(112/3/1) 1.3.6.2.Pitolisant (如 Wakix)：（112/3/1)"
+        "text": "8.Modafinil(如 Provigil)與 pitolisant(如 Wakix)兩者限擇一使用。(112/3/1)"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "1.3.6.2.Pitolisant (如 Wakix)：（112/3/1)"
       },
       {
         "type": "text",
@@ -1876,7 +1956,12 @@
       {
         "type": "text",
         "level": 0,
-        "text": "本類藥品限以下適應症使用，每一個案每一年需重新評估一次(98/5/1、107/2/1)。 1.6.2.1.Botox(90/1/1、93/1/1、94/6/1、98/3/1、98/5/1、100/8/1、104/5/1、 104/9/1、107/2/1、109/2/1、109/12/1、110/3/1、111/3/1、115/2/1)"
+        "text": "本類藥品限以下適應症使用，每一個案每一年需重新評估一次(98/5/1、107/2/1)。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "1.6.2.1.Botox(90/1/1、93/1/1、94/6/1、98/3/1、98/5/1、100/8/1、104/5/1、 104/9/1、107/2/1、109/2/1、109/12/1、110/3/1、111/3/1、115/2/1)"
       },
       {
         "type": "text",
@@ -2101,7 +2186,12 @@
       {
         "type": "text",
         "level": 2,
-        "text": "(10)不得與 CGRP(calcitonin gene-related peptide)單株抗體製劑併用(110/3/1、 111/3/1) 1.6.2.2.Dysport (91/2/1、93/1/1、94/6/1、98/3/1、98/5/1、100/8/1、107/2/1、 109/2/1、109/12/1、112/11/1)"
+        "text": "(10)不得與 CGRP(calcitonin gene-related peptide)單株抗體製劑併用(110/3/1、 111/3/1)"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "1.6.2.2.Dysport (91/2/1、93/1/1、94/6/1、98/3/1、98/5/1、100/8/1、107/2/1、 109/2/1、109/12/1、112/11/1)"
       },
       {
         "type": "text",
@@ -3062,7 +3152,12 @@
       {
         "type": "text",
         "level": 0,
-        "text": "2.1.1.1.Acetylsalicylic acid (Aspirin) 製劑（89/2/1） 如用於抗血小板凝集，以每日一粒為原則。 2.1.1.2.Ticlopidine (原 ticlopidine 與 acetylsalicylic acid 合併使用之情況條文 修訂)：(87/4/1、88/9/1、90/1/1、100/7/1)"
+        "text": "2.1.1.1.Acetylsalicylic acid (Aspirin) 製劑（89/2/1） 如用於抗血小板凝集，以每日一粒為原則。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "2.1.1.2.Ticlopidine (原 ticlopidine 與 acetylsalicylic acid 合併使用之情況條文 修訂)：(87/4/1、88/9/1、90/1/1、100/7/1)"
       },
       {
         "type": "text",
@@ -3077,7 +3172,12 @@
       {
         "type": "text",
         "level": 1,
-        "text": "3.申報費用時需註明放置支架 (stent) 之日期。（87/4/1、90/1/1、100/7/1) 2.1.1.3.Tirofiban (如 Aggrastat)：（91/2/1、99/10/1、100/7/1)"
+        "text": "3.申報費用時需註明放置支架 (stent) 之日期。（87/4/1、90/1/1、100/7/1)"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "2.1.1.3.Tirofiban (如 Aggrastat)：（91/2/1、99/10/1、100/7/1)"
       },
       {
         "type": "text",
@@ -3087,7 +3187,12 @@
       {
         "type": "text",
         "level": 1,
-        "text": "2.急性 Q 波心肌梗塞於症狀發生十二小時內，於執行 PTCA 時得併用 tirofiban。 2.1.1.4.Abciximab（如 ReoPro）：(90/7/1、100/7/1)"
+        "text": "2.急性 Q 波心肌梗塞於症狀發生十二小時內，於執行 PTCA 時得併用 tirofiban。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "2.1.1.4.Abciximab（如 ReoPro）：(90/7/1、100/7/1)"
       },
       {
         "type": "text",
@@ -3097,7 +3202,12 @@
       {
         "type": "text",
         "level": 1,
-        "text": "2.急性 Q 波心肌梗塞於症狀發生十二小時內，於執行 PTCA 時得併用 abciximab。 2.1.1.5.Cilostazol（如 Pletaal）：(90/6/1、100/7/1、104/4/1、105/5/1)"
+        "text": "2.急性 Q 波心肌梗塞於症狀發生十二小時內，於執行 PTCA 時得併用 abciximab。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "2.1.1.5.Cilostazol（如 Pletaal）：(90/6/1、100/7/1、104/4/1、105/5/1)"
       },
       {
         "type": "text",
@@ -3132,7 +3242,12 @@
       {
         "type": "text",
         "level": 2,
-        "text": "(4)最近一年內經上消化道內視鏡檢查或上消化道 X 光攝影檢查證實消化性潰瘍或發 生上消化道出血、穿孔病史。需於病歷註明上消化道內視鏡或上消化道 X 光攝影 檢查時間。但對 acetylsalicylic acid 無法耐受，且身體狀況無法忍受內視鏡或 消化道 X 光攝影檢查者（如75歲(含)以上罹有中風或長期卧床者）不在此限。 2.1.1.6 Clopidogrel（如 Plavix）：(90/1/1、93/4/1、94/8/1、96/10/1、100/7/1、 101/12/1)"
+        "text": "(4)最近一年內經上消化道內視鏡檢查或上消化道 X 光攝影檢查證實消化性潰瘍或發 生上消化道出血、穿孔病史。需於病歷註明上消化道內視鏡或上消化道 X 光攝影 檢查時間。但對 acetylsalicylic acid 無法耐受，且身體狀況無法忍受內視鏡或 消化道 X 光攝影檢查者（如75歲(含)以上罹有中風或長期卧床者）不在此限。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "2.1.1.6 Clopidogrel（如 Plavix）：(90/1/1、93/4/1、94/8/1、96/10/1、100/7/1、 101/12/1)"
       },
       {
         "type": "text",
@@ -3172,7 +3287,12 @@
       {
         "type": "text",
         "level": 1,
-        "text": "4.用於已發作之急性冠心症(不穩定性心絞痛和心肌梗塞)而住院的病人時，得與 acetylsalicylic acid (如 Aspirin) 合併治療，最長9個月。需於病歷註明住院時 間。（93/4/1、94/8/1、96/10/1） 2.1.1.7.Eptifibatide（如 Integrilin）：（95/8/1、100/7/1）"
+        "text": "4.用於已發作之急性冠心症(不穩定性心絞痛和心肌梗塞)而住院的病人時，得與 acetylsalicylic acid (如 Aspirin) 合併治療，最長9個月。需於病歷註明住院時 間。（93/4/1、94/8/1、96/10/1）"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "2.1.1.7.Eptifibatide（如 Integrilin）：（95/8/1、100/7/1）"
       },
       {
         "type": "text",
@@ -3182,7 +3302,12 @@
       {
         "type": "text",
         "level": 1,
-        "text": "2.急性 Q 波心肌梗塞於症狀發生十二小時內，於執行 PTCA 時得併用 eptifibatide。 2.1.1.8.Clopidogrel-acetylsalicylic acid（如 CoPlavix）：(100/9/1、101/12/1)"
+        "text": "2.急性 Q 波心肌梗塞於症狀發生十二小時內，於執行 PTCA 時得併用 eptifibatide。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "2.1.1.8.Clopidogrel-acetylsalicylic acid（如 CoPlavix）：(100/9/1、101/12/1)"
       },
       {
         "type": "text",
@@ -3197,7 +3322,17 @@
       {
         "type": "text",
         "level": 1,
-        "text": "3.用於已發作之急性冠心症(不穩定性心絞痛和心肌梗塞)而住院的病人時，最長9個 月。需於病歷註明住院時間。（100/9/1） 2.1.1.9.Ticagrelor（如 Brilinta）：(102/7/1) 限用於已發作之急性冠心症(包括不穩定型心絞痛、非 ST 段上升型心肌梗塞或 ST 段 上升型心肌梗塞)而住院的病人時，得與 acetylsalicylic acid (如 Aspirin) 合併 治療，最長9個月。需於病歷註明住院時間。 2.1.1.10. Prasugrel（如 Efient）：(107/11/1) 限用於需要冠狀動脈介入性治療(PCI)的已發作之急性冠心症(包括不穩定型心絞 痛、非 ST 段上升型心肌梗塞或 ST 段上升型心肌梗塞)而住院的病人時，得與 acetylsalicylic acid (如 Aspirin) 合併治療，最長12個月。需於病歷註明住院 時間。"
+        "text": "3.用於已發作之急性冠心症(不穩定性心絞痛和心肌梗塞)而住院的病人時，最長9個 月。需於病歷註明住院時間。（100/9/1）"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "2.1.1.9.Ticagrelor（如 Brilinta）：(102/7/1) 限用於已發作之急性冠心症(包括不穩定型心絞痛、非 ST 段上升型心肌梗塞或 ST 段 上升型心肌梗塞)而住院的病人時，得與 acetylsalicylic acid (如 Aspirin) 合併 治療，最長9個月。需於病歷註明住院時間。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "2.1.1.10. Prasugrel（如 Efient）：(107/11/1) 限用於需要冠狀動脈介入性治療(PCI)的已發作之急性冠心症(包括不穩定型心絞 痛、非 ST 段上升型心肌梗塞或 ST 段上升型心肌梗塞)而住院的病人時，得與 acetylsalicylic acid (如 Aspirin) 合併治療，最長12個月。需於病歷註明住院 時間。"
       }
     ]
   },
@@ -3259,7 +3394,12 @@
       {
         "type": "text",
         "level": 1,
-        "text": "8.醫院如擬將 rt-PA 或 tenecteplase 列為常備藥品，請於申報時檢附心臟病診斷設 備，加護病房 ( ICU 或 CCU ) 之相關資料，經本保險同意後再按使用規定辦理。 2.1.2.2. rt-PA（如 Actilyse Inj）用於急性缺血性腦中風時：(93/1/1、100/7/1、 107/11/1、112/10/1)"
+        "text": "8.醫院如擬將 rt-PA 或 tenecteplase 列為常備藥品，請於申報時檢附心臟病診斷設 備，加護病房 ( ICU 或 CCU ) 之相關資料，經本保險同意後再按使用規定辦理。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "2.1.2.2. rt-PA（如 Actilyse Inj）用於急性缺血性腦中風時：(93/1/1、100/7/1、 107/11/1、112/10/1)"
       },
       {
         "type": "text",
@@ -3279,7 +3419,12 @@
       {
         "type": "text",
         "level": 1,
-        "text": "4. 醫院於病例發生後，於當月醫療費用申報時，應填寫「全民健康保險使用 rt-PA (Actilyse) 申請表（急性缺血性腦中風病患用）」(請詳附表二-B)，並附注射前及 24小時、36小時後之腦部電腦斷層 (或磁振造影檢查) 與 NIHSS。 2.1.2.3.刪除(101/4/1)"
+        "text": "4. 醫院於病例發生後，於當月醫療費用申報時，應填寫「全民健康保險使用 rt-PA (Actilyse) 申請表（急性缺血性腦中風病患用）」(請詳附表二-B)，並附注射前及 24小時、36小時後之腦部電腦斷層 (或磁振造影檢查) 與 NIHSS。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "2.1.2.3.刪除(101/4/1)"
       }
     ]
   },
@@ -3315,7 +3460,12 @@
       {
         "type": "text",
         "level": 1,
-        "text": "3.用於治療肺栓塞。 2.1.3.2.Enoxaparin 注射劑（如 Clexane）：(108/2/1) 依下列情形使用："
+        "text": "3.用於治療肺栓塞。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "2.1.3.2.Enoxaparin 注射劑（如 Clexane）：(108/2/1) 依下列情形使用："
       },
       {
         "type": "text",
@@ -3372,7 +3522,12 @@
       {
         "type": "text",
         "level": 2,
-        "text": "(2)經靜脈超音波檢查（Venous ultrasonography）或靜脈攝影（Venography），診 斷為靜脈血栓症之病患。(111/3/1) 2.1.4.2.Rivaroxaban(如 Xarelto)（101/1/1、102/2/1、103/5/1、104/12/1、 105/5/1、110/7/1、111/2/1、112/3/1） 限用於"
+        "text": "(2)經靜脈超音波檢查（Venous ultrasonography）或靜脈攝影（Venography），診 斷為靜脈血栓症之病患。(111/3/1)"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "2.1.4.2.Rivaroxaban(如 Xarelto)（101/1/1、102/2/1、103/5/1、104/12/1、 105/5/1、110/7/1、111/2/1、112/3/1） 限用於"
       },
       {
         "type": "text",
@@ -3520,7 +3675,12 @@
       {
         "type": "text",
         "level": 2,
-        "text": "(4)不得合併雙重抗血小板(DAPT)藥物、P2Y12抑制劑(如 clopidogrel、ticagrelor 或 prasugrel)、cilostazol 或其他抗凝血劑(anti-coagulant，如 warfarin)。 2.1.4.3.Apixaban（如 Eliquis）(103/6/1、106/4/1、111/2/1) 限用於"
+        "text": "(4)不得合併雙重抗血小板(DAPT)藥物、P2Y12抑制劑(如 clopidogrel、ticagrelor 或 prasugrel)、cilostazol 或其他抗凝血劑(anti-coagulant，如 warfarin)。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "2.1.4.3.Apixaban（如 Eliquis）(103/6/1、106/4/1、111/2/1) 限用於"
       },
       {
         "type": "text",
@@ -3615,7 +3775,12 @@
       {
         "type": "text",
         "level": 2,
-        "text": "(3)第8日起，每日2次，每次限用1顆，每6個月評估一次。 2.1.4.4.Edoxaban(如 Lixiana)：(105/9/1、111/2/1) 限用於"
+        "text": "(3)第8日起，每日2次，每次限用1顆，每6個月評估一次。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "2.1.4.4.Edoxaban(如 Lixiana)：(105/9/1、111/2/1) 限用於"
       },
       {
         "type": "text",
@@ -4359,7 +4524,12 @@
       {
         "type": "text",
         "level": 2,
-        "text": "(4) 限每4週使用1次，每次最多使用3支，或每2週使用1支。(109/4/1) 2.6.4.2 Alirocumab (如 Praluent) (109/1/1、114/9/1)： 限使用於發生重大心血管事件之病人："
+        "text": "(4) 限每4週使用1次，每次最多使用3支，或每2週使用1支。(109/4/1)"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "2.6.4.2 Alirocumab (如 Praluent) (109/1/1、114/9/1)： 限使用於發生重大心血管事件之病人："
       },
       {
         "type": "text",
@@ -4442,7 +4612,12 @@
       {
         "type": "text",
         "level": 1,
-        "text": "2.WHO Functional Class III 之先天性心臟病續發肺動脈高血壓患者，使用單一藥物 治療三個月後成效不佳時。（104/8/1） 2.8.2.1.Iloprost (如 Ventavis、 Ilomedin-20)：(95/1/1、99/11/1、100/4/1)"
+        "text": "2.WHO Functional Class III 之先天性心臟病續發肺動脈高血壓患者，使用單一藥物 治療三個月後成效不佳時。（104/8/1）"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "2.8.2.1.Iloprost (如 Ventavis、 Ilomedin-20)：(95/1/1、99/11/1、100/4/1)"
       },
       {
         "type": "text",
@@ -4457,7 +4632,12 @@
       {
         "type": "text",
         "level": 1,
-        "text": "3.需經事前審查核准後使用。 2.8.2.2.Sildenafil (如 Revatio)：(97/6/1、100/4/1、102/8/1)"
+        "text": "3.需經事前審查核准後使用。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "2.8.2.2.Sildenafil (如 Revatio)：(97/6/1、100/4/1、102/8/1)"
       },
       {
         "type": "text",
@@ -4467,7 +4647,12 @@
       {
         "type": "text",
         "level": 1,
-        "text": "2.不得與任何有機硝酸鹽藥物合併使用。 2.8.2.3.Ambrisentan（如 Volibris）（98/12/1、103/7/1、104/8/1、107/12/1)："
+        "text": "2.不得與任何有機硝酸鹽藥物合併使用。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "2.8.2.3.Ambrisentan（如 Volibris）（98/12/1、103/7/1、104/8/1、107/12/1)："
       },
       {
         "type": "text",
@@ -4482,7 +4667,12 @@
       {
         "type": "text",
         "level": 1,
-        "text": "3.每次限用1粒。 2.8.2.4.Riociguat（如 Adempas）(104/6/1）："
+        "text": "3.每次限用1粒。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "2.8.2.4.Riociguat（如 Adempas）(104/6/1）："
       },
       {
         "type": "text",
@@ -4507,7 +4697,12 @@
       {
         "type": "text",
         "level": 1,
-        "text": "3.每次限用1粒。 2.8.2.5.Bosentan（如 Tracleer）（98/12/1、103/7/1、104/8/1）："
+        "text": "3.每次限用1粒。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "2.8.2.5.Bosentan（如 Tracleer）（98/12/1、103/7/1、104/8/1）："
       },
       {
         "type": "text",
@@ -4527,7 +4722,12 @@
       {
         "type": "text",
         "level": 1,
-        "text": "4.每次限用1粒。 2.8.2.6.Macitentan（如 Opsumit）（107/12/1、114/6/1、115/5/1)："
+        "text": "4.每次限用1粒。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "2.8.2.6.Macitentan（如 Opsumit）（107/12/1、114/6/1、115/5/1)："
       },
       {
         "type": "text",
@@ -4582,7 +4782,12 @@
       {
         "type": "text",
         "level": 2,
-        "text": "(4)每日限用1粒。 2.8.2.7.Selexipag (如 UPTRAVI)：(108/5/1、114/6/1)"
+        "text": "(4)每日限用1粒。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "2.8.2.7.Selexipag (如 UPTRAVI)：(108/5/1、114/6/1)"
       },
       {
         "type": "text",
@@ -4652,7 +4857,12 @@
       {
         "type": "text",
         "level": 2,
-        "text": "(5) 每日限最多使用4粒。 2.8.2.8.Treprostinil (如 Remodulin inj.、Tyvaso)：(109/1/1、112/3/1、 113/1/1)"
+        "text": "(5) 每日限最多使用4粒。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "2.8.2.8.Treprostinil (如 Remodulin inj.、Tyvaso)：(109/1/1、112/3/1、 113/1/1)"
       },
       {
         "type": "text",
@@ -4667,7 +4877,12 @@
       {
         "type": "text",
         "level": 1,
-        "text": "3.需經事前審查核准後使用，每次申請以24週為限，期滿須經再次申請核准後才得以 續用。(109/1/1、113/1/1) 2.8.2.9.Tadalafil（如 Adcirca）：（114/6/1）"
+        "text": "3.需經事前審查核准後使用，每次申請以24週為限，期滿須經再次申請核准後才得以 續用。(109/1/1、113/1/1)"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "2.8.2.9.Tadalafil（如 Adcirca）：（114/6/1）"
       },
       {
         "type": "text",
@@ -4677,7 +4892,12 @@
       {
         "type": "text",
         "level": 1,
-        "text": "2.不得與任何有機硝酸鹽藥物（如 nitroglycerin、isosorbide salts…等）合併使 用。 2.8.2.10.含 macitentan 及 tadalafil 之複方製劑(如 Opsynvi)：(115/5/1)"
+        "text": "2.不得與任何有機硝酸鹽藥物（如 nitroglycerin、isosorbide salts…等）合併使 用。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "2.8.2.10.含 macitentan 及 tadalafil 之複方製劑(如 Opsynvi)：(115/5/1)"
       },
       {
         "type": "text",
@@ -5572,7 +5792,12 @@
       {
         "type": "text",
         "level": 1,
-        "text": "4.肝功能檢查如檢查結果正常，應停止用藥，在檢查未得結果前，所用藥物以一週為 宜。 3.3.2.α-Keto acid-amino acid 製劑(如 Ketosteril)：限"
+        "text": "4.肝功能檢查如檢查結果正常，應停止用藥，在檢查未得結果前，所用藥物以一週為 宜。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "3.3.2.α-Keto acid-amino acid 製劑(如 Ketosteril)：限"
       },
       {
         "type": "text",
@@ -5671,7 +5896,12 @@
       {
         "type": "text",
         "level": 1,
-        "text": "5.不得同時合併其他胺基酸（amino acid）使用。 3.3.6.\"Baxter\" Extraneal Peritoneal Dialysis Solution With 7.5% Icodextrin (93/12 /1、96/1/1、99/9/1、100/2/1、108/8/1）"
+        "text": "5.不得同時合併其他胺基酸（amino acid）使用。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "3.3.6.\"Baxter\" Extraneal Peritoneal Dialysis Solution With 7.5% Icodextrin (93/12 /1、96/1/1、99/9/1、100/2/1、108/8/1）"
       },
       {
         "type": "text",
@@ -7196,7 +7426,17 @@
       {
         "type": "text",
         "level": 1,
-        "text": "2. 與4%檸檬酸鈉溶液(如 A.C.D.-4 Solution \"S.T.\")及鈣補充液(如 Support Cal 1.47% CaCl2)合併使用。 3.3.23. 4%檸檬酸鈉溶液(如 A.C.D.-4 Solution \"S.T.\")：（111/4/1） 須符合下列各項條件："
+        "text": "2. 與4%檸檬酸鈉溶液(如 A.C.D.-4 Solution \"S.T.\")及鈣補充液(如 Support Cal"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "1.47% CaCl2)合併使用。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "3.3.23. 4%檸檬酸鈉溶液(如 A.C.D.-4 Solution \"S.T.\")：（111/4/1） 須符合下列各項條件："
       },
       {
         "type": "text",
@@ -8095,7 +8335,12 @@
       {
         "type": "text",
         "level": 1,
-        "text": "2.患者如白血球超過4000/cumm，或中性白血球超過2000/cumm 時，應即停藥。惟當預 估其骨髓功能不易恢復時，雖其血球已達上述標準，仍可給予半量之治療，若仍可 維持血球數，則可給予四分之一劑量，若仍可維持血球數，則停用。任何時候，若 白血球或中性白血球數過度增高，即應停藥。 4.1.2.2. 長效型注射劑(如 pegfilgrastim)：(101/6/1、112/10/1、113/11/1、 114/9/1)"
+        "text": "2.患者如白血球超過4000/cumm，或中性白血球超過2000/cumm 時，應即停藥。惟當預 估其骨髓功能不易恢復時，雖其血球已達上述標準，仍可給予半量之治療，若仍可 維持血球數，則可給予四分之一劑量，若仍可維持血球數，則停用。任何時候，若 白血球或中性白血球數過度增高，即應停藥。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "4.1.2.2. 長效型注射劑(如 pegfilgrastim)：(101/6/1、112/10/1、113/11/1、 114/9/1)"
       },
       {
         "type": "text",
@@ -8800,7 +9045,12 @@
       {
         "type": "text",
         "level": 1,
-        "text": "6.與第八凝血因子製劑不得併用。(113/7/1) 4.3.其他"
+        "text": "6.與第八凝血因子製劑不得併用。(113/7/1)"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "4.3.其他"
       }
     ]
   },
@@ -8866,7 +9116,12 @@
       {
         "type": "text",
         "level": 0,
-        "text": "102/8/1、102/9/1、105/8/1、106/4/1、108/6/1、109/2/1、115/3/1) 4.3.2.1.Eltrombopag (如 Revolade)(108/6/1、109/2/1、112/1/1、115/3/1)"
+        "text": "102/8/1、102/9/1、105/8/1、106/4/1、108/6/1、109/2/1、115/3/1)"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "4.3.2.1.Eltrombopag (如 Revolade)(108/6/1、109/2/1、112/1/1、115/3/1)"
       },
       {
         "type": "text",
@@ -8981,7 +9236,12 @@
       {
         "type": "text",
         "level": 2,
-        "text": "(5)Eltrombopag 與 romiplostim 僅得擇一使用，惟有在耐受不良時方可轉換使用。 (112/1/1、115/3/1) 4.3.2.2.Romiplostim (如 Romiplate) (108/6/1、112/1/1)"
+        "text": "(5)Eltrombopag 與 romiplostim 僅得擇一使用，惟有在耐受不良時方可轉換使用。 (112/1/1、115/3/1)"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "4.3.2.2.Romiplostim (如 Romiplate) (108/6/1、112/1/1)"
       },
       {
         "type": "text",
@@ -9523,7 +9783,12 @@
       {
         "type": "text",
         "level": 1,
-        "text": "2.本藥品不得與 insulin、DPP-4抑制劑、SGLT-2抑制劑等藥物併用。 5.1.3.2. Liraglutide (如 Victoza)、dulaglutide (如 Trulicity)、lixisenatide(如 Lyxumia) 、semaglutide（如 Ozempic）(101/10/1、105/5/1、105/8/1、107/4/1、 107/7/1、109/5/1、109/8/1、109/9/1、109/12/1)"
+        "text": "2.本藥品不得與 insulin、DPP-4抑制劑、SGLT-2抑制劑等藥物併用。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "5.1.3.2. Liraglutide (如 Victoza)、dulaglutide (如 Trulicity)、lixisenatide(如 Lyxumia) 、semaglutide（如 Ozempic）(101/10/1、105/5/1、105/8/1、107/4/1、 107/7/1、109/5/1、109/8/1、109/9/1、109/12/1)"
       },
       {
         "type": "text",
@@ -9578,7 +9843,12 @@
       {
         "type": "text",
         "level": 0,
-        "text": "師更新其處方內容（109/8/1）。 5.1.3.3.含 lixisenatide 及 insulin glargine 之複方製劑(如 Soliqua)(108/7/1、 110/7/1)"
+        "text": "師更新其處方內容（109/8/1）。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "5.1.3.3.含 lixisenatide 及 insulin glargine 之複方製劑(如 Soliqua)(108/7/1、 110/7/1)"
       },
       {
         "type": "text",
@@ -9763,7 +10033,12 @@
       {
         "type": "text",
         "level": 0,
-        "text": "5.2.2.1 Finasteride（如 Proscar）; dutasteride (如 Avodart) (86/1/1、87/4/1、 93/10/1、101/3/1、102/12/1、106/10/1、108/12/1)： 限前列腺增生且有阻塞症狀，使用經直腸超音波前列腺掃描 (TRUS of prostate) 或 使用腹部超音波測量(僅限無法實施直腸超音波前列腺掃描者)為原則，前列腺大於 30mL 或最大尿流速 (Qmax) 小於15 mL/sec 之病人方可使用。(102/12/1、108/12/1) 5.2.2.2. Dutasteride + tamsulosin (如 Duodart) (101/3/1、102/12/1、106/10/1、 108/12/1)： 限前列腺增生且有阻塞症狀，經直腸超音波前列腺掃描 (TRUS of prostate) 或使用 腹部超音波測量(僅限無法實施直腸超音波前列腺掃描者)為原則，前列腺大於30mL 或 最大尿流速 (Qmax) 小於15 mL/sec 之病人。 (102/12/1、108/12/1)"
+        "text": "5.2.2.1 Finasteride（如 Proscar）; dutasteride (如 Avodart) (86/1/1、87/4/1、 93/10/1、101/3/1、102/12/1、106/10/1、108/12/1)： 限前列腺增生且有阻塞症狀，使用經直腸超音波前列腺掃描 (TRUS of prostate) 或 使用腹部超音波測量(僅限無法實施直腸超音波前列腺掃描者)為原則，前列腺大於 30mL 或最大尿流速 (Qmax) 小於15 mL/sec 之病人方可使用。(102/12/1、108/12/1)"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "5.2.2.2. Dutasteride + tamsulosin (如 Duodart) (101/3/1、102/12/1、106/10/1、 108/12/1)： 限前列腺增生且有阻塞症狀，經直腸超音波前列腺掃描 (TRUS of prostate) 或使用 腹部超音波測量(僅限無法實施直腸超音波前列腺掃描者)為原則，前列腺大於30mL 或 最大尿流速 (Qmax) 小於15 mL/sec 之病人。 (102/12/1、108/12/1)"
       }
     ]
   },
@@ -9801,7 +10076,12 @@
       {
         "type": "text",
         "level": 0,
-        "text": "5.3.1.1.Estraderm TTS；Oestro V.T (93/5/1) 限不能口服本品患者使用，申報費用時應具體說明不能口服之理由。 5.3.1.2.Estradiol 3.8mg/12.5cm2/patch （如 Climara 50 Transdermal Patch）之給 付規定：（90/4/1）限每週一片。"
+        "text": "5.3.1.1.Estraderm TTS；Oestro V.T (93/5/1) 限不能口服本品患者使用，申報費用時應具體說明不能口服之理由。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "5.3.1.2.Estradiol 3.8mg/12.5cm2/patch （如 Climara 50 Transdermal Patch）之給 付規定：（90/4/1）限每週一片。"
       }
     ]
   },
@@ -9894,7 +10174,12 @@
       {
         "type": "text",
         "level": 0,
-        "text": "hypothalamic function 5.4.1.1.生長激素 (Somatropin) (111/2/1)："
+        "text": "hypothalamic function"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "5.4.1.1.生長激素 (Somatropin) (111/2/1)："
       },
       {
         "type": "text",
@@ -9939,7 +10224,12 @@
       {
         "type": "text",
         "level": 2,
-        "text": "(3)治療劑量：起始劑量0.18 mg/kg/week，爾後視需要可調整至 0.18~0.23mg/kg/week。"
+        "text": "(3)治療劑量：起始劑量0.18 mg/kg/week，爾後視需要可調整至"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "0.18~0.23mg/kg/week。"
       },
       {
         "type": "text",
@@ -10199,7 +10489,12 @@
       {
         "type": "text",
         "level": 2,
-        "text": "(5)需事前審查核准後使用，治療後每年需再提出申請，審查同意後使用。 5.4.1.2.生長激素（如 Genotropin）用於治療普瑞德威利氏症候群 （Prader-Willi Syndrome）患者時：（93/5/1、106/8/1）"
+        "text": "(5)需事前審查核准後使用，治療後每年需再提出申請，審查同意後使用。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "5.4.1.2.生長激素（如 Genotropin）用於治療普瑞德威利氏症候群 （Prader-Willi Syndrome）患者時：（93/5/1、106/8/1）"
       },
       {
         "type": "text",
@@ -10624,7 +10919,12 @@
       {
         "type": "text",
         "level": 3,
-        "text": "Ⅱ.前項藥物治療以連續六個月為上限。 5.5.1.1.Degarelix（如 Firmagon）：（103/9/1） 限用於成年男性晚期荷爾蒙依賴型前列腺癌患者。"
+        "text": "Ⅱ.前項藥物治療以連續六個月為上限。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "5.5.1.1.Degarelix（如 Firmagon）：（103/9/1） 限用於成年男性晚期荷爾蒙依賴型前列腺癌患者。"
       }
     ]
   },
@@ -10674,7 +10974,17 @@
       {
         "type": "text",
         "level": 1,
-        "text": "3. Multiple Myeloma, Breast Cancer, Prostate Cancer 併有蝕骨性骨轉移之病患 (96/1/1)。 5.5.3.2.Zoledronic acid：(93/6/1、93/12/1、96/1/1、98/6/1) 5.5.3.2.1.Zoledronic acid 4mg/vial (如 Zometa Powder For Solution For Infusion 4mg)( 98/6/1、100/1/1) 限符合下列條件之一患者使用："
+        "text": "3. Multiple Myeloma, Breast Cancer, Prostate Cancer 併有蝕骨性骨轉移之病患 (96/1/1)。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "5.5.3.2.Zoledronic acid：(93/6/1、93/12/1、96/1/1、98/6/1)"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "5.5.3.2.1.Zoledronic acid 4mg/vial (如 Zometa Powder For Solution For Infusion 4mg)( 98/6/1、100/1/1) 限符合下列條件之一患者使用："
       },
       {
         "type": "text",
@@ -10684,7 +10994,27 @@
       {
         "type": "text",
         "level": 1,
-        "text": "2.Multiple Myeloma，Breast Cancer，Prostate Cancer 併有蝕骨性骨轉移之病患 (96/1/1)。 5.5.3.2.2.Zoledronic acid 5mg (如 Aclasta 5mg/100mL Solution for infusion)( 98/6/1、100/1/1) 用於變形性骨炎(Paget's disease) 5.5.3.3.Etidronate（如 Etibon）：(87/10/1、100/1/1) 限用於 Paget’s disease 之症狀治療及異位性骨化症之治療。 5.5.3.4.Ibandronic acid: (96/8/1、97/8/1、100/1/1) 5.5.3.4.1.Ibandronic acid 2mg/2mL；6mg/6mL（如 Bondronat concentrate for solution for infusion）(96/8/1、100/1/1) 限符合下列條件之一患者使用："
+        "text": "2.Multiple Myeloma，Breast Cancer，Prostate Cancer 併有蝕骨性骨轉移之病患 (96/1/1)。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "5.5.3.2.2.Zoledronic acid 5mg (如 Aclasta 5mg/100mL Solution for infusion)( 98/6/1、100/1/1) 用於變形性骨炎(Paget's disease)"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "5.5.3.3.Etidronate（如 Etibon）：(87/10/1、100/1/1) 限用於 Paget’s disease 之症狀治療及異位性骨化症之治療。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "5.5.3.4.Ibandronic acid: (96/8/1、97/8/1、100/1/1)"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "5.5.3.4.1.Ibandronic acid 2mg/2mL；6mg/6mL（如 Bondronat concentrate for solution for infusion）(96/8/1、100/1/1) 限符合下列條件之一患者使用："
       },
       {
         "type": "text",
@@ -11732,17 +12062,7 @@
       {
         "type": "text",
         "level": 2,
-        "text": "(3) 病人已遵循最適切的標準療法，並依下列規定持續使用口服類固醇 prednisolone 每天至少5mg 或等價當量(equivalence)。(109/11/1、115/4/1）"
-      },
-      {
-        "type": "text",
-        "level": 3,
-        "text": "I.18歲以上病人過去3個月持續使用口服類固醇。(115/4/1)"
-      },
-      {
-        "type": "text",
-        "level": 3,
-        "text": "II.6歲以上至未滿18歲病人過去1個月持續使用口服類固醇。(115/4/1)"
+        "text": "(3) 病人已遵循最適切的標準療法，並依下列規定持續使用口服類固醇 prednisolone 每天至少5mg 或等價當量(equivalence)。(109/11/1、115/4/1） I.18歲以上病人過去3個月持續使用口服類固醇。(115/4/1) II.6歲以上至未滿18歲病人過去1個月持續使用口服類固醇。(115/4/1)"
       },
       {
         "type": "text",
@@ -12020,7 +12340,12 @@
       {
         "type": "text",
         "level": 2,
-        "text": "(二)合併低劑量吸入型類 二、抗膽鹼藥物 固醇與 formoterol 之 (anticholinergics) 吸入劑於 GINA 輕度氣 喘可用於有症狀或急 沒有急性重症發作時， 性發作時之緩解治 每28天用量28次以內。 療，於中度與重度氣 喘則可用於每日維持 以及緩解治療。此類 吸入劑於輕度與中度 氣喘每28天至多使用1 支。 吸入型類固醇 一、有需要應規則使用，使用劑量及調整一、阻塞性肺病（如氣喘） (inhaled 配合 GINA 氣喘控制評方式同固定劑量 急性發作，在確定診斷 corticosteroi 估項目調整。 吸入劑 (MDI)。 下，每12小時使用1劑 d) （ 0.05mg/kg ， 上 限 二、維持劑量視個人而 2mg/次）。 定，原則上依最新版 GINA 指引之建議，給 二、拔管前後之病人，亦適 予適當劑量。 合使用，不超過2天。 三、少數控制不佳之氣喘 三、使用1至3天後，應轉成 患者，以 BDP (CFC)為 其他 MDI 劑型使用。超 例，其劑量可增加至 過3天使用，應說明理 每日1000mcg 以上(或 由。 其他類固醇藥物吸入 劑相等劑量)。 四、每28天最大用量1至2 瓶。 ＊MDI 使用於年紀小者，可配合 spacer 或 aerochamber 使用 第7節 腸胃藥物 Gastrointestinal drugs 7.1 .消化性潰瘍用藥："
+        "text": "(二)合併低劑量吸入型類 二、抗膽鹼藥物 固醇與 formoterol 之 (anticholinergics) 吸入劑於 GINA 輕度氣 喘可用於有症狀或急 沒有急性重症發作時， 性發作時之緩解治 每28天用量28次以內。 療，於中度與重度氣 喘則可用於每日維持 以及緩解治療。此類 吸入劑於輕度與中度 氣喘每28天至多使用1 支。 吸入型類固醇 一、有需要應規則使用，使用劑量及調整一、阻塞性肺病（如氣喘） (inhaled 配合 GINA 氣喘控制評方式同固定劑量 急性發作，在確定診斷 corticosteroi 估項目調整。 吸入劑 (MDI)。 下，每12小時使用1劑 d) （ 0.05mg/kg ， 上 限 二、維持劑量視個人而 2mg/次）。 定，原則上依最新版 GINA 指引之建議，給 二、拔管前後之病人，亦適 予適當劑量。 合使用，不超過2天。 三、少數控制不佳之氣喘 三、使用1至3天後，應轉成 患者，以 BDP (CFC)為 其他 MDI 劑型使用。超 例，其劑量可增加至 過3天使用，應說明理 每日1000mcg 以上(或 由。 其他類固醇藥物吸入 劑相等劑量)。 四、每28天最大用量1至2 瓶。 ＊MDI 使用於年紀小者，可配合 spacer 或 aerochamber 使用 第7節 腸胃藥物 Gastrointestinal drugs"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "7.1 .消化性潰瘍用藥："
       },
       {
         "type": "text",
@@ -12810,7 +13135,12 @@
       {
         "type": "text",
         "level": 3,
-        "text": "Ⅳ.繼續使用者，需每3個月評估一次血清 IgG 濃度(於最後1次注射 IVIg 的4週後或 下次注射前檢測)，符合血清 IgG 濃度＜5g/L，且過去3個月曾發生嚴重感染， 方可提出申請續用。若續用時血清 IgG 濃度＜5g/L 則每次劑量為每公斤體重 0.2-0.4公克。"
+        "text": "Ⅳ.繼續使用者，需每3個月評估一次血清 IgG 濃度(於最後1次注射 IVIg 的4週後或 下次注射前檢測)，符合血清 IgG 濃度＜5g/L，且過去3個月曾發生嚴重感染， 方可提出申請續用。若續用時血清 IgG 濃度＜5g/L 則每次劑量為每公斤體重"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "0.2-0.4公克。"
       },
       {
         "type": "text",
@@ -13079,7 +13409,12 @@
       {
         "type": "text",
         "level": 1,
-        "text": "2.成人肝、腎移植 cyclosporin 無效之第二線用藥。 8.2.2.2.Tacrolimus 注射劑及其他非持續性口服製劑： (88/8/1、93/12/1、 102/7/1)"
+        "text": "2.成人肝、腎移植 cyclosporin 無效之第二線用藥。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "8.2.2.2.Tacrolimus 注射劑及其他非持續性口服製劑： (88/8/1、93/12/1、 102/7/1)"
       },
       {
         "type": "text",
@@ -13112,7 +13447,12 @@
       {
         "type": "text",
         "level": 0,
-        "text": "96/7/1、97/8/1、99/10/1、100/5/1、100/10/1、101/9/1、102/10/1、107/7/1、 107/10/1、108/7/1、109/1/1、109/11/1、112/3/1、115/3/1) 8.2.3.1.Interferon beta-la (如Rebif) 、teriflunomide 14mg (如Aubagio)、 dimethyl fumarate (如Tecfidera)、peginterferon beta-1a (如Plegridy)、 ozanimod (如Zeposia)、cladribine(如Mavenclad)：(91/4/1、97/8/1、100/10/1、 106/10/1、107/7/1、107/10/1、109/11/1、112/3/1、115/3/1)"
+        "text": "96/7/1、97/8/1、99/10/1、100/5/1、100/10/1、101/9/1、102/10/1、107/7/1、 107/10/1、108/7/1、109/1/1、109/11/1、112/3/1、115/3/1)"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "8.2.3.1.Interferon beta-la (如Rebif) 、teriflunomide 14mg (如Aubagio)、 dimethyl fumarate (如Tecfidera)、peginterferon beta-1a (如Plegridy)、 ozanimod (如Zeposia)、cladribine(如Mavenclad)：(91/4/1、97/8/1、100/10/1、 106/10/1、107/7/1、107/10/1、109/11/1、112/3/1、115/3/1)"
       },
       {
         "type": "text",
@@ -13167,7 +13507,12 @@
       {
         "type": "text",
         "level": 1,
-        "text": "6.Interferon beta-la、teriflunomide 14mg、dimethyl fumarate、peginterferon beta-1a、ozanimod 及 cladribine 不得合併使用。(112/3/1、115/3/1) 8.2.3.2.Interferon beta-1b (如 Betaferon 8MIU)：(92/3/1、92/12/1、93/3/1、 97/8/1、99/10/1、100/10/1、106/10/1) 限用於："
+        "text": "6.Interferon beta-la、teriflunomide 14mg、dimethyl fumarate、peginterferon beta-1a、ozanimod 及 cladribine 不得合併使用。(112/3/1、115/3/1)"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "8.2.3.2.Interferon beta-1b (如 Betaferon 8MIU)：(92/3/1、92/12/1、93/3/1、 97/8/1、99/10/1、100/10/1、106/10/1) 限用於："
       },
       {
         "type": "text",
@@ -13197,7 +13542,17 @@
       {
         "type": "text",
         "level": 2,
-        "text": "(2)出現下列2種以上症狀： i 脊髓侵犯大於3節。 iiNMO-IgG or Aquaporin-4抗體陽性。 iii 腦部磁振造影不符合多發性硬化症診斷標準。 8.2.3.3.Glatiramer acetate (如 Copaxone injection)：(94/10/1、97/8/1) 限用於復發型多發性硬化症，Copaxone 用於減少復發型多發性硬化症病人的復發頻 率。 8.2.3.4.Natalizumab (如 Tysabri) （100/5/1）:"
+        "text": "(2)出現下列2種以上症狀： i 脊髓侵犯大於3節。 iiNMO-IgG or Aquaporin-4抗體陽性。 iii 腦部磁振造影不符合多發性硬化症診斷標準。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "8.2.3.3.Glatiramer acetate (如 Copaxone injection)：(94/10/1、97/8/1) 限用於復發型多發性硬化症，Copaxone 用於減少復發型多發性硬化症病人的復發頻 率。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "8.2.3.4.Natalizumab (如 Tysabri) （100/5/1）:"
       },
       {
         "type": "text",
@@ -13232,7 +13587,12 @@
       {
         "type": "text",
         "level": 1,
-        "text": "5.須經事前審查核准後使用，每年須重新申請，排除眼神經脊髓炎(neuromyelitis optica)病患。處方醫師應事先告知病患，使用本案藥品無法完全排除發生「進行性 多灶性白質腦病」(Progressive multifocal leukoencephalopathy；PML)之副作 用，PML 致死率高，且臨床上不易處理。 8.2.3.5.Fingolimod(如Gilenya)：(101/9/1、102/10/1、109/1/1、109/10/1、115/3/1)"
+        "text": "5.須經事前審查核准後使用，每年須重新申請，排除眼神經脊髓炎(neuromyelitis optica)病患。處方醫師應事先告知病患，使用本案藥品無法完全排除發生「進行性 多灶性白質腦病」(Progressive multifocal leukoencephalopathy；PML)之副作 用，PML 致死率高，且臨床上不易處理。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "8.2.3.5.Fingolimod(如Gilenya)：(101/9/1、102/10/1、109/1/1、109/10/1、115/3/1)"
       },
       {
         "type": "text",
@@ -13277,7 +13637,12 @@
       {
         "type": "text",
         "level": 1,
-        "text": "4.個案在停藥觀察期間復發且為高度活躍型復發緩解之多發性硬化症病人(highly active relapsing–remitting multiple sclerosis)可再申請並經事前審查核准後 使用。(102/10/1) 8.2.3.6.Alemtuzumab（如 Lemtrada）：（108/7/1）"
+        "text": "4.個案在停藥觀察期間復發且為高度活躍型復發緩解之多發性硬化症病人(highly active relapsing–remitting multiple sclerosis)可再申請並經事前審查核准後 使用。(102/10/1)"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "8.2.3.6.Alemtuzumab（如 Lemtrada）：（108/7/1）"
       },
       {
         "type": "text",
@@ -13332,7 +13697,12 @@
       {
         "type": "text",
         "level": 1,
-        "text": "4.使用兩年後，年度復發率(average annual relapse)無法減少時應停止本藥品之治 療。 ※年度復發率無法減少之定義： 採計使用 Alemtuzumab 藥物後兩年內復發次數之數據(以最近兩年之復發次數除以2來 計算)，較諸更先前一年或兩年之年復發率皆無再減少時。 8.2.3.7.Siponimod(如 Mayzent)：(110/3/1)"
+        "text": "4.使用兩年後，年度復發率(average annual relapse)無法減少時應停止本藥品之治 療。 ※年度復發率無法減少之定義： 採計使用 Alemtuzumab 藥物後兩年內復發次數之數據(以最近兩年之復發次數除以2來 計算)，較諸更先前一年或兩年之年復發率皆無再減少時。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "8.2.3.7.Siponimod(如 Mayzent)：(110/3/1)"
       },
       {
         "type": "text",
@@ -13397,7 +13767,12 @@
       {
         "type": "text",
         "level": 0,
-        "text": "abatacept（如 Orencia）；tocilizumab（如 Actemra）；tofacitinib（如 Xeljanz）； infliximab ；certolizumab (如 Cimzia)；ixekizumab(如 Taltz)；brodalumab(如 Lumicef)；filgotinib(如 Jyseleca)；secukinumab（如 Cosentyx）(92/3/1、 93/8/1、93/9/1、98/3/1、99/2/1、100/12/1、101/1/1、101/6/1、101/10/1、 102/1/1、102/2/1、102/4/1、102/10/1、103/9/1、103/12/1、105/9/1、 105/10/1、109/12/1、111/5/1、112/5/1、113/10/1、114/7/1、114/10/1) 使用本類藥品之醫事機構應注意監測病患用藥後之不良反應及可能發生的重大安全事 件(如肺結核及病毒性肝炎)。（103/9/1） 8.2.4.1. Etanercept(如 Enbrel)；adalimumab(如 Humira)；tocilizumab（如 Actemra）；tofacitinib（如 Xeljanz）；secukinumab（如 Cosentyx）(94/3/1、 101/12/1、102/1/1、102/10/1、105/10/1、108/1/1、111/2/1、113/10/1、 114/7/1、114/10/1)：兒童治療部分"
+        "text": "abatacept（如 Orencia）；tocilizumab（如 Actemra）；tofacitinib（如 Xeljanz）； infliximab ；certolizumab (如 Cimzia)；ixekizumab(如 Taltz)；brodalumab(如 Lumicef)；filgotinib(如 Jyseleca)；secukinumab（如 Cosentyx）(92/3/1、 93/8/1、93/9/1、98/3/1、99/2/1、100/12/1、101/1/1、101/6/1、101/10/1、 102/1/1、102/2/1、102/4/1、102/10/1、103/9/1、103/12/1、105/9/1、 105/10/1、109/12/1、111/5/1、112/5/1、113/10/1、114/7/1、114/10/1) 使用本類藥品之醫事機構應注意監測病患用藥後之不良反應及可能發生的重大安全事 件(如肺結核及病毒性肝炎)。（103/9/1）"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "8.2.4.1. Etanercept(如 Enbrel)；adalimumab(如 Humira)；tocilizumab（如 Actemra）；tofacitinib（如 Xeljanz）；secukinumab（如 Cosentyx）(94/3/1、 101/12/1、102/1/1、102/10/1、105/10/1、108/1/1、111/2/1、113/10/1、 114/7/1、114/10/1)：兒童治療部分"
       },
       {
         "type": "text",
@@ -13497,7 +13872,12 @@
       {
         "type": "text",
         "level": 2,
-        "text": "(1)不良事件，包括： Ⅰ惡性腫瘤。 Ⅱ該藥物引起的嚴重毒性。 Ⅲ懷孕 (暫時停藥即可)。 Ⅳ嚴重的間發性感染症 (intercurrent infection)(暫時停藥即可)。 療效不彰：患者的 core set data 經過6個月治療後未達療效者。 療效定義： Ⅰ紅血球沉降速率 (ESR) 或 CRP 及下列三項中至少有二項達到較基礎值改善30% 以上效果者。 i.活動性關節炎的總數 ii.關節活動範圍受到限制的關節總數 iii.醫師的整體評估 Ⅱ上述各種指標惡化程度達30%以上者不得超過一項 ◎附表十六：全民健康保險活動性多關節幼年型慢性關節炎使用藥品申請表 ◎附表十六之二：（刪除） 8.2.4.2. Etanercept(如 Enbrel)； adalimumab（如 Humira）；golimumab（如 Simponi）； abatacept（如 Orencia）；tocilizumab（如 Actemra）；tofacitinib（如 Xeljanz）；certolizumab (Cimzia) ；baricitinib（如 Olumiant）；opinercept (如 Tunex)； infliximab(如 Remicade)；peficitinib (如 Smyraf)；upadacitinib(如 Rinvoq)；filgotinib(如 Jyseleca) (92/3/1、93/8/1、93/9/1、98/3/1、99/2/1、 100/12/1、101/1/1、101/6/1、102/1/1、102/4/1、102/10/1、103/12/1、106/4/1、 106/11/1、107/9/1、108/3/1、108/5/1、109/8/1、109/9/1、109/12/1、110/3/1、 110/5/1、110/6/1、112/5/1、114/9/1)：成人治療部分"
+        "text": "(1)不良事件，包括： Ⅰ惡性腫瘤。 Ⅱ該藥物引起的嚴重毒性。 Ⅲ懷孕 (暫時停藥即可)。 Ⅳ嚴重的間發性感染症 (intercurrent infection)(暫時停藥即可)。 療效不彰：患者的 core set data 經過6個月治療後未達療效者。 療效定義： Ⅰ紅血球沉降速率 (ESR) 或 CRP 及下列三項中至少有二項達到較基礎值改善30% 以上效果者。 i.活動性關節炎的總數 ii.關節活動範圍受到限制的關節總數 iii.醫師的整體評估 Ⅱ上述各種指標惡化程度達30%以上者不得超過一項 ◎附表十六：全民健康保險活動性多關節幼年型慢性關節炎使用藥品申請表 ◎附表十六之二：（刪除）"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "8.2.4.2. Etanercept(如 Enbrel)； adalimumab（如 Humira）；golimumab（如 Simponi）； abatacept（如 Orencia）；tocilizumab（如 Actemra）；tofacitinib（如 Xeljanz）；certolizumab (Cimzia) ；baricitinib（如 Olumiant）；opinercept (如 Tunex)； infliximab(如 Remicade)；peficitinib (如 Smyraf)；upadacitinib(如 Rinvoq)；filgotinib(如 Jyseleca) (92/3/1、93/8/1、93/9/1、98/3/1、99/2/1、 100/12/1、101/1/1、101/6/1、102/1/1、102/4/1、102/10/1、103/12/1、106/4/1、 106/11/1、107/9/1、108/3/1、108/5/1、109/8/1、109/9/1、109/12/1、110/3/1、 110/5/1、110/6/1、112/5/1、114/9/1)：成人治療部分"
       },
       {
         "type": "text",
@@ -13527,7 +13907,12 @@
       {
         "type": "text",
         "level": 3,
-        "text": "I.靜脈注射劑：劑量應從4mg/kg 開始，治療第12週，評估 DAS28積分，未達療效 者(療效之定義：DAS28總積分下降程度≧ 1.2，或 DAS28總積分＜ 3.2者)，得 調高劑量至8mg/kg，繼續治療12週後，再評估 DAS28總積分，必須下降程度≧ 1.2，或 DAS28總積分＜ 3.2，方可續用。(102/10/1、106/4/1)"
+        "text": "I.靜脈注射劑：劑量應從4mg/kg 開始，治療第12週，評估 DAS28積分，未達療效 者(療效之定義：DAS28總積分下降程度≧ 1.2，或 DAS28總積分＜ 3.2者)，得 調高劑量至8mg/kg，繼續治療12週後，再評估 DAS28總積分，必須下降程度≧"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "1.2，或 DAS28總積分＜ 3.2，方可續用。(102/10/1、106/4/1)"
       },
       {
         "type": "text",
@@ -13577,7 +13962,12 @@
       {
         "type": "text",
         "level": 3,
-        "text": "Ⅰ.28處關節疾病活動度積分 (Disease Activity Score, DAS 28) 必須大於 5.1。"
+        "text": "Ⅰ.28處關節疾病活動度積分 (Disease Activity Score, DAS 28) 必須大於"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "5.1。"
       },
       {
         "type": "text",
@@ -13715,7 +14105,12 @@
       {
         "type": "text",
         "level": 2,
-        "text": "(2)其他事項：包括 i 惡性腫瘤 ii 該藥物引起之嚴重毒性 (白血球過低、嚴重過敏) iii 嚴重感染(暫時停藥即可)。 ◎附表二十六之三：全民健康保險小兒克隆氏症使用 adalimumab、infliximab、 risankizumab 申請表(106/5/1、108/10/1、113/7/1、113/9/1) ◎附表二十六之四：PCDAI（Pediatric Crohn’s disease activity index） 8.2.4.8.Abatacept 靜脈注射劑（如 Orencia IV）（101/10/1、102/1/1、104/8/1、 108/1/1、111/2/1）：用於幼年型慢性關節炎治療部分"
+        "text": "(2)其他事項：包括 i 惡性腫瘤 ii 該藥物引起之嚴重毒性 (白血球過低、嚴重過敏) iii 嚴重感染(暫時停藥即可)。 ◎附表二十六之三：全民健康保險小兒克隆氏症使用 adalimumab、infliximab、 risankizumab 申請表(106/5/1、108/10/1、113/7/1、113/9/1) ◎附表二十六之四：PCDAI（Pediatric Crohn’s disease activity index）"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "8.2.4.8.Abatacept 靜脈注射劑（如 Orencia IV）（101/10/1、102/1/1、104/8/1、 108/1/1、111/2/1）：用於幼年型慢性關節炎治療部分"
       },
       {
         "type": "text",
@@ -13845,7 +14240,17 @@
       {
         "type": "text",
         "level": 3,
-        "text": "Ⅱ.上述各種指標惡化程度達30%以上者不得超過一項。 ◎附表三十一：全民健康保險使用 abatacept 申請表(六歲以上兒童) 8.2.4.9. Golimumab(如 Simponi)、Adalimumab（如 Humira）、Vedolizumab（如 Entyvio）、infliximab（如 Remicade）、tofacitinib(如 Xeljanz)、ustekinumab(如 Stelara)、upadacitinib(如 Rinvoq) (105/9/1、105/10/1、106/10/1、107/8/1、 108/10/1、111/3/1、111/6/1、112/8/1、113/7/1、113/11/1、114/8/1、114/9/1)： 用於潰瘍性結腸炎治療部分 8.2.4.9.1. Golimumab(如 Simponi)、Adalimumab（如 Humira）、Vedolizumab（如 Entyvio）、infliximab（如 Remicade）、tofacitinib(如 Xeljanz) ustekinumab(如 Stelara)、upadacitinib(如 Rinvoq)(105/9/1、105/10/1、106/10/1、107/8/1、 108/10/1、111/3/1、111/6/1、112/8/1、113/7/1、113/11/1、114/8/1、114/9/1)： 成人治療部分"
+        "text": "Ⅱ.上述各種指標惡化程度達30%以上者不得超過一項。 ◎附表三十一：全民健康保險使用 abatacept 申請表(六歲以上兒童)"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "8.2.4.9. Golimumab(如 Simponi)、Adalimumab（如 Humira）、Vedolizumab（如 Entyvio）、infliximab（如 Remicade）、tofacitinib(如 Xeljanz)、ustekinumab(如 Stelara)、upadacitinib(如 Rinvoq) (105/9/1、105/10/1、106/10/1、107/8/1、 108/10/1、111/3/1、111/6/1、112/8/1、113/7/1、113/11/1、114/8/1、114/9/1)： 用於潰瘍性結腸炎治療部分"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "8.2.4.9.1. Golimumab(如 Simponi)、Adalimumab（如 Humira）、Vedolizumab（如 Entyvio）、infliximab（如 Remicade）、tofacitinib(如 Xeljanz) ustekinumab(如 Stelara)、upadacitinib(如 Rinvoq)(105/9/1、105/10/1、106/10/1、107/8/1、 108/10/1、111/3/1、111/6/1、112/8/1、113/7/1、113/11/1、114/8/1、114/9/1)： 成人治療部分"
       },
       {
         "type": "text",
@@ -14093,7 +14498,12 @@
       {
         "type": "text",
         "level": 2,
-        "text": "(9)用於一般療法無法治療的 Lymphangioma。（93/4/1、97/8/1） 8.2.6.2.Peginterferon alpha-2b（如 Peg-Intron）（92/10/1、94/10/1、109/7/1）； interferon alfacon-1（如 Infergen）（93/7/1、94/10/1、98/11/1、109/7/1）"
+        "text": "(9)用於一般療法無法治療的 Lymphangioma。（93/4/1、97/8/1）"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "8.2.6.2.Peginterferon alpha-2b（如 Peg-Intron）（92/10/1、94/10/1、109/7/1）； interferon alfacon-1（如 Infergen）（93/7/1、94/10/1、98/11/1、109/7/1）"
       },
       {
         "type": "text",
@@ -14237,7 +14647,12 @@
       {
         "type": "text",
         "level": 3,
-        "text": "Ⅱ.申請給予重複療程：符合下列條件者，得再提出申請。 i.接受 rituximab 初次治療後第21週評估 DAS28總積分，必須下降程度≧ 1.2，或 DAS28總積分 ＜ 3.2 者，方可給予重複療程。 ii.重複療程之申請可於治療後第21週提出。申請第1次重複療程者，應先填寫初 次療效;申請第2次以上重複療程者，必須填寫前兩次療效。並宜記錄患者發 生之重大感染等副作用。"
+        "text": "Ⅱ.申請給予重複療程：符合下列條件者，得再提出申請。 i.接受 rituximab 初次治療後第21週評估 DAS28總積分，必須下降程度≧"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "1.2，或 DAS28總積分 ＜ 3.2 者，方可給予重複療程。 ii.重複療程之申請可於治療後第21週提出。申請第1次重複療程者，應先填寫初 次療效;申請第2次以上重複療程者，必須填寫前兩次療效。並宜記錄患者發 生之重大感染等副作用。"
       },
       {
         "type": "text",
@@ -16832,7 +17247,12 @@
       {
         "type": "text",
         "level": 1,
-        "text": "7.治療患有無法手術切除、復發性或轉移性且有血小板衍生生長因子受體(PDGFR)基因 重組之隆突性皮膚纖維肉瘤(DFSP)之成人患者。(99/6/1) 8.1~7項規定內之疾病診斷或追蹤若需依據基因檢測報告，則需符合全民健康保險藥品 給付規定之通則十二。(113/6/1)"
+        "text": "7.治療患有無法手術切除、復發性或轉移性且有血小板衍生生長因子受體(PDGFR)基因 重組之隆突性皮膚纖維肉瘤(DFSP)之成人患者。(99/6/1)"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "8.1~7項規定內之疾病診斷或追蹤若需依據基因檢測報告，則需符合全民健康保險藥品 給付規定之通則十二。(113/6/1)"
       }
     ]
   },
@@ -17391,7 +17811,12 @@
       {
         "type": "text",
         "level": 1,
-        "text": "3.治療患有慢性期費城染色體陽性慢性骨髓性白血病(Ph+ CML) 之1歲以上的兒童病 人。(110/5/1) 4.1~3項規定內之疾病診斷或追蹤若需依據基因檢測報告，則需符合全民健康保險藥 品給付規定之通則十二。(113/6/1)"
+        "text": "3.治療患有慢性期費城染色體陽性慢性骨髓性白血病(Ph+ CML) 之1歲以上的兒童病 人。(110/5/1)"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "4.1~3項規定內之疾病診斷或追蹤若需依據基因檢測報告，則需符合全民健康保險藥 品給付規定之通則十二。(113/6/1)"
       },
       {
         "type": "text",
@@ -17518,7 +17943,12 @@
       {
         "type": "text",
         "level": 1,
-        "text": "3.Nilotinib、dasatinib 與 bosutinib 不得合併使用。（98/6/1、99/1/1、104/12/1、 115/2/1) 4.1~2項規定內之疾病診斷或追蹤若需依據基因檢測報告，則需符合全民健康保險藥品 給付規定之通則十二。(113/6/1)"
+        "text": "3.Nilotinib、dasatinib 與 bosutinib 不得合併使用。（98/6/1、99/1/1、104/12/1、 115/2/1)"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "4.1~2項規定內之疾病診斷或追蹤若需依據基因檢測報告，則需符合全民健康保險藥品 給付規定之通則十二。(113/6/1)"
       }
     ]
   },
@@ -18475,12 +18905,7 @@
       {
         "type": "text",
         "level": 2,
-        "text": "(1)需具有下列 I.或Ⅱ.的條件之一："
-      },
-      {
-        "type": "text",
-        "level": 3,
-        "text": "I.75歲以上。"
+        "text": "(1)需具有下列 I.或Ⅱ.的條件之一： I.75歲以上。"
       },
       {
         "type": "text",
@@ -20198,7 +20623,12 @@
       {
         "type": "text",
         "level": 1,
-        "text": "3.若使用後未出現治療反應、無法耐受藥物副作用或疾病進展，則必須停止使用。 4.1~3項規定內之疾病診斷或追蹤若需依據基因檢測報告，則需符合全民健康保險藥品 給付規定之通則十二。(113/6/1)"
+        "text": "3.若使用後未出現治療反應、無法耐受藥物副作用或疾病進展，則必須停止使用。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "4.1~3項規定內之疾病診斷或追蹤若需依據基因檢測報告，則需符合全民健康保險藥品 給付規定之通則十二。(113/6/1)"
       }
     ]
   },
@@ -20675,12 +21105,7 @@
       {
         "type": "text",
         "level": 2,
-        "text": "(1)需具有下列 I.或Ⅱ.的條件之一："
-      },
-      {
-        "type": "text",
-        "level": 3,
-        "text": "I.75歲以上。"
+        "text": "(1)需具有下列 I.或Ⅱ.的條件之一： I.75歲以上。"
       },
       {
         "type": "text",
@@ -24902,7 +25327,12 @@
       {
         "type": "text",
         "level": 1,
-        "text": "3.使用後無法耐受藥物副作用或發生疾病進展，須停止使用。 4.1~2項規定之疾病診斷或追蹤若為依據基因檢測報告，需符合全民健康保險藥品給付規 定之通則十二。"
+        "text": "3.使用後無法耐受藥物副作用或發生疾病進展，須停止使用。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "4.1~2項規定之疾病診斷或追蹤若為依據基因檢測報告，需符合全民健康保險藥品給付規 定之通則十二。"
       }
     ]
   },
@@ -25358,7 +25788,12 @@
       {
         "type": "text",
         "level": 2,
-        "text": "(3).每日最大劑量500mg，惟接受起始劑量而未達到維持血液學、細胞遺傳學或分子 反應，且未出現第3級或以上不良反應的病人，可進行遞增劑量，每日以最大劑量 600mg 為限。 3.1~2項規定內之疾病診斷或追蹤若需依據基因檢測報告，則需符合全民健康保險藥品 給付規定之通則十二。"
+        "text": "(3).每日最大劑量500mg，惟接受起始劑量而未達到維持血液學、細胞遺傳學或分子 反應，且未出現第3級或以上不良反應的病人，可進行遞增劑量，每日以最大劑量 600mg 為限。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "3.1~2項規定內之疾病診斷或追蹤若需依據基因檢測報告，則需符合全民健康保險藥品 給付規定之通則十二。"
       },
       {
         "type": "text",
@@ -26163,7 +26598,12 @@
       {
         "type": "text",
         "level": 1,
-        "text": "4.用於念珠性陰道炎，限頑固性疾病或無性經驗病人無法使用塞劑治療者單一劑量使 用。 10.6.1.2.Fluconazole 注射劑（如 Diflucan inj）：（85/10/1、108/12/1） 限"
+        "text": "4.用於念珠性陰道炎，限頑固性疾病或無性經驗病人無法使用塞劑治療者單一劑量使 用。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "10.6.1.2.Fluconazole 注射劑（如 Diflucan inj）：（85/10/1、108/12/1） 限"
       },
       {
         "type": "text",
@@ -26173,7 +26613,12 @@
       {
         "type": "text",
         "level": 1,
-        "text": "2.非愛滋病隱球菌腦膜炎患者使用，原則上使用6到8週，視病人臨床反應，抗原效價 及培養結果調整療期，而治黴菌藥物之終止以效價下降四倍及兩次培養陰性為原 則。 10.6.1.3. Fluconazole 口服液劑（如 Fluzole powder for oral suspension）： （108/12/1、111/2/1）"
+        "text": "2.非愛滋病隱球菌腦膜炎患者使用，原則上使用6到8週，視病人臨床反應，抗原效價 及培養結果調整療期，而治黴菌藥物之終止以效價下降四倍及兩次培養陰性為原 則。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "10.6.1.3. Fluconazole 口服液劑（如 Fluzole powder for oral suspension）： （108/12/1、111/2/1）"
       },
       {
         "type": "text",
@@ -26202,7 +26647,12 @@
       {
         "type": "text",
         "level": 0,
-        "text": "98/8/1） 10.6.3.1.Itraconazole 膠囊劑 (如 Sporanox cap)：（85/1/1、91/4/1、91/8/1、 98/8/1、104/1/1） 限"
+        "text": "98/8/1）"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "10.6.3.1.Itraconazole 膠囊劑 (如 Sporanox cap)：（85/1/1、91/4/1、91/8/1、 98/8/1、104/1/1） 限"
       },
       {
         "type": "text",
@@ -26237,7 +26687,12 @@
       {
         "type": "text",
         "level": 1,
-        "text": "7.病人接受本品治療期間，不得併用其他同類藥品。 10.6.3.2.Itraconazole 注射劑 (如 Sporanox inj.)：（96/6/1、96/8/1、99/10/1）"
+        "text": "7.病人接受本品治療期間，不得併用其他同類藥品。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "10.6.3.2.Itraconazole 注射劑 (如 Sporanox inj.)：（96/6/1、96/8/1、99/10/1）"
       },
       {
         "type": "text",
@@ -26252,7 +26707,12 @@
       {
         "type": "text",
         "level": 1,
-        "text": "3.因病情需要，經感染症專科醫師會診確認需要使用者(申報費用時需檢附會診紀錄及 相關之病歷資料)。(96/8/1、99/10/1) 10.6.3.3.Itraconazole 內服液劑 (如 Itrazole oral solution)：（96/10/1） 限用於 HIV 陽性反應及其它免疫功能不全病人的口腔念珠菌感染及食道念珠菌感染 者。"
+        "text": "3.因病情需要，經感染症專科醫師會診確認需要使用者(申報費用時需檢附會診紀錄及 相關之病歷資料)。(96/8/1、99/10/1)"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "10.6.3.3.Itraconazole 內服液劑 (如 Itrazole oral solution)：（96/10/1） 限用於 HIV 陽性反應及其它免疫功能不全病人的口腔念珠菌感染及食道念珠菌感染 者。"
       }
     ]
   },
@@ -26645,7 +27105,12 @@
       {
         "type": "text",
         "level": 1,
-        "text": "3.Acyclovir、famciclovir 及 valaciclovir 除上述特別規定外，使用療程原則以10天 為限，口服、注射劑及外用藥膏擇一使用，不得合併使用。（95/6/1、100/7/1、 101/5/1） 10.7.1.2.局部抗疱疹病毒劑（如 Acyclovir 外用製劑；tromantadine 外用製劑； penciclovir 外用製劑）：(97/12/1、98/11/1、100/7/1、102/7/1）"
+        "text": "3.Acyclovir、famciclovir 及 valaciclovir 除上述特別規定外，使用療程原則以10天 為限，口服、注射劑及外用藥膏擇一使用，不得合併使用。（95/6/1、100/7/1、 101/5/1）"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "10.7.1.2.局部抗疱疹病毒劑（如 Acyclovir 外用製劑；tromantadine 外用製劑； penciclovir 外用製劑）：(97/12/1、98/11/1、100/7/1、102/7/1）"
       },
       {
         "type": "text",
@@ -27692,7 +28157,12 @@
       {
         "type": "text",
         "level": 1,
-        "text": "5.其他經感染症專科醫師認定需使用者。 10.8.1.2.Vancomycin 口服製劑(110/7/1)"
+        "text": "5.其他經感染症專科醫師認定需使用者。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "10.8.1.2.Vancomycin 口服製劑(110/7/1)"
       },
       {
         "type": "text",
@@ -27749,7 +28219,12 @@
       {
         "type": "text",
         "level": 0,
-        "text": "限使用於下列疾病，若使用於結核病不予給付，請向衛生福利部疾病管制署申請並 依最新版「結核病診治指引」辦理。(96/9/1、108/12/1) 10.8.2.1.Moxifloxacin (如 Avelox)：(91/2/1、92/11/1、94/3/1、97/9/1、105/8/1) 限用於成人(18歲以上)之下列感染症："
+        "text": "限使用於下列疾病，若使用於結核病不予給付，請向衛生福利部疾病管制署申請並 依最新版「結核病診治指引」辦理。(96/9/1、108/12/1)"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "10.8.2.1.Moxifloxacin (如 Avelox)：(91/2/1、92/11/1、94/3/1、97/9/1、105/8/1) 限用於成人(18歲以上)之下列感染症："
       },
       {
         "type": "text",
@@ -27759,7 +28234,22 @@
       {
         "type": "text",
         "level": 1,
-        "text": "2.急性鼻竇炎或複雜性皮膚和軟組織感染，因抗藥性細菌感染及病情需要，經感染科 醫師會診確認需要使用者。 10.8.2.2.Gemifloxacin (如 Factive)：(96/6/1、97/9/1) 限用於成人(18歲以上)之慢性支氣管炎的急性惡化、社區性肺炎。 10.8.2.3.Levofloxacin（如 Cravit）（97/9/1） 限用於成人(18歲以上)之慢性支氣管炎的急性惡化、社區性肺炎、複雜性泌尿道感 染。 10.8.2.4.Nemonoxacin 膠囊劑及注射劑(如 Taigexyn)：(107/1/1、111/3/1)"
+        "text": "2.急性鼻竇炎或複雜性皮膚和軟組織感染，因抗藥性細菌感染及病情需要，經感染科 醫師會診確認需要使用者。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "10.8.2.2.Gemifloxacin (如 Factive)：(96/6/1、97/9/1) 限用於成人(18歲以上)之慢性支氣管炎的急性惡化、社區性肺炎。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "10.8.2.3.Levofloxacin（如 Cravit）（97/9/1） 限用於成人(18歲以上)之慢性支氣管炎的急性惡化、社區性肺炎、複雜性泌尿道感 染。"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "10.8.2.4.Nemonoxacin 膠囊劑及注射劑(如 Taigexyn)：(107/1/1、111/3/1)"
       },
       {
         "type": "text",
@@ -30022,7 +30512,12 @@
       {
         "type": "text",
         "level": 3,
-        "text": "Ⅰ.未曾申請給付新生血管抑制劑(anti-angiogenic agents)者，第一次申請以3 支為限，第一次申請時需檢附一個月內之病眼最佳矯正視力(介於 0.05~0.5(含)之間)、眼底彩色照片、FAG (fluorescein angiography)、OCT (optical coherence tomography)、及相關病歷紀錄資料。(109/2/1)"
+        "text": "Ⅰ.未曾申請給付新生血管抑制劑(anti-angiogenic agents)者，第一次申請以3 支為限，第一次申請時需檢附一個月內之病眼最佳矯正視力(介於"
+      },
+      {
+        "type": "text",
+        "level": 0,
+        "text": "0.05~0.5(含)之間)、眼底彩色照片、FAG (fluorescein angiography)、OCT (optical coherence tomography)、及相關病歷紀錄資料。(109/2/1)"
       },
       {
         "type": "text",
