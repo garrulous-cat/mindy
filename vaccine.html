@@ -326,8 +326,7 @@ body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: va
     </div>
 
     <div style="margin-top:16px; font-size:12px; color:var(--text-light); line-height:1.8;">
-      ※ A型肝炎公費自107年起提供106年1月1日以後出生之幼兒常規接種<br>
-      ※ 流感疫苗公費時程依每年政策公告，通常 10 月起開打，此處未列入；初次接種兩劑，第二劑間隔 4 週<br>
+      ※ 流感疫苗每年公費政策可能變動，自114/1/1起公費已擴大至全民（6個月以上未接種者，至疫苗用罄止）；6個月–8歲初次接種者須打 2 劑（間隔 4 週以上），9 歲以上 1 劑即可<br>
       ※ 接種時程以 CDC 公告及醫師評估為準，本工具僅供參考
     </div>
   </div>
@@ -415,7 +414,7 @@ const PED_VACCINES = [
     doses: [
       { months: 2, label: '第1', tip: '出生滿2個月' },
       { months: 4, label: '第2', tip: '出生滿4個月' },
-      { months: 12, label: '第3', tip: '出生滿12個月' },
+      { months: 12, label: '第3', tip: '出生滿12-15個月（建議於 12 個月後即可接種）' },
     ]
   },
   {
@@ -425,8 +424,8 @@ const PED_VACCINES = [
   {
     name: 'MMR\n麻疹腮腺炎德麻', en: 'MMR', type: 'pub',
     doses: [
-      { months: 12, label: '第1', tip: '出生滿12個月' },
-      { months: 60, label: '第2', tip: '滿5歲，入國小前' },
+      { months: 12, label: '第1', tip: '出生滿12個月（CDC 公費為 12 個月）' },
+      { months: 60, label: '第2', tip: '滿 5 歲，入國小前（與第 1 劑間隔至少 4 週）' },
     ]
   },
   {
@@ -439,8 +438,8 @@ const PED_VACCINES = [
   {
     name: 'A型肝炎\n(特定對象)', en: 'Hepatitis A', type: 'pub',
     doses: [
-      { months: 18, label: '第1', tip: '出生滿18個月（公費，107年後出生幼兒）' },
-      { months: 27, label: '第2', tip: '出生滿27個月' },
+      { months: 18, label: '第1', tip: '出生滿18個月（114 年起新時程）' },
+      { months: 27, label: '第2', tip: '出生滿27個月（與第 1 劑間隔至少 6 個月）' },
     ]
   },
   {
@@ -450,18 +449,33 @@ const PED_VACCINES = [
   // ── 自費 ──
   {
     section: '自費疫苗',
-    name: '輪狀病毒', en: 'Rotavirus', type: 'priv',
+    name: '輪狀病毒\n羅特律 (Rotarix)', en: 'Rotavirus (Rotarix, 2-dose)', type: 'priv',
     doses: [
-      { months: 2, label: '第1', tip: '出生滿2個月（2劑或3劑時程）' },
-      { months: 4, label: '第2', tip: '出生滿4個月' },
-      { months: 6, label: '第3', tip: '出生滿6個月（3劑時程）' },
+      { months: 2, label: '第1', tip: '出生滿2個月（最早出生6週可接種）' },
+      { months: 4, label: '第2', tip: '與第 1 劑間隔至少 4 週；最後 1 劑不得晚於 24 週（約 6 個月）' },
     ]
   },
   {
-    name: '腸病毒A71型', en: 'EV71', type: 'priv',
+    name: '輪狀病毒\n輪達停 (RotaTeq)', en: 'Rotavirus (RotaTeq, 3-dose)', type: 'priv',
+    doses: [
+      { months: 2, label: '第1', tip: '出生滿2個月（最早出生6週可接種）' },
+      { months: 4, label: '第2', tip: '與前劑間隔至少 4 週' },
+      { months: 6, label: '第3', tip: '最後 1 劑不得晚於 32 週（約 8 個月）' },
+    ]
+  },
+  {
+    name: '腸病毒A71型\n國光/安特羅', en: 'EV71 (EnVAX-A71)', type: 'priv',
     doses: [
       { months: 2, label: '第1', tip: '出生滿2個月（2個月–未滿6歲）' },
-      { months: 4, label: '第2', tip: '間隔4週以上' },
+      { months: 3, label: '第2', tip: '間隔至少28天（4週）' },
+    ]
+  },
+  {
+    name: '腸病毒A71型\n高端', en: 'EV71 (Medigen)', type: 'priv',
+    doses: [
+      { months: 2, label: '第1', tip: '出生滿2個月（2個月–未滿6歲）' },
+      { months: 4, label: '第2', tip: '間隔至少56天（8週）' },
+      { months: 14, label: '追加', tip: '第1劑接種時未滿2歲者，建議於第1劑後1年接種追加劑' },
     ]
   },
   {
@@ -471,16 +485,25 @@ const PED_VACCINES = [
     ]
   },
   {
-    name: '流行性腦膜炎\nMCV4 (4價)', en: 'MCV4', type: 'priv',
+    name: '流行性腦膜炎\nMenveo (ACWY)', en: 'MenACWY (Menveo)', type: 'priv',
     doses: [
-      { months: 24, label: '1劑', tip: '2歲以上，1劑（保護約5年）' },
+      { months: 24, label: '1劑', tip: '2 歲以上單劑接種（台灣 CDC 旅遊醫學主要使用之 MCV4）' },
     ]
   },
   {
-    name: '流行性腦膜炎\nMenB (B型)', en: 'MenB', type: 'priv',
+    name: '流行性腦膜炎\nMenactra (ACWY)', en: 'MenACWY (Menactra)', type: 'priv',
     doses: [
-      { months: 2, label: '第1', tip: '滿2個月以上可接種，多劑' },
-      { months: 4, label: '第2', tip: '間隔1–2個月' },
+      { months: 9, label: '第1', tip: '9 個月以上未滿 2 歲：2 劑（間隔至少 3 個月）' },
+      { months: 12, label: '第2', tip: '與第 1 劑間隔至少 3 個月' },
+    ]
+  },
+  {
+    name: '流行性腦膜炎\nMenB (Bexsero)', en: 'MenB (4CMenB)', type: 'priv',
+    doses: [
+      { months: 2, label: '第1', tip: '出生滿2個月（2 個月起接種者為 3+1 共 4 劑）' },
+      { months: 4, label: '第2', tip: '與第 1 劑間隔至少 1 個月' },
+      { months: 6, label: '第3', tip: '與第 2 劑間隔至少 1 個月' },
+      { months: 12, label: '追加', tip: '12 個月以上接種，與第 3 劑間隔至少 6 個月' },
     ]
   },
   {
@@ -496,9 +519,10 @@ const ADULT_VACCINES = [
   {
     id: 'hpv', icon: '🧬', name: 'HPV 9價疫苗', en: 'Human Papillomavirus Vaccine (9-valent)',
     doses: '2劑（9–14歲）/ 3劑（15歲以上）',
-    schedule: '15歲以上：0、2、6個月',
-    target: '18–45歲男女皆可',
-    notes: ['預防子宮頸癌、菜花等6種癌症及多種疾病', '9–14歲2劑效果等同15歲以上3劑', '接種前不必常規篩檢HPV'],
+    schedule: '9–14歲：0、6–12個月（2劑）；15歲以上：0、2、6個月（3劑）',
+    target: '仿單適應 9–45 歲男女',
+    notes: ['預防子宮頸癌、肛門癌、口咽癌、外生殖器癌等與 HPV 相關之疾病', '9–14歲2劑效果等同15歲以上3劑', '接種前不必常規篩檢 HPV', '已有性經驗者仍可接種，效力對未曾感染之型別仍有保護'],
+    public_note: '【公費對象】自 107 年 12 月起國中女生公費接種；自 114 年 9 月起擴大為全體國中生（男女皆可），由 113 學年度入學國中生開始，採校園集中接種 9 價疫苗，9–14 歲僅需 2 劑。<br>詳見：<a href="https://www.hpa.gov.tw/Pages/List.aspx?nodeid=1799" target="_blank" style="color:var(--accent)">國健署 HPV 疫苗 QA</a>',
     contraindication: '對疫苗成分嚴重過敏；孕婦暫緩',
     price: null,
   },
@@ -545,11 +569,20 @@ const ADULT_VACCINES = [
   },
   {
     id: 'pneumo', icon: '🫁', name: '肺炎鏈球菌疫苗', en: 'Pneumococcal Vaccine (PCV20 / PPV23)',
-    doses: '1劑（PCV20）或依序接種',
-    schedule: '未曾接種者可直接接種PCV20（1劑）',
-    target: '65歲以上；19–64歲高危險群（慢性病、免疫不全等）',
-    notes: ['PCV20（20價結合型）：涵蓋最廣，建議優先選擇', 'PPV23：可與PCV序列接種，詳詢醫師', '曾接種PPV23者：間隔至少1年再接種PCV20'],
-    public_note: '【公費對象】65歲以上長者可接種1劑公費肺炎鏈球菌疫苗（PCV20或PPV23，依各縣市提供）。詳見：<a href="https://www.cdc.gov.tw/Category/MPage/zK8mS8V4oEfjRy8Dlv0yJw" target="_blank" style="color:var(--accent)">CDC 肺炎鏈球菌疫苗專區</a>',
+    doses: '1劑 PCV20（新政策）',
+    schedule: '從未接種過者：1劑 PCV20 即完整接種',
+    target: '65 歲以上；55–64 歲原住民；19–64 歲 IPD 高風險對象',
+    notes: [
+      'PCV20（20 價結合型）：自 115/1/15 起取代原 PCV13 + PPV23 雙劑接種模式，1 劑即完整保護',
+      'IPD 高風險對象：脾臟功能缺損、先天/後天免疫功能不全、人工耳植入、腦脊髓液滲漏、一年內接受免疫抑制劑或放射治療之惡性腫瘤患者及器官移植者',
+      '銜接規則（依過去接種紀錄）：',
+      '　• 從未接種：直接接種 1 劑 PCV20',
+      '　• 僅曾接種 PPV23（間隔≥1 年）：補打 1 劑 PCV20',
+      '　• 僅曾接種 PCV13/15（間隔≥1 年；高風險者≥8 週）：以 1 劑 PPV23 銜接（過渡期，俟 PPV23 用罄後改 PCV20）',
+      '　• 已接種 PCV13/15 + PPV23：視為完整接種，無需再打',
+      '　• 19–64 歲 IPD 高風險者，於 65 歲前完整接 PCV13/15+PPV23：滿 65 歲且距前劑≥5 年，可追加 1 劑 PCV20'
+    ],
+    public_note: '【公費對象（115 年起新制）】3 類人公費：(1) 65 歲以上、(2) 55–64 歲原住民、(3) 19–64 歲 IPD 高風險對象。自 115/1/15 起政策大改：以 1 劑 PCV20 取代原 2 劑接種。<br>詳見：<a href="https://www.cdc.gov.tw/Category/Page/U_hY1WCfa5BU6fuqW9FIXg" target="_blank" style="color:var(--accent)">CDC 成人肺炎鏈球菌疫苗</a>',
     contraindication: '對疫苗成分嚴重過敏',
     price: null,
   },
@@ -572,20 +605,47 @@ const ADULT_VACCINES = [
     price: null,
   },
   {
-    id: 'mcv4', icon: '🧪', name: '流行性腦脊髓膜炎疫苗', en: 'Meningococcal Vaccine (MCV4 / MenB)',
-    doses: 'MCV4：1劑；MenB：多劑',
-    schedule: 'MCV4：1劑；MenB：依仿單接種2–3劑',
-    target: '前往腦膜炎流行地區（非洲腦膜炎帶）；高危險族群；朝聖者（麥加）',
-    notes: ['MCV4（4價結合型，ACWY）：2歲以上，保護約5年', 'MenB（B型）：2個月以上可接種', '沙烏地阿拉伯規定朝聖者須有MCV4接種證明'],
+    id: 'menacwy', icon: '🧪', name: '流行性腦脊髓膜炎疫苗 ACWY', en: 'MenACWY (Menveo)',
+    doses: '1 劑（2 歲以上）',
+    schedule: '單劑肌肉注射，接種後 7-10 天產生保護力，預防接種證明書於接種 10 天後生效',
+    target: '前往腦膜炎流行地區（非洲腦膜炎帶）；沙烏地阿拉伯朝聖者；留學生（部分學校要求）；高危險族群（脾臟切除、補體缺損、HIV）',
+    notes: [
+      '台灣 CDC 旅遊醫學專案進口廠牌為 Menveo（GSK，腦寧安）',
+      '保護 A、C、W-135、Y 四種血清型；不涵蓋 B 型',
+      '保護力可維持約 5 年；持續暴露於高風險環境者，建議每 5 年追加 1 劑',
+      '可至疾管署合約之旅遊醫學門診接種；建議出國前至少 10 天完成接種',
+      '9 個月-未滿 2 歲嬰幼兒：可考慮 Menactra 接種 2 劑（間隔至少 3 個月）',
+    ],
+    contraindication: '對疫苗成分嚴重過敏（含白喉類毒素過敏者）',
+    price: null,
+  },
+  {
+    id: 'menb', icon: '🧪', name: '流行性腦脊髓膜炎疫苗 B 型', en: 'MenB (Bexsero / 4CMenB)',
+    doses: '依年齡 2-4 劑',
+    schedule: '依起始年齡決定劑次：2-5 個月起 → 3 + 1 共 4 劑；6-11 個月起 → 2 + 1 共 3 劑；12 個月以上起 → 2 劑',
+    target: '台灣本土流行性腦脊髓膜炎以 B 型為主（約佔 80%）；建議高危險族群接種：脾臟功能缺損、先天/後天補體缺損、原發性免疫缺損、HIV 感染者、接受 eculizumab 治療者、造血幹細胞移植者；學校群居族群亦可考慮自費接種',
+    notes: [
+      '台灣現用為 Bexsero（GSK，必思諾）四成份重組蛋白疫苗（4CMenB）',
+      '不涵蓋 ACWY 血清型（如有需要可同時接種 MenACWY，分開不同部位）',
+      '輝瑞 Trumenba（適用 10 歲以上）在台灣較少見',
+      '可預防性使用 acetaminophen 降低發燒發生率，不影響免疫生成效果',
+    ],
     contraindication: '對疫苗成分嚴重過敏',
     price: null,
   },
   {
-    id: 'rsv', icon: '🫧', name: 'RSV疫苗', en: 'RSV Vaccine',
-    doses: '1劑',
-    schedule: '1劑（單次接種）',
-    target: '75歲以上；60–74歲有慢性肺病、心臟病等高危族群；懷孕28–36週（保護嬰兒）',
-    notes: ['孕婦接種後可提供嬰兒出生至6個月被動免疫', '基因重組或mRNA疫苗，非活性疫苗', '60–74歲一般健康成人建議與醫師討論後決定'],
+    id: 'rsv', icon: '🫧', name: 'RSV 疫苗（成人/孕婦）', en: 'RSV Vaccine (Abrysvo / Arexvy)',
+    doses: '1 劑',
+    schedule: '1 劑（單次接種）',
+    target: '60 歲以上長者（尤其慢性肺病、心臟病等高危族群）；懷孕 28–36 週（為新生兒被動免疫）',
+    notes: [
+      'Abrysvo（艾沛兒，輝瑞）：2025 年於台灣上市，雙適應 — 60 歲以上成人 + 孕婦（28–36 週）',
+      'Arexvy（GSK）：適用 60 歲以上成人，未涵蓋孕婦',
+      '孕婦接種後抗體經胎盤傳給胎兒，可保護新生兒至出生後 6 個月',
+      '孕婦建議與百日咳疫苗（Tdap）間隔 2 週，避免可能免疫干擾',
+      '基因重組蛋白疫苗，非活性疫苗',
+      '60–74 歲一般健康成人建議與醫師討論後決定'
+    ],
     contraindication: '對疫苗成分嚴重過敏',
     price: null,
   },
@@ -618,11 +678,11 @@ const ADULT_VACCINES = [
   },
   {
     id: 'flu', icon: '🤧', name: '流感疫苗（成人）', en: 'Influenza Vaccine',
-    doses: '每年 1 劑（初次接種者2劑）',
-    schedule: '每年施打，建議 10 月前完成',
-    target: '所有成人建議接種，尤其是高風險族群',
-    notes: ['初次接種者須接種2劑，間隔4週', '每年病毒株不同，需年年接種', '孕婦、6個月以上幼兒、65歲以上長者優先'],
-    public_note: '【公費對象（114年）】醫事人員、65歲以上長者、55歲以上原住民、孕婦、6個月至入學前幼兒、高風險慢性病人（BMI≥30、罕病、重大傷病）、幼兒園托育人員、國小至五專三年級學生等；第二階段（11/1起）50-64歲無慢性病成人。<br>詳見：<a href="https://www.cdc.gov.tw/Category/QAPage/T93ZfoLyyuCaZvKf7v9eww" target="_blank" style="color:var(--accent)">CDC 公費流感疫苗接種計畫</a>',
+    doses: '每年 1 劑（9 歲以下初次接種者 2 劑）',
+    schedule: '每年施打，建議 10 月前完成；秋冬接種計畫於每年 10/1 起分階段開打',
+    target: '所有 6 個月以上民眾建議接種，尤其是高風險族群',
+    notes: ['9 歲以下初次接種者須接 2 劑，間隔至少 4 週；9 歲以上 1 劑即可', '每年病毒株不同，需年年接種', '孕婦、幼兒、65 歲以上長者、慢性病人為優先族群'],
+    public_note: '【公費對象（114 年起）】自 114/1/1 起公費流感疫苗已擴大全民接種，凡 6 個月以上具中華民國國民身分或持居留證者皆可接種，至疫苗用罄止。每年秋冬接種計畫於 10/1 起分階段優先服務高風險族群（醫事人員、65 歲以上長者、55 歲以上原住民、孕婦、學齡前幼兒、學生、高風險慢性病人 etc.），但全民皆可接種。<br>詳見：<a href="https://www.cdc.gov.tw/Category/MPage/JNTC9qza3F_rgt9sRHqV2Q" target="_blank" style="color:var(--accent)">CDC 流感疫苗接種計畫</a>',
     contraindication: '對疫苗成分（含雞蛋蛋白）嚴重過敏；發燒中',
     price: null,
   },
