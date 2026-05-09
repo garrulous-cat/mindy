@@ -230,8 +230,7 @@
       "generic": "Canagliflozin",
       "brand_tw": "Invokana",
       "brand_zh": "可拿糖",
-      "in_formulary": false,
-      "in_formulary_note": "成大醫院非常備，需特別申請。本院 SGLT2i 主力為 empagliflozin 與 dapagliflozin。",
+      "in_formulary": true,
       "manufacturer": "Janssen",
 
       "basic": {

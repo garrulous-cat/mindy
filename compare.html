@@ -486,16 +486,6 @@
   <h1 class="page-title">藥物類別比較</h1>
   <p class="page-sub">同類藥之仿單適應症、里程碑試驗、指引建議分層呈現。每筆資料標註來源，便於核對。</p>
 
-  <div class="class-selector">
-    <button class="class-btn active" data-class="sglt2">SGLT2</button>
-    <button class="class-btn disabled" disabled title="待加入">GLP-1 RA</button>
-    <button class="class-btn disabled" disabled title="待加入">Statin</button>
-    <button class="class-btn disabled" disabled title="待加入">DOAC</button>
-  </div>
-</div>
-
-<div class="compare-wrap">
-
   <div class="disclaimer">
     <span class="dc-icon" id="discIcon"></span>
     <div>
@@ -504,6 +494,16 @@
       跨試驗之 HR 數值不可直接比較。臨床決策請以最新仿單與指引為準。
     </div>
   </div>
+
+  <div class="class-selector">
+    <button class="class-btn active" data-class="sglt2">SGLT2</button>
+    <button class="class-btn" data-class="glp1">GLP-1 RA</button>
+    <button class="class-btn disabled" disabled title="待加入">Statin</button>
+    <button class="class-btn disabled" disabled title="待加入">DOAC</button>
+  </div>
+</div>
+
+<div class="compare-wrap">
 
   <div class="toggle-bar">
     <span class="toggle-label">顯示設定</span>
@@ -525,9 +525,17 @@
 <script>
 let DATA = null;
 let showOOF = true; // show out-of-formulary
+let currentClass = 'sglt2'; // 預設 SGLT2
+
+const CLASS_FILES = {
+  'sglt2': 'data/sglt2.json',
+  'glp1':  'data/glp1.json'
+};
 
 async function loadData() {
-  const res = await fetch('data/sglt2.json');
+  const url = CLASS_FILES[currentClass];
+  if (!url) return;
+  const res = await fetch(url);
   DATA = await res.json();
   document.getElementById('lastUpdated').textContent = DATA._meta.last_updated;
   render();
@@ -560,14 +568,18 @@ function render() {
   const headers = drugs.map(d => {
     const dim = d.in_formulary ? '' : 'dimmed';
     const tag = d.in_formulary
-      ? '<span class="form-tag in">處方集 ✓</span>'
+      ? ''
       : '<span class="form-tag out">非常備</span>';
     const note = !d.in_formulary && d.in_formulary_note
       ? `<div class="drug-name-line3">${esc(d.in_formulary_note)}</div>`
       : '';
+    const classNote = d.class_note
+      ? `<div class="drug-name-line3" style="color:var(--yellow);font-style:italic">⚐ ${esc(d.class_note)}</div>`
+      : '';
     return `<th class="drug-col-header ${dim}">
       <div class="drug-name-line1">${esc(d.generic)}</div>
       <div class="drug-name-line2">${esc(d.brand_tw)} · ${esc(d.brand_zh)}</div>
+      ${classNote}
       ${tag}
       ${note}
     </th>`;
@@ -621,7 +633,9 @@ function render() {
     if (!d.key_trials || d.key_trials.length === 0) {
       return '<span class="empty-cell">無收錄主要試驗</span>';
     }
-    return d.key_trials.map(t => `
+    // 依年份由新到舊排序（同年份保持原順序）
+    const sortedTrials = [...d.key_trials].sort((a, b) => (b.year || 0) - (a.year || 0));
+    return sortedTrials.map(t => `
       <div class="trial-card">
         <div class="trial-name">
           ${esc(t.name)}
@@ -629,7 +643,7 @@ function render() {
         </div>
         <div class="trial-meta"><span class="trial-meta-label">人群</span>${esc(t.population)}</div>
         <div class="trial-meta"><span class="trial-meta-label">介入</span>${esc(t.intervention)}</div>
-        <div class="trial-result"><span class="trial-meta-label" style="color:var(--accent)">結果</span>${esc(t.primary_outcome)}</div>
+        <div class="trial-result"><span class="trial-meta-label">結果</span>${esc(t.primary_outcome)}</div>
         ${t.secondary ? `<div class="trial-meta" style="margin-top:4px"><span class="trial-meta-label">次要</span>${esc(t.secondary)}</div>` : ''}
         ${t.note ? `<div class="trial-note">${esc(t.note)}</div>` : ''}
         <div class="trial-ref">
@@ -727,6 +741,17 @@ function render() {
 document.getElementById('showOutOfFormulary').addEventListener('change', e => {
   showOOF = e.target.checked;
   render();
+});
+
+// Class 切換
+document.querySelectorAll('.class-btn[data-class]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (btn.classList.contains('disabled')) return;
+    document.querySelectorAll('.class-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentClass = btn.dataset.class;
+    loadData();
+  });
 });
 
 // Inject icons
