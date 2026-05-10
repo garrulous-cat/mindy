@@ -262,6 +262,13 @@
   </div>
   資料來源：<a href="https://www.nhi.gov.tw/ch/cp-13108-67ddf-2508-1.html" target="_blank" rel="noopener">衛生福利部中央健康保險署</a> ·
   本站僅供查詢參考，以健保署官方公告為準
+  <div style="margin-top: 12px;">
+    <a class="feedback-link" id="feedbackLink"
+       href="https://docs.google.com/forms/d/e/1FAIpQLSfNUXEtUPxavNh_ga1khBQr0VOcY0ZYVmkMK3Ux3CNxznPUSg/viewform"
+       target="_blank" rel="noopener">
+      <span id="feedbackIcon"></span>回報錯誤 / 提建議
+    </a>
+  </div>
 </footer>
 
 <script>
@@ -779,6 +786,9 @@ function injectIcons() {
   // clear button
   const clr = document.getElementById('clearBtn');
   if (clr) clr.innerHTML = ICON.close;
+  // feedback icon
+  const fb = document.getElementById('feedbackIcon');
+  if (fb) fb.innerHTML = ICON.message;
 }
 injectIcons();
 

@@ -233,3 +233,29 @@
     text-align: center;
   }
 }
+
+/* ── Feedback link（每頁 footer 共用）── */
+.feedback-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #8fa3c0;
+  text-decoration: none;
+  font-size: 12px;
+  padding: 4px 10px;
+  border: 1px solid #2d3a52;
+  border-radius: 5px;
+  transition: all 0.15s;
+  background: transparent;
+}
+.feedback-link:hover {
+  color: #4a9eff;
+  border-color: rgba(74,158,255,0.4);
+  background: rgba(74,158,255,0.05);
+}
+.feedback-link svg {
+  width: 12px;
+  height: 12px;
+  stroke-width: 1.8;
+  flex-shrink: 0;
+}

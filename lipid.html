@@ -951,6 +951,13 @@
   <div class="disclaimer">
     ⚠️ 本工具僅供醫護人員臨床參考，不取代個別病人評估與醫師判斷。
   </div>
+  <div style="margin-top: 14px;">
+    <a class="feedback-link" id="feedbackLink"
+       href="https://docs.google.com/forms/d/e/1FAIpQLSfNUXEtUPxavNh_ga1khBQr0VOcY0ZYVmkMK3Ux3CNxznPUSg/viewform"
+       target="_blank" rel="noopener">
+      <span id="feedbackIcon"></span>回報錯誤 / 提建議
+    </a>
+  </div>
 </footer>
 
 <script>
@@ -2316,6 +2323,9 @@ document.querySelectorAll('.ti[data-icon]').forEach(el => {
   const k = el.dataset.icon;
   if (window.ICON && window.ICON[k]) el.innerHTML = window.ICON[k];
 });
+// Feedback icon
+const fbIcon = document.getElementById('feedbackIcon');
+if (fbIcon && window.ICON) fbIcon.innerHTML = window.ICON.message;
 </script>
 </body>
 </html>

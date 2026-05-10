@@ -356,6 +356,13 @@ body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: va
 <div class="footer-meta">
   資料來源：<a href="https://www.cdc.gov.tw" target="_blank">衛生福利部疾病管制署</a>
   · 本工具由 DR. YANG 個人維護，資訊僅供參考，以 CDC 官方公告為準
+  <div style="margin-top: 12px;">
+    <a class="feedback-link" id="feedbackLink"
+       href="https://docs.google.com/forms/d/e/1FAIpQLSfNUXEtUPxavNh_ga1khBQr0VOcY0ZYVmkMK3Ux3CNxznPUSg/viewform"
+       target="_blank" rel="noopener">
+      <span id="feedbackIcon"></span>回報錯誤 / 提建議
+    </a>
+  </div>
 </div>
 
 <script>
@@ -920,6 +927,9 @@ document.querySelectorAll('.ti[data-icon]').forEach(el => {
   const k = el.dataset.icon;
   if (window.ICON && window.ICON[k]) el.innerHTML = window.ICON[k];
 });
+// Feedback icon
+const fbIcon = document.getElementById('feedbackIcon');
+if (fbIcon && window.ICON) fbIcon.innerHTML = window.ICON.message;
 </script>
 </body>
 </html>

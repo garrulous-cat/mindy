@@ -59,7 +59,10 @@
     scale:     svg('<path d="M16 16.01V16"/><path d="M8 16.01V16"/>' +
                    '<path d="m2 16 3-9 3 9"/><path d="m14 16 3-9 3 9"/>' +
                    '<path d="M5 16h6"/><path d="M17 16h6"/>' +
-                   '<path d="M12 3v18"/><path d="M5 21h14"/>')
+                   '<path d="M12 3v18"/><path d="M5 21h14"/>'),
+
+    // 意見回饋：對話框
+    message:   svg('<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>')
   };
 
   global.ICON = ICON;
