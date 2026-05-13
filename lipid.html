@@ -648,7 +648,7 @@
       </div>
       <div class="form-group">
         <label>LDL-C <span class="unit">mg/dL</span></label>
-        <input type="number" id="ldl" min="10" max="500" placeholder="壞膽固醇（未測可不填）" oninput="calcNonHDL()">
+        <input type="number" id="ldl" min="10" max="500" placeholder="壞膽固醇" oninput="calcNonHDL()">
       </div>
       <div class="form-group">
         <label>HDL-C <span class="unit">mg/dL</span></label>
@@ -670,7 +670,7 @@
         <div class="computed-field" id="nonhdl">—</div>
       </div>
       <div class="form-group" id="calcLdlGroup" style="display:none;">
-        <label>Calculated LDL <span class="unit">mg/dL</span> <span class="optional">Friedewald</span> <i class="info-icon" data-tip="未實測 LDL 時，由 TC、HDL、TG 推算：LDL = TC − HDL − TG/5。TG ≥ 400 mg/dL 時公式不適用。">!</i></label>
+        <label>Calculated LDL <span class="unit">mg/dL</span> <i class="info-icon" data-tip="未實測 LDL 時，由 TC、HDL、TG 用 Friedewald 公式推算：LDL = TC − HDL − TG/5。TG ≥ 400 mg/dL 時公式不適用，建議實測 LDL。">!</i></label>
         <div class="computed-field" id="calcLdl">—</div>
       </div>
 
@@ -1005,7 +1005,7 @@ function calcNonHDL() {
         elCL.textContent = '計算值異常（< 0），請覆核數值';
         elCL.style.color = 'var(--accent-yellow, #d4a843)';
       } else {
-        elCL.textContent = calc.toFixed(0) + ' mg/dL（推算值）';
+        elCL.textContent = calc.toFixed(0) + ' mg/dL';
         elCL.style.color = '';
       }
     }
@@ -1699,7 +1699,7 @@ function calcESC(p) {
 //  AHA PREVENT 2023
 // ─────────────────────────────────────────────────────────────
 function calcAHA(p) {
-  const { age, sex, sbp, tc, hdl, ldl, dm, smoking, bpMed, dmMed, egfr,
+  const { age, sex, sbp, tc, hdl, ldl, ldlSource, dm, smoking, bpMed, dmMed, egfr,
           ascvd, ascvd_multi, ascvdTypes, fh, cac, imaging_stenosis } = p;
   let level, ldlTarget, nonhdlTarget, prevent = null;
   let reasons = [];
@@ -1873,7 +1873,13 @@ function calcAHA(p) {
 
   } else {
     level = null;
+    const got = [];
+    if (age) got.push(`年齡 ${age}`); else got.push('年齡 ✗');
+    if (sbp) got.push(`SBP ${sbp}`); else got.push('SBP ✗');
+    if (tc) got.push(`TC ${tc}`); else got.push('TC ✗');
+    if (hdl) got.push(`HDL ${hdl}`); else got.push('HDL ✗');
     reasons.push('需年齡、SBP、TC、HDL-C 才能計算 PREVENT');
+    reasons.push(`目前讀到：${got.join('、')}`);
   }
 
   // PREVENT 主要貢獻因子（獨立 chips 區塊）
