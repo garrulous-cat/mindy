@@ -279,6 +279,103 @@ body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: va
 }
 .footer-meta a { color: var(--accent); text-decoration: none; }
 
+/* ── Special Populations ── */
+.special-pop-section {
+  margin-top: 36px;
+  padding-top: 28px;
+  border-top: 1px solid var(--border);
+}
+.special-pop-header {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 6px;
+}
+.special-pop-header h2 {
+  font-size: 20px; font-weight: 600; color: var(--text);
+}
+.special-pop-subtitle {
+  font-size: 13px; color: var(--text-muted); margin-bottom: 18px;
+}
+.special-pop-tabs {
+  display: flex; gap: 8px; margin-bottom: 18px;
+  border-bottom: 1px solid var(--border); padding-bottom: 0;
+  overflow-x: auto;
+}
+.sp-tab {
+  padding: 10px 16px; cursor: pointer; border: none; background: transparent;
+  color: var(--text-muted); font-size: 14px; font-weight: 500;
+  border-bottom: 2px solid transparent; margin-bottom: -1px;
+  white-space: nowrap; font-family: inherit;
+  transition: color 0.15s, border-color 0.15s;
+}
+.sp-tab:hover { color: var(--text); }
+.sp-tab.active {
+  color: var(--accent); border-bottom-color: var(--accent);
+}
+.sp-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+  padding: 20px;
+}
+.sp-block { margin-bottom: 22px; }
+.sp-block:last-child { margin-bottom: 0; }
+.sp-block-title {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 12px;
+}
+.sp-block-title::before {
+  content: ''; display: inline-block; width: 3px; height: 14px; border-radius: 2px;
+}
+.sp-block.vaccines .sp-block-title::before { background: var(--accent); }
+.sp-block.timing .sp-block-title::before { background: var(--green); }
+.sp-block.warnings .sp-block-title::before { background: var(--yellow); }
+
+.sp-vax-list { display: flex; flex-direction: column; gap: 8px; }
+.sp-vax-item {
+  display: grid; grid-template-columns: 130px 1fr; gap: 12px;
+  padding: 10px 12px; background: var(--bg2); border-radius: 6px;
+  font-size: 13.5px; line-height: 1.55;
+}
+.sp-vax-name {
+  font-weight: 600; color: var(--text);
+  display: flex; flex-direction: column; gap: 4px;
+}
+.sp-vax-tag {
+  display: inline-block; font-size: 10px; padding: 1px 6px; border-radius: 3px;
+  font-weight: 500; width: fit-content;
+}
+.sp-vax-tag.pub { background: var(--green-dim); color: var(--green); border: 1px solid var(--green-border); }
+.sp-vax-tag.priv { background: var(--orange-dim); color: var(--orange); border: 1px solid var(--orange-border); }
+.sp-vax-detail { color: var(--text-muted); }
+.sp-vax-detail strong { color: var(--text); font-weight: 500; }
+
+.sp-timing-list, .sp-warn-list {
+  list-style: none; padding: 0; display: flex; flex-direction: column; gap: 8px;
+}
+.sp-timing-list li, .sp-warn-list li {
+  padding: 10px 12px; background: var(--bg2); border-radius: 6px;
+  font-size: 13.5px; line-height: 1.6;
+  border-left: 3px solid transparent;
+}
+.sp-timing-list li { border-left-color: var(--green); }
+.sp-warn-list li { border-left-color: var(--yellow); }
+.sp-warn-list li.critical { border-left-color: var(--red); }
+.sp-warn-list li strong { color: var(--text); font-weight: 600; }
+
+.sp-sources {
+  margin-top: 18px; padding-top: 14px; border-top: 1px dashed var(--border);
+  font-size: 12px; color: var(--text-muted); line-height: 1.7;
+}
+.sp-sources strong { color: var(--text-muted); font-weight: 500; }
+.sp-sources a { color: var(--accent); text-decoration: none; }
+.sp-sources a:hover { text-decoration: underline; }
+.sp-sources .src-item { margin-bottom: 4px; }
+
+@media (max-width: 600px) {
+  .sp-vax-item { grid-template-columns: 1fr; gap: 4px; }
+  .sp-vax-name { flex-direction: row; align-items: center; gap: 8px; }
+  .special-pop-tabs { gap: 4px; }
+  .sp-tab { padding: 8px 12px; font-size: 13px; }
+}
+
 /* Responsive */
 @media (max-width: 600px) {
   .page-wrap { padding: 16px 12px; }
@@ -337,9 +434,8 @@ body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: va
       </table>
     </div>
 
-    <div style="margin-top:16px; font-size:12px; color:var(--text-light); line-height:1.8;">
-      ※ 流感疫苗每年公費政策可能變動，自114/1/1起公費已擴大至全民（6個月以上未接種者，至疫苗用罄止）；6個月–8歲初次接種者須打 2 劑（間隔 4 週以上），9 歲以上 1 劑即可<br>
-      ※ 接種時程以 CDC 公告及醫師評估為準，本工具僅供參考
+    <div style="margin-top:16px; font-size:12px; line-height:1.8;">
+      <span style="color: var(--yellow); font-weight: 500;">※ 流感疫苗每年公費政策可能變動，自 114/1/1 起公費已擴大至全民（6 個月以上未接種者，至疫苗用罄止）；6 個月–8 歲初次接種者須打 2 劑（間隔 4 週以上），9 歲以上 1 劑即可。</span>
     </div>
   </div>
 
@@ -361,6 +457,18 @@ body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: va
           <span>← 點選左側疫苗查看詳細資訊</span>
         </div>
       </div>
+    </div>
+
+    <!-- ─── Special Populations ─── -->
+    <div class="special-pop-section">
+      <div class="special-pop-header">
+        <h2>特殊族群速查</h2>
+      </div>
+      <div class="special-pop-subtitle">
+        針對特定族群與一般成人時程不同之疫苗建議；點選下方頁籤切換族群。
+      </div>
+      <div class="special-pop-tabs" id="spTabs"></div>
+      <div id="spContent"></div>
     </div>
   </div>
 </div>
@@ -528,6 +636,22 @@ const PED_VACCINES = [
   {
     name: '水痘\n(第2劑)', en: 'Varicella ×2', type: 'priv',
     doses: [{ months: 54, label: '第2', tip: '滿4–6歲自費接種第2劑' }]
+  },
+
+  // ── 9y+ / 13y+ 學齡與青少年疫苗 ──
+  {
+    name: 'HPV 9價', en: 'HPV (9-valent)', type: 'pub',
+    doses: [
+      { months: 108, label: '第1', tip: '公費接種於國中二年級（生日 9/2~翌年 9/1 那批），114/9 起男女皆可。9–14歲接種：兩劑時程' },
+      { months: 156, label: '第2', tip: '與第 1 劑間隔 6–12 個月。注意：若 ≥15 歲才開始施打，須改打 3 劑（0、2、6 個月）' },
+    ]
+  },
+  {
+    name: '流感\n(學齡與青少年)', en: 'Influenza (annual)', type: 'pub',
+    doses: [
+      { months: 108, label: '每年', tip: '6 個月以上每年秋冬接種 1 劑（自 114/1 起全民公費）' },
+      { months: 156, label: '每年', tip: '每年秋冬接種 1 劑（公費）' },
+    ]
   },
 
 
@@ -717,6 +841,179 @@ const ADULT_VACCINES = [
 ];
 
 // ══════════════════════════════════════════════════════
+//  SPECIAL POPULATIONS (特殊族群速查)
+// ══════════════════════════════════════════════════════
+//  type: 'pub' = 公費  'priv' = 自費
+//  warning level: 'critical' (紅色) / undefined (黃色)
+const SPECIAL_POPULATIONS = [
+  // ─── 1. 脾切除 / 無脾症 ───────────────────────────
+  {
+    id: 'asplenia',
+    icon: '🫀',
+    name: '脾切除 / 無脾症',
+    en: 'Asplenia / Hyposplenism',
+    vaccines: [
+      {
+        name: '肺炎鏈球菌', type: 'priv',
+        detail: '<strong>單劑 PCV20 或 PCV21</strong>（依 2024 ACIP 與台灣 2026 公費政策，已可單劑取代過去 PCV13→PPSV23 序貫）；先前已接種者依原時程銜接'
+      },
+      {
+        name: 'B型嗜血桿菌\n(HiB)', type: 'priv',
+        detail: '兒童時未完整接種者，<strong>終生補接種 1 劑</strong>'
+      },
+      {
+        name: 'MenACWY\n(Menveo)', type: 'priv',
+        detail: '<strong>2 劑，間隔 ≥ 8 週</strong>；之後<strong>每 5 年追加 1 劑</strong>'
+      },
+      {
+        name: 'MenB\n(Bexsero)', type: 'priv',
+        detail: '<strong>2 劑，間隔 ≥ 4 週</strong>；初次接種 1 年後追加 1 劑，之後<strong>每 2–3 年追加</strong>'
+      },
+      {
+        name: '流感疫苗', type: 'pub',
+        detail: '<strong>每年 1 劑</strong>非活性疫苗（公費全民）'
+      },
+    ],
+    timing: [
+      '<strong>擇期切脾：</strong>建議手術前 <strong>10–12 週</strong>開始接種，<strong>術前 14 天</strong>完成所有疫苗',
+      '<strong>緊急切脾：</strong>術後第 <strong>7–14 天</strong>或出院當天即可開始接種（澳洲 Spleen Australia 建議第 7 天；ACIP 建議第 14 天，免疫原性較佳）',
+      '<strong>化療 / 放療：</strong>治療結束後 <strong>3 個月</strong>再接種',
+      '<strong>Rituximab：</strong>用藥後 <strong>6 個月</strong>再接種',
+    ],
+    warnings: [
+      { text: '<strong>禁用活性減毒流感疫苗（LAIV，鼻噴劑型）</strong>', critical: true },
+      { text: 'Menactra（MenACWY 另一廠牌）不可與 PCV 同時接種，需間隔 ≥ 4 週；Menveo / Nimenrix 則可同時' },
+      { text: '若兒童時期已完整接種 PCV13 (2 歲前 4 劑)，不需再接種 PCV；但仍需依新政策銜接 PCV20 / PCV21' },
+      { text: '請於致死性脾切除後感染（OPSI）高風險期警覺：術後兩年內為高峰、死亡率約 50%' },
+    ],
+    sources: [
+      {
+        text: '周志傑、林菀茹、廖再緯。成人脾臟切除者的疫苗接種。家庭醫學與基層醫療 2022;37(10):315-320。',
+        url: 'assets/refs/splenectomy_vaccine_2022.pdf'
+      },
+      {
+        text: 'CDC. Adult immunization schedule by medical condition and other indication (ACIP).',
+        url: 'https://www.cdc.gov/vaccines/schedules/hcp/imz/adult-conditions.html'
+      },
+      {
+        text: 'Kanhutu K, et al. Spleen Australia guidelines for the prevention of sepsis in patients with asplenia. Intern Med J 2017;47:848-55.',
+      },
+    ],
+  },
+
+  // ─── 2. 慢性腎臟病 / 透析 / 腎移植 ────────────────
+  {
+    id: 'ckd',
+    icon: '🩺',
+    name: 'CKD / 透析 / 腎移植',
+    en: 'Chronic Kidney Disease / Dialysis / Kidney Transplant',
+    vaccines: [
+      {
+        name: 'RSV 疫苗', type: 'priv',
+        detail: '<strong>50 歲以上 CKD 或腎移植者建議接種</strong>；建議優先選擇<strong>含佐劑型 RSVPreF3（Arexvy）</strong>'
+      },
+      {
+        name: '帶狀疱疹', type: 'priv',
+        detail: '<strong>非活性重組疫苗（Shingrix）2 劑，間隔 2–6 個月</strong>；18 歲以上 CKD/透析/移植皆建議'
+      },
+      {
+        name: '肺炎鏈球菌', type: 'pub/priv',
+        detail: '<strong>單劑 PCV20 或 PCV21</strong>（2026 公費政策）；或既有 PCV13/15 + PPSV23 序貫'
+      },
+      {
+        name: 'B 型肝炎', type: 'priv',
+        detail: '<strong>透析/移植：</strong>Engerix-B 四劑 0/1/2/6 月（每劑 40 mcg）或 H-B-VAX II 三劑 0/1/6 月（每劑 40 mcg）。<strong>一般 CKD：</strong>用一般成人劑量（Engerix-B 20 mcg 或 H-B-VAX II 10 mcg）'
+      },
+      {
+        name: '流感疫苗', type: 'pub',
+        detail: '<strong>每年 1 劑</strong>；65 歲以上可<strong>優先考慮高劑量或含佐劑型</strong>流感疫苗'
+      },
+      {
+        name: 'COVID-19', type: 'pub',
+        detail: '<strong>每年 2 劑</strong>最新變異株疫苗，間隔原則 6 個月（高傳播時可縮短至 2 個月）'
+      },
+    ],
+    timing: [
+      '<strong>腎移植前：</strong>可於等待移植期間或<strong>術前 2 個月以前</strong>規劃接種；最後 1 劑應於<strong>術前 2 週</strong>完成',
+      '<strong>腎移植後（若術前未完成）：</strong><strong>術後 6–12 個月</strong>、待免疫抑制劑使用穩定後再接種',
+      '<strong>流感疫苗特例：</strong>移植後 <strong>1 個月即可</strong>接種（不必等到 6–12 個月）',
+      'B 肝完整接種後 1–2 個月檢驗抗體；透析/移植者若 <strong>anti-HBs < 10 mIU/ml</strong>，可追加 1 劑',
+    ],
+    warnings: [
+      { text: '<strong>禁用活性減毒疫苗於免疫低下者：</strong>包括活性減毒流感疫苗（LAIV）、活性減毒帶疱疫苗 Zostavax', critical: true },
+      { text: 'B 肝 non-responder（兩輪接種後抗體仍 < 10）並非完全無保護，可能存在細胞免疫；臨床決策應個別評估' },
+      { text: 'PCV20 / PCV21 在 CKD/移植族群直接證據有限，但 ACIP 與台灣腎臟學會 2025 共識皆支持使用' },
+      { text: '透析開始後 <strong>2 年內</strong>接種帶疱疫苗保護效果較佳；移植病人盡可能於移植前接種' },
+    ],
+    sources: [
+      {
+        text: '台灣腎臟病患疫苗接種建議指引（台灣腎臟醫學會、感染症醫學會、移植醫學會聯合共識）。2025/12。ISBN 978-626-92619-0-1。',
+        url: 'assets/refs/ckd_vaccine_consensus_2025.pdf'
+      },
+      {
+        text: 'KDIGO Clinical Practice Guideline for the Care of Kidney Transplant Recipients.',
+      },
+      {
+        text: 'ACIP Adult Immunization Schedule (kidney disease conditions).',
+        url: 'https://www.cdc.gov/vaccines/schedules/hcp/imz/adult-conditions.html'
+      },
+    ],
+  },
+
+  // ─── 3. 懷孕 ─────────────────────────────────────
+  {
+    id: 'pregnancy',
+    icon: '🤰',
+    name: '懷孕',
+    en: 'Pregnancy',
+    vaccines: [
+      {
+        name: 'Tdap\n(百日咳)', type: 'priv',
+        detail: '<strong>每次懷孕</strong>都要接種 1 劑，不論過去接種史。<strong>建議於懷孕 28–36 週</strong>接種，使母體抗體傳給胎兒效益最大。若孕期未接種，應於<strong>產後立即</strong>補種'
+      },
+      {
+        name: '流感疫苗', type: 'pub',
+        detail: '<strong>任何孕期</strong>皆可接種 1 劑（不活化疫苗）；孕婦為公費對象之一'
+      },
+      {
+        name: 'COVID-19', type: 'pub',
+        detail: '<strong>孕婦為公費接種對象</strong>，依當年度最新變異株疫苗接種'
+      },
+      {
+        name: 'RSV 疫苗\n(RSVpreF, Abrysvo)', type: 'priv',
+        detail: '<strong>懷孕 28–36 週</strong>接種 1 劑，為新生兒（出生至 6 個月）提供被動免疫；FDA 限制適用於 32–36 週以避免極早產風險'
+      },
+    ],
+    timing: [
+      '<strong>Tdap：</strong>每次懷孕都要打 1 劑（不是「一輩子 1 劑」），最佳接種週數 <strong>28–36 週</strong>',
+      '<strong>RSV pre-F：</strong>建議 <strong>28–36 週</strong>；若與 Tdap 同時考量，可先打 RSV，<strong>間隔 ≥ 14 天</strong>後再打 Tdap，避開免疫干擾',
+      '<strong>流感：</strong>任何孕期皆可，不必等特定週數',
+      '<strong>產後：</strong>若孕期未接種 Tdap，<strong>離院前</strong>立即補種；MMR/水痘等活疫苗也可於產後接種',
+    ],
+    warnings: [
+      { text: '<strong>禁用活性減毒疫苗：</strong>MMR（麻疹/腮腺炎/德國麻疹）、水痘、HPV、LAIV 鼻噴流感、活性帶疱疫苗皆禁用於懷孕', critical: true },
+      { text: '<strong>建議孕前 1 個月以上</strong>完成 MMR、水痘等活疫苗接種；接種後避孕 1 個月' },
+      { text: 'HPV 疫苗孕期不建議接種；若接種後才發現懷孕，可待產後補完剩餘劑次（不需引產）' },
+      { text: '建議嬰兒主要照顧者（父親、祖父母、保母）也自費接種 1 劑 Tdap，形成「包覆免疫（cocoon strategy）」' },
+    ],
+    sources: [
+      {
+        text: '衛生福利部疾病管制署：破傷風、白喉及百日咳相關疫苗接種建議（孕婦每次懷孕第 28–36 週自費接種 1 劑 Tdap）。',
+        url: 'https://www.cdc.gov.tw/Category/Page/MXy9TPGNNXMS_rzotG7xzQ'
+      },
+      {
+        text: '衛生福利部疾病管制署：孕婦預防接種建議（流感、新冠、RSV）。',
+        url: 'https://www.cdc.gov.tw/Category/List/TcKynGco9G59NR02tsMyaQ'
+      },
+      {
+        text: '台灣兒童感染症醫學會：呼吸道細胞融合病毒疫苗使用建議（專業版）。',
+        url: 'https://www.pids.org.tw/index.php?route=education%2Feducation&path=137'
+      },
+    ],
+  },
+];
+
+// ══════════════════════════════════════════════════════
 //  MODE SWITCH
 // ══════════════════════════════════════════════════════
 function setMode(mode) {
@@ -724,7 +1021,7 @@ function setMode(mode) {
   document.getElementById('btn-adult').className = 'mode-btn' + (mode === 'adult' ? ' active' : '');
   document.getElementById('peds-section').style.cssText = mode === 'peds' ? 'display:block' : 'display:none';
   document.getElementById('adult-section').style.cssText = mode === 'adult' ? 'display:block' : 'display:none';
-  if (mode === 'adult') renderAdultList();
+  if (mode === 'adult') { renderAdultList(); renderSpecialTabs(); }
   if (mode === 'peds') renderTimeline();
 }
 
@@ -925,6 +1222,80 @@ function showAdultDetail(id) {
     <div class="detail-section">
       <div class="detail-section-title">自費價格</div>
       ${priceHtml}
+    </div>
+  `;
+}
+
+// ══════════════════════════════════════════════════════
+//  SPECIAL POPULATIONS RENDER
+// ══════════════════════════════════════════════════════
+let _spActiveId = null;
+
+function renderSpecialTabs() {
+  const tabsEl = document.getElementById('spTabs');
+  if (!tabsEl) return;
+  if (!_spActiveId) _spActiveId = SPECIAL_POPULATIONS[0].id;
+  tabsEl.innerHTML = SPECIAL_POPULATIONS.map(p =>
+    `<button class="sp-tab ${p.id === _spActiveId ? 'active' : ''}"
+             onclick="selectSpecialPop('${p.id}')">${p.icon} ${p.name}</button>`
+  ).join('');
+  renderSpecialContent();
+}
+
+function selectSpecialPop(id) {
+  _spActiveId = id;
+  renderSpecialTabs();
+}
+
+function renderSpecialContent() {
+  const contentEl = document.getElementById('spContent');
+  if (!contentEl) return;
+  const pop = SPECIAL_POPULATIONS.find(p => p.id === _spActiveId);
+  if (!pop) { contentEl.innerHTML = ''; return; }
+
+  const vaxHtml = pop.vaccines.map(v => {
+    const tagClass = v.type === 'pub' ? 'pub' : (v.type === 'priv' ? 'priv' : 'pub');
+    const tagText = v.type === 'pub' ? '公費' : (v.type === 'priv' ? '自費' : '公費/自費');
+    return `
+      <div class="sp-vax-item">
+        <div class="sp-vax-name">
+          <span>${v.name.replace(/\n/g, '<br>')}</span>
+          <span class="sp-vax-tag ${tagClass}">${tagText}</span>
+        </div>
+        <div class="sp-vax-detail">${v.detail}</div>
+      </div>`;
+  }).join('');
+
+  const timingHtml = pop.timing.map(t => `<li>${t}</li>`).join('');
+  const warnHtml = pop.warnings.map(w =>
+    `<li class="${w.critical ? 'critical' : ''}">${w.text}</li>`
+  ).join('');
+
+  const sourcesHtml = pop.sources.map(s => {
+    const linkText = s.url
+      ? `<a href="${s.url}" target="_blank" rel="noopener">${s.text}</a>`
+      : s.text;
+    return `<div class="src-item">• ${linkText}</div>`;
+  }).join('');
+
+  contentEl.innerHTML = `
+    <div class="sp-card">
+      <div class="sp-block vaccines">
+        <div class="sp-block-title">建議接種</div>
+        <div class="sp-vax-list">${vaxHtml}</div>
+      </div>
+      <div class="sp-block timing">
+        <div class="sp-block-title">特殊時機</div>
+        <ul class="sp-timing-list">${timingHtml}</ul>
+      </div>
+      <div class="sp-block warnings">
+        <div class="sp-block-title">注意事項</div>
+        <ul class="sp-warn-list">${warnHtml}</ul>
+      </div>
+      <div class="sp-sources">
+        <strong>資料來源</strong><br>
+        ${sourcesHtml}
+      </div>
     </div>
   `;
 }
