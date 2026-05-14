@@ -11,7 +11,10 @@
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://garrulous-cat.github.io/mindy/lab.html">
 
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='5' fill='%230d1117'/%3E%3Ctext x='12' y='17' text-anchor='middle' font-family='monospace' font-size='13' font-weight='700' fill='%234a9eff'%3EY%3C/text%3E%3C/svg%3E">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<link rel="shortcut icon" href="assets/favicon.ico">
 
 <link rel="stylesheet" href="assets/shared.css">
 <script src="assets/icons.js"></script>
@@ -129,7 +132,7 @@
   /* Textarea */
   textarea.lab-input {
     width: 100%;
-    min-height: 460px;
+    min-height: 280px;
     background: var(--bg-base);
     border: 1px solid var(--border);
     border-radius: var(--radius);
@@ -298,6 +301,7 @@
   }
   .dx-row .dx-right .evidence-row { display: block; }
   .dx-row .dx-right .ev-item { color: var(--text-secondary); }
+  .dx-row .dx-right .ev-source { color: var(--text-secondary); font-family: 'IBM Plex Sans TC', sans-serif; font-size: 12px; }
   .dx-row .dx-right .ev-value { color: var(--accent-red); font-weight: 600; }
   .dx-row .dx-right .ev-value.low { color: var(--accent-yellow); }
   .dx-row .dx-right .ev-date { color: var(--text-dim); margin-right: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; }
@@ -936,8 +940,9 @@ function splitReports(text) {
     const type = typeMatch ? typeMatch[1].trim() : '';
     const sampleMatch = part.match(/採檢\s+(\d{4}-\d{2}-\d{2})/);
     const execMatch   = part.match(/執行\s+(\d{4}-\d{2}-\d{2})/);
+    const signMatch   = part.match(/簽收\s+(\d{4}-\d{2}-\d{2})/);
     const reportMatch = part.match(/報告\s+(\d{4}-\d{2}-\d{2})/);
-    const date = (sampleMatch || execMatch || reportMatch || [])[1] || null;
+    const date = (sampleMatch || execMatch || signMatch || reportMatch || [])[1] || null;
     const isPending = /單據狀態[：:]\s*(?:已開立|簽收\/執行(?!\s*\S))/.test(part)
       || (part.includes('單據狀態') && !/檢驗名稱.*結果/.test(part));
     return { type, date, isPending, text: part };
@@ -964,6 +969,50 @@ function parseValue(cell, def) {
   if (/^\+{1,4}$/.test(s) || /^\d+\+$/.test(s)) return { num: null, qual: s };
   if (/^[A-Za-z][A-Za-z\s-]+$/.test(s)) return { num: null, qual: s };
   return { num: null, qual: s };
+}
+
+// 從報告 row 找出 ref cell。成大格式：
+//   nonEmpty = [name, value, unit, ref, ...]
+// 但某些項目 unit 為空，會變成 [name, value, ref, ...]
+// 策略：從 value 後往後掃，找第一個「長得像 ref 區間」的 cell（不是純單位/不是LOINC code）
+function findRefCell(nonEmpty, nameIdx) {
+  for (let i = nameIdx + 2; i < Math.min(nameIdx + 5, nonEmpty.length); i++) {
+    const c = nonEmpty[i];
+    if (!c) continue;
+    // 純 LOINC：4-7 位數字 + 短橫 + 數字
+    if (/^\d{3,7}-\d+$/.test(c)) continue;
+    // 看起來像 ref：含 - 或 ~ 或 ≦/≧/</>，或是 Negative/Normal/Non-reactive 等
+    if (/[\-~≦≤≧≥<>]/.test(c) || /^(Negative|Normal|Non-reactive|Neg)/i.test(c)) {
+      return c;
+    }
+  }
+  // fallback：通常 nameIdx+3 就是 ref
+  return nonEmpty[nameIdx + 3] || null;
+}
+
+// 解析 ref cell 為 [lo, hi]。
+// 例：
+//   "0.70-1.20"  → [0.70, 1.20]
+//   "10-50"      → [10, 50]
+//   "≦35"       → [0, 35]
+//   "≧60"       → [60, Infinity]
+//   "<200"       → [0, 200]
+//   ">40"        → [40, Infinity]
+//   "1.003~1.035"→ [1.003, 1.035]
+//   "Negative"   → null (qualitative)
+function parseRefCell(cell) {
+  if (!cell) return null;
+  const s = cell.trim();
+  // 範圍：A-B 或 A~B
+  let m = s.match(/^(-?\d+\.?\d*)\s*[-~]\s*(-?\d+\.?\d*)$/);
+  if (m) return [parseFloat(m[1]), parseFloat(m[2])];
+  // 上限：≦N 或 <N
+  m = s.match(/^[≦≤<]\s*=?\s*(-?\d+\.?\d*)/);
+  if (m) return [0, parseFloat(m[1])];
+  // 下限：≧N 或 >N
+  m = s.match(/^[≧≥>]\s*=?\s*(-?\d+\.?\d*)/);
+  if (m) return [parseFloat(m[1]), Infinity];
+  return null;
 }
 
 function parseTableSection(section) {
@@ -1019,11 +1068,17 @@ function parseTableSection(section) {
     const def = LAB_DICT.items[key];
     const nameIdx = nonEmpty.indexOf(nameCell);
     const valueCell = nonEmpty[nameIdx + 1] || '';
+    // 第 4 欄通常是 ref（成大格式：註 / 名稱 / 結果 / 單位 / 參考區間 / 備註 / LOINC）
+    // 但「註」常常是空字串被 filter 掉了，所以實際 nonEmpty 的 index 是：name=0, value=1, unit=2, ref=3
+    // 不過有時 unit 也是空 — 我們取 [nameIdx+1 之後] 找看起來像 ref 的那個
+    const refCell = findRefCell(nonEmpty, nameIdx);
+    const reportRef = parseRefCell(refCell);
     const v = parseValue(valueCell, def);
 
     currentItem = {
       key, def, raw, valueCell,
       num: v.num, qual: v.qual, capped: v.capped, range: v.range,
+      reportRef,       // 從報告解析出的 ref：[lo, hi] 或 null
       sampledAt: section.date,
       sourceType: section.type,
       notes: ''
@@ -1102,11 +1157,144 @@ function parseDemographics(text) {
   return demo;
 }
 
+// ─── Free-text report parsing (內視鏡、病理、影像、皮膚科超音、X光) ─────
+// 抓 Impression / IMPRESSION / DIAGNOSIS / PATHOLOGICAL DIAGNOSIS 段落
+// 回傳 [{ text, sourceLabel, sampledAt }]
+
+const FREE_TEXT_TYPES = [
+  { match: /內視鏡室檢查報告/,          label: '內視鏡',     keywords: ['DIAGNOSIS', 'IMPRESSION'] },
+  { match: /病理組織切片報告/,          label: '病理切片',   keywords: ['PATHOLOGICAL DIAGNOSIS', 'DIAGNOSIS'] },
+  { match: /細胞學檢查報告/,            label: '細胞學',     keywords: ['DIAGNOSIS', 'IMPRESSION', 'CYTOLOGIC DIAGNOSIS'] },
+  { match: /放射線部超音波檢查報告/,    label: '超音波',     keywords: ['Impression', 'IMPRESSION'] },
+  { match: /(電腦斷層|CT)/,             label: 'CT',         keywords: ['Impression', 'IMPRESSION'] },
+  { match: /Ｘ光|X光|X-ray|放射線/,     label: 'X光',        keywords: ['Impression', 'IMPRESSION'] },
+  { match: /皮膚科檢查報告/,            label: '皮膚科超音', keywords: ['Impression', 'IMPRESSION'] },
+  { match: /家醫部特殊檢查報告/,        label: '家醫部',     keywords: ['醫師診斷', 'DIAGNOSIS', '診斷'] },
+  { match: /心臟內科檢查報告/,          label: '心臟內科',   keywords: ['Impression', 'IMPRESSION', 'DIAGNOSIS'] },
+  { match: /神經傳導速度/,              label: '神經傳導',   keywords: ['IMPRESSION', 'DIAGNOSIS'] },
+  { match: /泌尿科部檢查報告/,          label: '泌尿科',     keywords: ['Impression', 'IMPRESSION', 'DIAGNOSIS'] }
+];
+
+function detectFreeTextType(sectionType) {
+  for (const t of FREE_TEXT_TYPES) {
+    if (t.match.test(sectionType)) return t;
+  }
+  return null;
+}
+
+// 抓 culture 報告（陰性跳過、陽性回傳菌名）
+function parseCultureSection(section) {
+  const text = section.text;
+  if (/No\s+aerobic\s+bacteria\s+isolated|No\s+anaerobic\s+bacteria\s+isolated|No\s+(?:growth|bacteria|organism)/i.test(text)) {
+    return [];   // 陰性培養：跳過
+  }
+  // 嘗試抓「ISOLATE:」或「Final report:」後的菌名
+  const dx = [];
+  const isolateMatch = text.match(/(?:isolated|Isolate|FINAL REPORT)[：:\s]+([\s\S]+?)(?:\n\n|報告結果|$)/);
+  if (isolateMatch) {
+    const cleaned = isolateMatch[1].trim().split(/\n+/)[0].replace(/^[-•・]+\s*/, '').trim();
+    if (cleaned && cleaned.length < 200) {
+      dx.push({ text: cleaned, sourceLabel: '細菌培養', sampledAt: section.date });
+    }
+  }
+  return dx;
+}
+
+function parseFreeTextSection(section, typeInfo) {
+  const results = [];
+  const text = section.text;
+
+  // 依關鍵字嘗試抓段落
+  for (const kw of typeInfo.keywords) {
+    // 抓 KW: ... 直到下一個全大寫標題（NOTE/GROSS/MICROSCOPIC/Pathologists/檢查醫師/醫師簽章），
+    // 或連續兩個空行，或抵達區塊結尾
+    const pattern = new RegExp(
+      kw + '\\s*[：:]?\\s*\\n?([\\s\\S]*?)' +
+      '(?=\\n\\s*(?:NOTE|GROSS|MICROSCOPIC|Pathologists|檢查醫師|醫師簽章|醫師簽章|報告結果|\\n\\n|[A-Z]{4,}[：:]|Impression|IMPRESSION|DIAGNOSIS)|$)',
+      ''
+    );
+    const m = text.match(pattern);
+    if (!m) continue;
+    const body = m[1].trim();
+    if (!body) continue;
+
+    // 分行 / bullet / 分號 / 句號（保留條目）
+    let lines = body
+      .split(/\n+|;|；/)
+      .map(s => s.replace(/^[\s\->•・*>＞\]\[]+/, '')
+                  .replace(/^\d+[\)\.]\s*/, '')
+                  .replace(/^診斷\s*[:：]\s*/, '')
+                  .replace(/^Dx\s*[:：]\s*/i, '')
+                  .replace(/[。\.\s]+$/, '')
+                  .trim())
+      .filter(s => s.length > 0 && s.length < 200);
+
+    // 去掉 meta/雜訊（醫師名、報告編號、null 等）
+    lines = lines.filter(line => {
+      if (/^(null|N\/A|None|Nil|無|\]|\[)$/i.test(line)) return false;
+      if (/^(Fellow|R:|VS:|主治醫師|檢查醫師|醫師簽章|Pathologists?|Premedication|Clinical Information|Indication|Rapid urease test|AccessionNumber|PatientID)/i.test(line)) return false;
+      if (/醫師.*[-－]\s*[\u4e00-\u9fff]+專/.test(line)) return false;
+      if (/^(Right|Left)\s+kidney\s+size|^Spleen\s*=|^kidney\s*=/i.test(line)) return false;
+      if (/^(Normal\s+(?:heart\s+size|sized?))$/i.test(line)) return false;
+      if (/(?:is\s+not\s+(?:widened|enlarged|dilated)|is\s+intact|are\s+intact|appears?\s+normal|are\s+free\s+of|unremarkable|not\s+distended)$/i.test(line)) return false;
+      if (/[,，][\s\S]+[,，][\s\S]+[:：]\s*$/.test(line)) return false;
+      if (/(?:biopsy|excision|aspiration|resection)\s*[:：]?\s*$/i.test(line)) return false;
+      if (/^(Soft\s+tissue|Bladder|Liver|Kidney|Lung|Brain|Heart|Stomach|Colon|Skin|Muscle|Bone|Lymph|Breast|Prostate|Ovary|Uterus|Cervix|Thyroid|Parathyroid|Pancreas|Spleen|Gallbladder|Esophagus|Duodenum|Jejunum|Ileum|Appendix|Rectum)[,，]/i.test(line)) return false;
+      if (/^\d/.test(line) && line.length < 8) return false;
+      if (/^[a-z\u4e00-\u9fff]+\s*[:：]\s*$/.test(line)) return false;
+      if (/^(?:[Ii]so|[Hh]yper|[Hh]ypo|[Aa]n)[\-\s]?(?:to|echoic|echogenic)/.test(line) && !/lipoma|cyst|stone|tumor|mass|lesion\s+suspect/i.test(line)) return false;
+      return true;
+    });
+
+    for (const line of lines) {
+      results.push({
+        text: line,
+        sourceLabel: typeInfo.label,
+        sampledAt: section.date
+      });
+    }
+    if (results.length > 0) break;  // 第一個有結果的關鍵字就停
+  }
+
+  return results;
+}
+
+// ─── Free-text 診斷整合與去重 ─────────────────────────────────────────
+// 規範化文字以便比對：移除標點、grade/Grade、大小寫
+function normDxText(s) {
+  return s.toLowerCase()
+    .replace(/[\s,，.。;；:：()()\[\]<>"'·]+/g, '')
+    .replace(/grade[a-z0-9]+/g, '')   // 移除 grade A/B/I/II 後綴以便合併
+    .trim();
+}
+
+// 同診斷出現多次 → 合併、列出所有來源
+function integrateFreeTextDx(items) {
+  if (!items.length) return [];
+  const grouped = {};
+  for (const item of items) {
+    const key = normDxText(item.text);
+    if (!grouped[key]) {
+      grouped[key] = {
+        text: item.text,    // 保留第一次出現的原文
+        sources: []
+      };
+    }
+    grouped[key].sources.push({
+      label: item.sourceLabel,
+      date: item.sampledAt
+    });
+  }
+  return Object.values(grouped);
+}
+
 function parseLIS(text) {
   const demographics = parseDemographics(text);
   const sections = splitReports(text);
   const allResults = [];
+  const freeTextItems = [];
   const skipped = [];
+
   for (const sec of sections) {
     if (sec.isPending) {
       const itemMatches = [...sec.text.matchAll(/項目名稱[：:]\s*(.+?)(?:\s*　　|\s{2,}|\n|$)/g)];
@@ -1116,14 +1304,38 @@ function parseLIS(text) {
       });
       continue;
     }
+
+    // 動脈硬化（ABI/PWV）— 走特殊解析回到數值類
     if (/動脈硬化檢查|肱踝動脈|足踝肱動脈/.test(sec.text)) {
       allResults.push(...parseSpecialSection(sec));
+      // 同一份家醫部報告可能還有 free-text「醫師診斷」段落
+      const ft = detectFreeTextType(sec.type);
+      if (ft) freeTextItems.push(...parseFreeTextSection(sec, ft));
       continue;
     }
+
+    // 細菌培養
+    if (/細菌檢查報告|培養|Culture/i.test(sec.type)) {
+      freeTextItems.push(...parseCultureSection(sec));
+      continue;
+    }
+
+    // Free-text 報告（內視鏡、病理、影像…）
+    const ftType = detectFreeTextType(sec.type);
+    if (ftType) {
+      freeTextItems.push(...parseFreeTextSection(sec, ftType));
+      continue;
+    }
+
+    // 標準表格報告
     const r = parseTableSection(sec);
     if (r) allResults.push(...r);
   }
-  return { results: allResults, skipped, demographics };
+
+  // 去重整合 free-text 診斷
+  const freeTextDx = integrateFreeTextDx(freeTextItems);
+
+  return { results: allResults, skipped, demographics, freeTextDx };
 }
 
 function classifyResult(item, sex) {
@@ -1137,9 +1349,19 @@ function classifyResult(item, sex) {
   if (item.num === null) return '?';
   if (def.crit_low != null && item.num <= def.crit_low) return 'LL';
   if (def.crit_high != null && item.num >= def.crit_high) return 'HH';
-  const ref = getRef(def, sex);
+  // 優先用報告自己的 ref（解析自檢驗單的參考區間欄位），沒有才用字典預設
+  const ref = item.reportRef || getRef(def, sex);
   if (!ref) return '?';
   const [lo, hi] = ref;
+  // Range-form 結果（e.g. "0~5 (9.0)" → range=[0,5]）：用範圍上限與 ref 上限比較
+  // 因為括號內的定量值單位通常與 ref 不同（/µL vs /HPF），看分類即可
+  if (item.range) {
+    const rHi = item.range[1];
+    if (def.direction === 'low_bad') return item.range[0] < lo ? 'L' : 'OK';
+    if (rHi > hi) return 'H';
+    if (item.range[0] < lo) return 'L';
+    return 'OK';
+  }
   if (def.direction === 'low_bad') return item.num < lo ? 'L' : 'OK';
   if (item.num < lo) return 'L';
   if (item.num > hi) return 'H';
@@ -1244,7 +1466,8 @@ const state = {
   demographics: { name: null, chartNo: null, sex: null, age: null, birthDate: null },
   integrated: [],
   skipped: [],
-  dx: []
+  dx: [],
+  freeTextDx: []
 };
 
 function escHtml(s) {
@@ -1257,6 +1480,12 @@ function fmtDate(iso) {
   if (!iso) return '';
   const m = iso.match(/(\d{4})-(\d{2})-(\d{2})/);
   return m ? `${m[1]}/${m[2]}/${m[3]}` : iso;
+}
+
+function fmtYearMonth(iso) {
+  if (!iso) return '';
+  const m = iso.match(/(\d{4})-(\d{2})/);
+  return m ? `${m[1]}/${m[2]}` : iso;
 }
 
 function displayValue(item) {
@@ -1273,12 +1502,13 @@ function runParse() {
     showToast('請先貼上 LIS 報告');
     return;
   }
-  const { results, skipped, demographics } = parseLIS(text);
+  const { results, skipped, demographics, freeTextDx } = parseLIS(text);
   state.demographics = demographics;
   state.sex = demographics.sex || 'M';  // 沒抓到就預設男（影響極小）
   state.integrated = integrateTimeline(results, state.sex);
   state.skipped = skipped;
   state.dx = applyDiagnosisRules(state.integrated);
+  state.freeTextDx = freeTextDx || [];
   renderResults(results.length);
 }
 
@@ -1365,15 +1595,16 @@ function renderResults(totalParsed) {
   html += `</div>`;
 
   // ── Diagnosis ──
+  const totalDxCount = state.dx.length + state.freeTextDx.length;
   html += `
     <div class="output-section">
       <div class="section-header">
-        <h3>🩺 Diagnosis <span class="badge-count">${state.dx.length}</span></h3>
-        ${state.dx.length > 0 ? '<button class="btn small primary" id="copyDxBtn">複製 Diagnosis</button>' : ''}
+        <h3>🩺 Diagnosis <span class="badge-count">${totalDxCount}</span></h3>
+        ${totalDxCount > 0 ? '<button class="btn small" id="copyDxBtn">複製</button>' : ''}
       </div>
   `;
 
-  if (state.dx.length === 0) {
+  if (totalDxCount === 0) {
     if (state.integrated.length > 0) {
       html += `<div class="objective-box" style="text-align:center;color:var(--text-muted);padding:20px">
         異常項目未觸發任何預設診斷規則
@@ -1381,7 +1612,10 @@ function renderResults(totalParsed) {
     }
   } else {
     html += `<div class="dx-table" id="dxTable">`;
-    state.dx.forEach((d, i) => {
+    let idx = 1;
+
+    // 數值型診斷
+    state.dx.forEach(d => {
       const evList = d.evidence.map(ev => {
         const isPast = state.integrated.find(it => it.key === ev.key && it.pastAbnormal === ev);
         const pastTag = isPast ? `<span class="past-prefix">曾異常</span>` : '';
@@ -1392,7 +1626,7 @@ function renderResults(totalParsed) {
       html += `
         <div class="dx-row">
           <div class="dx-left">
-            <span class="num">${i + 1}.</span>
+            <span class="num">${idx}.</span>
             <span>${escHtml(d.rule.name)}</span>
           </div>
           <div class="dx-right">
@@ -1401,7 +1635,30 @@ function renderResults(totalParsed) {
           </div>
         </div>
       `;
+      idx++;
     });
+
+    // Free-text 診斷（病理、影像、內視鏡等）
+    state.freeTextDx.forEach(d => {
+      const srcList = d.sources.map(s =>
+        `<span class="evidence-row"><span class="ev-date">${fmtYearMonth(s.date)}</span> <span class="ev-source">${escHtml(s.label)}</span></span>`
+      ).join('');
+
+      html += `
+        <div class="dx-row">
+          <div class="dx-left">
+            <span class="num">${idx}.</span>
+            <span>${escHtml(d.text)}</span>
+          </div>
+          <div class="dx-right">
+            <div class="dx-right-label">來源（不複製）</div>
+            ${srcList}
+          </div>
+        </div>
+      `;
+      idx++;
+    });
+
     html += `</div>`;
   }
   html += `</div>`;
@@ -1448,7 +1705,10 @@ function copyObjective() {
 }
 
 function copyDiagnosis() {
-  const lines = state.dx.map((d, i) => `${i + 1}. ${d.rule.name}`);
+  const lines = [];
+  let idx = 1;
+  state.dx.forEach(d => { lines.push(`${idx}. ${d.rule.name}`); idx++; });
+  state.freeTextDx.forEach(d => { lines.push(`${idx}. ${d.text}`); idx++; });
   navigator.clipboard.writeText(lines.join('\n'));
   showToast('已複製 Diagnosis（' + lines.length + ' 條）');
 }

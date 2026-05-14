@@ -25,7 +25,10 @@
 <meta name="twitter:description" content="家醫科醫師寫給自己用的臨床查詢工具箱。">
 
 <!-- ── Favicon (inline SVG) ── -->
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='5' fill='%230d1117'/%3E%3Ctext x='12' y='17' text-anchor='middle' font-family='monospace' font-size='13' font-weight='700' fill='%234a9eff'%3EY%3C/text%3E%3C/svg%3E">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<link rel="shortcut icon" href="assets/favicon.ico">
 
 <!-- ── Structured data ── -->
 <script type="application/ld+json">
@@ -70,7 +73,24 @@
 
   .wrapper { max-width: 600px; width: 100%; }
 
-  /* Title */
+  /* Logo hero */
+  .logo-hero {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 8px;
+  }
+  .logo-hero img {
+    width: 240px;
+    height: auto;
+    max-width: 80%;
+    display: block;
+    /* logo 本身已含暗底色，與頁面背景自然融合；無需額外處理 */
+  }
+  @media (max-width: 480px) {
+    .logo-hero img { width: 200px; }
+  }
+
+  /* Title (kept as visually-hidden a11y label) */
   .site-title {
     font-family: 'Noto Sans TC', sans-serif;
     font-size: 48px;
@@ -84,16 +104,18 @@
   .site-sub {
     font-size: 14px;
     color: var(--text-muted);
-    margin-bottom: 6px;
+    margin-top: 4px;
+    margin-bottom: 4px;
     text-align: center;
   }
   .site-byline {
-    font-size: 12px;
+    font-size: 11px;
     color: var(--text-dim);
-    margin-bottom: 40px;
+    margin-bottom: 36px;
     text-align: center;
     font-family: 'JetBrains Mono', monospace;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.02em;
+    opacity: 0.7;
   }
 
   /* Warning */
@@ -256,7 +278,9 @@
 <body>
 <div class="wrapper">
 
-  <h1 class="site-title">DR. LAN</h1>
+  <div class="logo-hero">
+    <img src="assets/logo.png" alt="DR. LAN — 成大家醫科">
+  </div>
   <div class="site-sub">個人臨床工具箱</div>
   <div class="site-byline">— 成大家醫科醫師寫給自己用的查詢工具 —</div>
 
