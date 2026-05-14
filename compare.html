@@ -10,12 +10,12 @@
 <meta name="keywords" content="SGLT2,empagliflozin,dapagliflozin,canagliflozin,藥物比較,EMPA-REG,DAPA-HF,EMPA-KIDNEY,DAPA-CKD,KDIGO,ADA">
 <meta name="author" content="DR. LAN">
 <meta name="robots" content="index, follow">
-<link rel="canonical" href="https://garrulous-cat.github.io/mindy/compare.html">
+<link rel="canonical" href="https://fmdrlan.github.io/compare.html">
 
 <meta property="og:type" content="website">
 <meta property="og:title" content="藥物類別比較 · DR. LAN's Toolbox">
 <meta property="og:description" content="同類藥物比較工具，每筆資料標註來源。">
-<meta property="og:url" content="https://garrulous-cat.github.io/mindy/compare.html">
+<meta property="og:url" content="https://fmdrlan.github.io/compare.html">
 <meta property="og:locale" content="zh_TW">
 
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
@@ -479,8 +479,8 @@
 <body>
 
 <nav class="tabs-bar" aria-label="主選單">
-  <a class="tab-link tab-home" href="index_landing.html"><span class="ti" data-icon="home"></span>DR. LAN</a>
-  <a class="tab-link" href="index.html"><span class="ti" data-icon="search"></span>藥品給付查詢</a>
+  <a class="tab-link tab-home" href="index.html"><span class="ti" data-icon="home"></span>DR. LAN</a>
+  <a class="tab-link" href="drugs.html"><span class="ti" data-icon="search"></span>藥品給付查詢</a>
   <a class="tab-link" href="lab.html"><span class="ti" data-icon="flask"></span>檢驗報告解讀</a>
   <a class="tab-link" href="lipid.html"><span class="ti" data-icon="chart"></span>高血脂風險評估</a>
   <a class="tab-link" href="vaccine.html"><span class="ti" data-icon="syringe"></span>疫苗查詢</a>
@@ -636,7 +636,7 @@ function render() {
       sub: 'NHI coverage',
       get: d => {
         const ref = d.nhi_coverage.cross_ref_section
-          ? `<a class="nhi-link" href="index.html" onclick="sessionStorage.setItem('initial_query','${esc(d.nhi_coverage.cross_ref_section)}')">${ICON.search}查 ${esc(d.nhi_coverage.cross_ref_section)}</a>`
+          ? `<a class="nhi-link" href="drugs.html" onclick="sessionStorage.setItem('initial_query','${esc(d.nhi_coverage.cross_ref_section)}')">${ICON.search}查 ${esc(d.nhi_coverage.cross_ref_section)}</a>`
           : '';
         return `${esc(d.nhi_coverage.value)}<br>${ref}${srcTag(d.nhi_coverage.source)}`;
       }
