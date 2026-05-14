@@ -1355,6 +1355,14 @@ function parseFreeTextSection(section, typeInfo) {
       if (/^(Right|Left)\s+kidney\s+size|^Spleen\s*=|^kidney\s*=/i.test(line)) return false;
       if (/^(Normal\s+(?:heart\s+size|sized?))$/i.test(line)) return false;
       if (/(?:is\s+not\s+(?:widened|enlarged|dilated)|is\s+intact|are\s+intact|appears?\s+normal|are\s+free\s+of|unremarkable|not\s+distended)$/i.test(line)) return false;
+
+      // 「形容詞 + 部位」型的正常 finding：
+      //   "Clear bilateral CP angles" / "Clear lung fields" / "Patent airway" 等
+      //   開頭是 Clear / Patent / Normal / Intact / Symmetric / Symmetrical / Smooth 等正常形容詞
+      if (/^(Clear|Patent|Normal|Intact|Symmetric(?:al)?|Smooth|Preserved|Well[-\s]?(?:defined|aerated|preserved))\b/i.test(line)) {
+        // 但若同時提到「mass / lesion / tumor」等懷疑詞 → 保留
+        if (!/\b(mass|lesion|tumor|nodule|opacity|infiltrate|suspicious)\b/i.test(line)) return false;
+      }
       if (/[,，][\s\S]+[,，][\s\S]+[:：]\s*$/.test(line)) return false;
       if (/(?:biopsy|excision|aspiration|resection)\s*[:：]?\s*$/i.test(line)) return false;
       if (/^(Soft\s+tissue|Bladder|Liver|Kidney|Lung|Brain|Heart|Stomach|Colon|Skin|Muscle|Bone|Lymph|Breast|Prostate|Ovary|Uterus|Cervix|Thyroid|Parathyroid|Pancreas|Spleen|Gallbladder|Esophagus|Duodenum|Jejunum|Ileum|Appendix|Rectum)[,，]/i.test(line)) return false;
@@ -1403,34 +1411,56 @@ function detectFMSubtype(text) {
 
 // 眼底篩檢：抓出哪眼有 retinopathy
 function parseFundusSection(section) {
-  const results = [];
   const text = section.text;
   // 右眼: 非增殖性視網膜病變NPDR-mild  /  左眼: 無糖尿病視網膜病變NDR
   const eyePatterns = [
     { side: '右眼', re: /右眼\s*[:：]\s*([^\n]+)/ },
     { side: '左眼', re: /左眼\s*[:：]\s*([^\n]+)/ }
   ];
-  const findings = [];
+  const retinopathy = [];   // 有病變
+  const unevaluable = [];   // 無法評估
+  const reasonsMatch = text.match(/(?:無法評估|不能評估)原因\s*[:：]+\s*([^\n]+)/);
+  const unevalReason = reasonsMatch ? reasonsMatch[1].replace(/^[:：\s]+/, '').trim() : '';
+
   for (const e of eyePatterns) {
     const m = text.match(e.re);
     if (!m) continue;
     const content = m[1].trim();
-    // 正常情況：NDR / 無糖尿病視網膜病變 / Normal
-    if (/^(無.*|NDR|Normal)/.test(content) || (/NDR/.test(content) && !/NPDR|PDR/.test(content))) continue;
-    // 有病變：NPDR-mild/moderate/severe、PDR、CSME、ME
+    // 無法完整評估：第三種狀態
+    if (/無法.*評估|不能.*評估|無法判讀|無法辨識|影像.*不佳|影像.*品質|cannot\s+evaluate|unable\s+to\s+assess/i.test(content)) {
+      unevaluable.push(e.side);
+      continue;
+    }
+    // 正常：NDR / 無糖尿病視網膜病變 / Normal (排除無法評估後才檢查)
+    if (/^(無糖尿病|NDR|Normal|無.*病變)/.test(content) || (/NDR/.test(content) && !/NPDR|PDR/.test(content))) continue;
+    // 病變：NPDR-mild/moderate/severe、PDR、CSME、ME
     if (/NPDR|PDR|增殖性|視網膜病變|黃斑部|maculopathy|CSME|edema/i.test(content)) {
-      findings.push(`${e.side}: ${content}`);
+      retinopathy.push(`${e.side}: ${content}`);
     }
   }
-  if (findings.length === 0) return [];
-  // 合併成一條
-  const dxText = `Diabetic retinopathy (${findings.join('; ')})`;
-  return [{
-    text: dxText,
-    sourceLabel: '眼底篩檢',
-    sourceShort: 'Fundus',
-    sampledAt: section.date
-  }];
+
+  const results = [];
+  if (retinopathy.length > 0) {
+    results.push({
+      text: `Diabetic retinopathy (${retinopathy.join('; ')})`,
+      sourceLabel: '眼底篩檢',
+      sourceShort: 'Fundus',
+      sampledAt: section.date
+    });
+  }
+  if (unevaluable.length > 0) {
+    const eyesStr = unevaluable.length === 2 ? 'bilateral' : (unevaluable[0] === '右眼' ? 'right eye' : 'left eye');
+    let dxText = `Fundus exam unevaluable (${eyesStr})`;
+    if (unevalReason) dxText += ` — ${unevalReason}`;
+    dxText += ', further ophthalmology workup recommended';
+    results.push({
+      text: dxText,
+      sourceLabel: '眼底篩檢',
+      sourceShort: 'Fundus',
+      sampledAt: section.date
+    });
+  }
+  return results;
 }
 
 // 足部檢查：列出 (+) 異常項目
@@ -1941,41 +1971,6 @@ function renderResults(totalParsed) {
     html += `</div>`;
   }
   html += `</div>`;
-
-  // ── Cross-tool 動作：若有血脂資料，提供「送到高血脂風險評估」按鈕 ──
-  const lipidKeys = ['TC', 'LDL-C', 'HDL-C', 'TG'];
-  const latestLipid = {};
-  for (const k of lipidKeys) {
-    // 找最新一筆（不論異常與否）
-    const candidates = state.allResults.filter(r => r.key === k && r.num != null);
-    if (candidates.length === 0) continue;
-    candidates.sort((a, b) => (b.sampledAt || '').localeCompare(a.sampledAt || ''));
-    latestLipid[k] = candidates[0];
-  }
-  const hasLipid = Object.keys(latestLipid).length > 0;
-  if (hasLipid) {
-    const params = new URLSearchParams();
-    if (latestLipid['TC'])    params.set('tc',  latestLipid['TC'].num);
-    if (latestLipid['LDL-C']) params.set('ldl', latestLipid['LDL-C'].num);
-    if (latestLipid['HDL-C']) params.set('hdl', latestLipid['HDL-C'].num);
-    if (latestLipid['TG'])    params.set('tg',  latestLipid['TG'].num);
-    if (state.sex)            params.set('sex', state.sex.toLowerCase());
-    if (state.demographics.age) params.set('age', state.demographics.age);
-    const date = Object.values(latestLipid).map(l => l.sampledAt).sort().pop();
-    const fields = Object.keys(latestLipid).map(k => `${k} ${latestLipid[k].num}`).join(' · ');
-    html += `
-      <div class="next-action-box">
-        <div class="next-action-title">下一步</div>
-        <div class="next-action-row">
-          <div class="next-action-info">
-            <div class="primary">用此血脂資料評估 statin 給付 / 風險分層</div>
-            <div class="secondary">${escHtml(fields)}  ·  ${escHtml(fmtDate(date))}</div>
-          </div>
-          <a href="lipid.html?${params.toString()}" class="btn small primary">前往風險評估 →</a>
-        </div>
-      </div>
-    `;
-  }
 
   // ── Pending reports notice ──
   if (state.skipped.length > 0) {

@@ -281,14 +281,27 @@
 
 /* ─── 統一頁面標題樣式（所有 tool 頁通用） ─── */
 .page-intro {
+  /* 自帶寬度限制與置中，不管被怎麼包都會對齊；
+     20px 左右 margin 為手機端的呼吸空間 */
+  max-width: 1200px;
+  margin: 0 auto 20px;
   background: #161b27;
   border: 1px solid #2d3a52;
   border-radius: 12px;
   padding: 16px 20px;
-  margin-bottom: 20px;
   display: flex;
   align-items: flex-start;
   gap: 12px;
+  box-sizing: border-box;
+}
+/* 在外層容器已限寬時，page-intro 不超出容器；左右 20px 屬於容器 padding 即可 */
+.container > .page-intro,
+main > .page-intro,
+.page-wrap > .page-intro,
+.app-container > .page-intro {
+  max-width: none;
+  margin-left: 0;
+  margin-right: 0;
 }
 .page-intro .icon {
   font-size: 22px;
@@ -317,6 +330,17 @@
   font-size: 12.5px;
   color: #6b7d96;
   flex-wrap: wrap;
+}
+
+/* 手機端 page-intro 縮小 padding，避免溢出 */
+@media (max-width: 600px) {
+  .page-intro {
+    padding: 14px 16px;
+    gap: 10px;
+  }
+  .page-intro .icon { font-size: 20px; }
+  .page-intro h1, .page-intro h2 { font-size: 16px; }
+  .page-intro p { font-size: 13px; }
 }
 
 /* feedback-link 的 footer 容器：在小螢幕也不會跑掉 */
