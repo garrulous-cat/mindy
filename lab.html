@@ -331,6 +331,51 @@
     cursor: help;
   }
 
+  /* inline 版（在 Diagnosis 區底部） */
+  .ua-inline {
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--border);
+    font-size: 12.5px;
+    color: var(--text-muted);
+    line-height: 1.7;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 6px;
+  }
+  .ua-inline-warn {
+    color: var(--yellow, #d4a843);
+    font-weight: 500;
+    margin-right: 6px;
+  }
+  .ua-inline-group {
+    display: inline;
+  }
+  .ua-inline-label {
+    color: var(--text-light, #566880);
+    font-size: 11px;
+    margin-right: 4px;
+  }
+  .ua-inline-chip {
+    color: var(--yellow, #d4a843);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+  }
+  .ua-inline-chip.unknown {
+    color: var(--text-muted);
+    cursor: help;
+  }
+  .ua-sep {
+    color: var(--text-light, #566880);
+    margin: 0 4px;
+  }
+  .ua-group-sep {
+    display: inline-block;
+    margin: 0 8px;
+    color: var(--border);
+  }
+
   /* Diagnosis: 2-column with left-copyable, right-evidence */
   .dx-table {
     background: var(--bg-base);
@@ -366,6 +411,12 @@
     font-family: 'IBM Plex Mono', monospace;
     font-weight: 400;
     margin-left: 2px;
+  }
+  .dx-row .dx-left .ft-marker {
+    font-size: 12px;
+    opacity: 0.7;
+    cursor: help;
+    margin-right: 2px;
   }
   .dx-row .dx-left .icd-tag {
     color: var(--accent);
@@ -2083,7 +2134,8 @@
       "aliases": [
         "Folate",
         "Folic Acid",
-        "葉酸"
+        "葉酸",
+        "FOL"
       ],
       "unit": "ng/mL",
       "ref": [
@@ -2830,6 +2882,40 @@
         0.5,
         2.0
       ]
+    },
+    "Osteocalcin": {
+      "group": "bone",
+      "aliases": [
+        "Osteocalcin",
+        "OSTEOC",
+        "OC",
+        "骨鈣素",
+        "Bone Gla protein"
+      ],
+      "unit": "ng/mL",
+      "ref": [
+        11,
+        43
+      ]
+    },
+    "RPR": {
+      "group": "serology",
+      "aliases": [
+        "RPR",
+        "VDRL",
+        "RPR/VDRL",
+        "Syphilis screening",
+        "梅毒篩檢"
+      ],
+      "unit": "",
+      "is_qual": true,
+      "qual_neg": [
+        "-",
+        "Non-reactive",
+        "Negative",
+        "Neg",
+        "NR"
+      ]
     }
   }
 }
@@ -3103,6 +3189,10 @@
         {
           "item": "TSH",
           "op": "above_ref"
+        },
+        {
+          "item": "Free T4",
+          "op": "below_ref"
         }
       ],
       "icd10": "E03.9",
@@ -3162,10 +3252,6 @@
         },
         {
           "item": "U-NIT",
-          "op": "qual_positive"
-        },
-        {
-          "item": "U-Bacteria",
           "op": "qual_positive"
         }
       ],
@@ -3481,6 +3567,16 @@ function parseTableSection(section) {
           /\d|Non-reactive|Reactive|Positive|Negative|Trace|\+/i.test(nonEmpty[1]);
 
         if (looksLikeNewItem) {
+          // 尿液 sediment 報告的標準欄位 - 不該被當作字典未收錄
+          const URINE_SEDIMENT_FIELDS = new Set([
+            'Others', 'Cast', 'Crystal', 'EC', 'Color', 'Clarity',
+            'Bacteria', 'Yeast', 'Mucus', 'Sperm'
+          ]);
+          if (isUrineReport && URINE_SEDIMENT_FIELDS.has(nonEmpty[0])) {
+            // 是尿液 sediment 標準欄位，但字典沒收（例如 Others）→ 安靜跳過
+            currentItem = null;
+            continue;
+          }
           // 收集為 unknown，UI 提示醫師「字典未收錄」
           results.push({
             key: nonEmpty[0],
@@ -3606,14 +3702,16 @@ const FREE_TEXT_TYPES = [
   { match: /內視鏡室檢查報告/,          label: '內視鏡',     short: 'EGD',       keywords: ['DIAGNOSIS', 'IMPRESSION'] },
   { match: /病理組織切片報告/,          label: '病理切片',   short: 'Pathology', keywords: ['PATHOLOGICAL DIAGNOSIS', 'DIAGNOSIS'] },
   { match: /細胞學檢查報告/,            label: '細胞學',     short: 'Cytology',  keywords: ['DIAGNOSIS', 'IMPRESSION', 'CYTOLOGIC DIAGNOSIS'] },
-  { match: /放射線部超音波檢查報告/,    label: '超音波',     short: 'US',        keywords: ['Impression', 'IMPRESSION'] },
-  { match: /(電腦斷層|CT)/,             label: 'CT',         short: 'CT',        keywords: ['Impression', 'IMPRESSION'] },
-  { match: /Ｘ光|X光|X-ray|放射線/,     label: 'X光',        short: 'XR',        keywords: ['Impression', 'IMPRESSION'] },
-  { match: /皮膚科檢查報告/,            label: '皮膚科超音', short: 'Skin US',   keywords: ['Impression', 'IMPRESSION'] },
+  { match: /放射線部超音波檢查報告/,    label: '超音波',     short: 'US',        keywords: ['Impression', 'IMPRESSION', 'IMP'] },
+  { match: /(電腦斷層|CT)/,             label: 'CT',         short: 'CT',        keywords: ['Impression', 'IMPRESSION', 'IMP'] },
+  { match: /磁振造影/,                  label: 'MRI',        short: 'MRI',       keywords: ['Impression', 'IMPRESSION', 'IMP'] },
+  { match: /Ｘ光|X光|X-ray|放射線/,     label: 'X光',        short: 'XR',        keywords: ['Impression', 'IMPRESSION', 'IMP'] },
+  { match: /皮膚科檢查報告/,            label: '皮膚科超音', short: 'Skin US',   keywords: ['Impression', 'IMPRESSION', 'IMP'] },
   { match: /家醫部特殊檢查報告/,        label: '家醫部',     short: 'FM',        keywords: ['醫師診斷', 'DIAGNOSIS', '診斷'] },
-  { match: /心臟內科檢查報告/,          label: '心臟內科',   short: 'Cardio',    keywords: ['Impression', 'IMPRESSION', 'DIAGNOSIS'] },
-  { match: /神經傳導速度/,              label: '神經傳導',   short: 'NCV',       keywords: ['IMPRESSION', 'DIAGNOSIS'] },
-  { match: /泌尿科部檢查報告/,          label: '泌尿科',     short: 'Urology',   keywords: ['Impression', 'IMPRESSION', 'DIAGNOSIS'] }
+  { match: /心臟內科檢查報告/,          label: '心臟內科',   short: 'ECG',       keywords: ['Impression', 'IMPRESSION', 'IMP', 'DIAGNOSIS', '__SPECIAL_ECG__'] },
+  { match: /神經傳導速度/,              label: '神經傳導',   short: 'NCV',       keywords: ['IMPRESSION', 'DIAGNOSIS', 'IMP'] },
+  { match: /泌尿科部檢查報告/,          label: '泌尿科',     short: 'Urology',   keywords: ['Impression', 'IMPRESSION', 'DIAGNOSIS', 'IMP'] },
+  { match: /行為神經學檢查報告/,        label: '神經行為',   short: 'Cognitive', keywords: ['__SPECIAL_COGNITIVE__'] },
 ];
 
 // X 光細分：KUB / CXR / 其他 — 根據報告內容偵測
@@ -3648,12 +3746,90 @@ function parseCultureSection(section) {
   return dx;
 }
 
+// ── ECG 純文字判讀抽取 ─────────────────────────────────────────────
+function parseEcgReport(section, typeInfo) {
+  const results = [];
+  const text = section.text;
+  // 找含特定關鍵字的行：CONSIDER / SUGGEST / SUSPECT
+  // 或常見診斷字：A.?Fib / AVB / ST elevation / ST depression / bradycardia / tachycardia / bundle branch block / LVH / RVH / 心室肥大
+  const lines = text.split('\n');
+  for (let raw of lines) {
+    raw = raw.trim();
+    if (!raw) continue;
+    // 跳過明確的正常節律
+    if (/^SINUS\s+RHYTHM\s*$/i.test(raw)) continue;
+    if (/^Normal\s+(ECG|sinus)/i.test(raw)) continue;
+
+    let isAbnormal = false;
+    // (1) CONSIDER / SUGGEST / SUSPECT XXX
+    if (/^(CONSIDER|SUGGEST|SUSPECT)\b/i.test(raw)) isAbnormal = true;
+    // (2) 特定診斷關鍵字
+    if (/\b(A\.?\s?Fib|atrial\s+fibrillation|AV\s*block|AVB\b|bradycardia|tachycardia|bundle\s+branch\s+block|LBBB|RBBB|hypertrophy|ischemi[ac]|infarction|ST\s+(elevation|depression)|Q\s+wave|prolonged\s+QT)/i.test(raw)) isAbnormal = true;
+    if (!isAbnormal) continue;
+    // 拆出 prefix（CONSIDER/SUGGEST/SUSPECT）+ 主體
+    let prefix = '';
+    let body = raw;
+    const pm = raw.match(/^(CONSIDER|SUGGEST|SUSPECT)\s+(.+)$/i);
+    if (pm) {
+      prefix = pm[1].charAt(0).toUpperCase() + pm[1].slice(1).toLowerCase();
+      body = pm[2];
+    }
+    // 主體若是純大寫，轉 title case
+    if (/^[A-Z][A-Z\s,.\-]*[A-Z]$/.test(body) || /^[A-Z]+$/.test(body)) {
+      body = body.toLowerCase().replace(/\b([a-z])/g, (_, c) => c.toUpperCase());
+    }
+    const dxText = prefix ? `${prefix} ${body}` : body;
+    if (dxText.length < 200) {
+      results.push({
+        text: dxText,
+        sourceLabel: typeInfo.label,
+        sourceShort: typeInfo.short,
+        sampledAt: section.date,
+        fromFreeText: true
+      });
+    }
+  }
+  return results;
+}
+
+// ── 認知功能測驗（CDR / CASI / MMSE）抽取 ─────────────────────────────
+function parseCognitiveReport(section, typeInfo) {
+  const results = [];
+  const text = section.text;
+  // 模式 1：Clinical diagnosis: XXX 或 Clinical problem: XXX
+  const m = text.match(/Clinical\s+(?:diagnosis|problem)\s*[:：]\s*([^\n]+)/i);
+  if (m) {
+    let dx = m[1].trim().replace(/[。\.\s]+$/, '');
+    if (dx && dx.length < 200 && !/^(none|nil|n\/a|unremarkable|normal)$/i.test(dx)) {
+      results.push({
+        text: dx,
+        sourceLabel: typeInfo.label,
+        sourceShort: typeInfo.short,
+        sampledAt: section.date,
+        fromFreeText: true
+      });
+    }
+  }
+  // 模式 2：Interpretation 區「Abnormal」（但前一個模式抓到 dx 名已經夠了，這個不抽）
+  return results;
+}
+
 function parseFreeTextSection(section, typeInfo) {
   const results = [];
   const text = section.text;
 
+  // ── 特殊處理：ECG ──
+  if (typeInfo.keywords.includes('__SPECIAL_ECG__')) {
+    return parseEcgReport(section, typeInfo);
+  }
+  // ── 特殊處理：認知測驗 ──
+  if (typeInfo.keywords.includes('__SPECIAL_COGNITIVE__')) {
+    return parseCognitiveReport(section, typeInfo);
+  }
+
   // 依關鍵字嘗試抓段落
   for (const kw of typeInfo.keywords) {
+    if (kw.startsWith('__SPECIAL_')) continue;
     // 抓 KW: ... 直到下一個全大寫標題（NOTE/GROSS/MICROSCOPIC/Pathologists/檢查醫師/醫師簽章），
     // 或連續兩個空行，或抵達區塊結尾
     const pattern = new RegExp(
@@ -3870,6 +4046,124 @@ function normDxText(s) {
     .replace(/[\s,，.。;；:：()()\[\]<>"'·]+/g, '')
     .replace(/grade[a-z0-9]+/g, '')   // 移除 grade A/B/I/II 後綴以便合併
     .trim();
+}
+
+// ─── Free-text 診斷 → ICD-10 對應表 ────────────────────────────────────
+// 用 regex 比對診斷文字，找到第一個 match 就用該 ICD
+// 順序很重要：specific 在前、generic 在後
+const FREE_TEXT_ICD_MAP = [
+  // ─ 甲狀腺 ─
+  { pattern: /thyroidectomy/i,                 icd: 'Z90.6',   desc: 'Acquired absence of other endocrine glands' },
+  { pattern: /thyroid\s+(nodule|nodules)/i,    icd: 'E04.1',   desc: 'Nontoxic single thyroid nodule' },
+  { pattern: /thyroid\s+(cyst|cysts)/i,        icd: 'E04.1',   desc: 'Nontoxic thyroid nodule (cyst)' },
+  { pattern: /thyroid\s+goiter/i,              icd: 'E04.9',   desc: 'Nontoxic goiter, unspecified' },
+  { pattern: /hashimoto/i,                     icd: 'E06.3',   desc: 'Autoimmune thyroiditis' },
+  { pattern: /graves/i,                        icd: 'E05.00',  desc: 'Thyrotoxicosis with diffuse goiter' },
+
+  // ─ 肝膽 ─
+  { pattern: /(fatty\s+liver|hepatic\s+steatosis|steatohepatitis)/i, icd: 'K76.0', desc: 'Fatty (change of) liver, not elsewhere classified' },
+  { pattern: /liver\s+cirrhosis/i,             icd: 'K74.60',  desc: 'Unspecified cirrhosis of liver' },
+  { pattern: /liver\s+(cyst|cysts)/i,          icd: 'K76.89',  desc: 'Other specified diseases of liver' },
+  { pattern: /hemangioma.*liver|liver.*hemangioma/i, icd: 'D18.03', desc: 'Hemangioma of intra-abdominal structures' },
+  { pattern: /gallbladder\s+(stone|stones)|cholelithiasis/i, icd: 'K80.20', desc: 'Calculus of gallbladder without cholecystitis' },
+  { pattern: /gallbladder\s+polyp/i,           icd: 'K82.8',   desc: 'Other specified diseases of gallbladder' },
+  { pattern: /(s\/?p\s+)?cholecystectomy/i,    icd: 'Z90.49',  desc: 'Acquired absence of other specified parts of digestive tract' },
+
+  // ─ 腎臟泌尿 ─
+  { pattern: /(renal|kidney)\s+(stone|stones|calculus|calculi)|nephrolithiasis/i, icd: 'N20.0', desc: 'Calculus of kidney' },
+  { pattern: /(renal|kidney)\s+(cyst|cysts)/i, icd: 'N28.1',   desc: 'Cyst of kidney, acquired' },
+  { pattern: /polycystic\s+kidney/i,           icd: 'Q61.3',   desc: 'Polycystic kidney, unspecified' },
+  { pattern: /hydronephrosis/i,                icd: 'N13.30',  desc: 'Unspecified hydronephrosis' },
+  { pattern: /bladder\s+stone/i,               icd: 'N21.0',   desc: 'Calculus in bladder' },
+
+  // ─ 皮膚 ─
+  { pattern: /lipoma/i,                        icd: 'D17.9',   desc: 'Benign lipomatous neoplasm, unspecified' },
+  { pattern: /sebaceous\s+cyst|epidermal\s+cyst/i, icd: 'L72.0', desc: 'Epidermal cyst' },
+
+  // ─ 乳房 ─
+  { pattern: /breast\s+(cyst|cysts)/i,         icd: 'N60.0',   desc: 'Solitary cyst of breast' },
+  { pattern: /breast\s+(nodule|fibroadenoma)/i, icd: 'D24.9',  desc: 'Benign neoplasm of unspecified breast' },
+
+  // ─ 內視鏡相關 ─
+  { pattern: /esophagitis/i,                   icd: 'K20.9',   desc: 'Esophagitis, unspecified' },
+  { pattern: /gerd|reflux\s+esophagitis|gastroesophageal\s+reflux/i, icd: 'K21.9', desc: 'Gastro-esophageal reflux disease without esophagitis' },
+  { pattern: /(barrett'?s|barrett)/i,          icd: 'K22.7',   desc: 'Barrett\'s esophagus' },
+  { pattern: /hiatal\s+hernia/i,               icd: 'K44.9',   desc: 'Diaphragmatic hernia without obstruction or gangrene' },
+  { pattern: /gastric\s+ulcer/i,               icd: 'K25.9',   desc: 'Gastric ulcer, unspecified' },
+  { pattern: /duodenal\s+ulcer/i,              icd: 'K26.9',   desc: 'Duodenal ulcer, unspecified' },
+  { pattern: /gastritis/i,                     icd: 'K29.70',  desc: 'Gastritis, unspecified, without bleeding' },
+  { pattern: /colon\s+polyp|colonic\s+polyp/i, icd: 'K63.5',   desc: 'Polyp of colon' },
+  { pattern: /diverticul(um|osis|itis)/i,      icd: 'K57.30',  desc: 'Diverticulosis of large intestine without perforation or abscess' },
+  { pattern: /hemorrhoid/i,                    icd: 'K64.9',   desc: 'Unspecified hemorrhoids' },
+
+  // ─ 影像（CT/CXR/KUB/US 通用）─
+  { pattern: /pulmonary\s+nodule|lung\s+nodule/i, icd: 'R91.1', desc: 'Solitary pulmonary nodule' },
+  { pattern: /(emphysema|copd)/i,              icd: 'J44.9',   desc: 'Chronic obstructive pulmonary disease, unspecified' },
+  { pattern: /bronchiectasis/i,                icd: 'J47.9',   desc: 'Bronchiectasis, uncomplicated' },
+  { pattern: /pleural\s+effusion/i,            icd: 'J90',     desc: 'Pleural effusion, not elsewhere classified' },
+  { pattern: /increased\s+(bilateral\s+)?lung\s+markings/i, icd: 'R91.8', desc: 'Other nonspecific abnormal finding of lung field' },
+  // 心臟（特異在前）
+  { pattern: /(left\s+ventricular\s+hypertrophy|\bLVH\b)/i, icd: 'I51.7', desc: 'Cardiomegaly / Left ventricular hypertrophy' },
+  { pattern: /(right\s+ventricular\s+hypertrophy|\bRVH\b)/i, icd: 'I51.7', desc: 'Cardiomegaly / Right ventricular hypertrophy' },
+  { pattern: /atrial\s+fibrillation|\bA\.?\s?Fib\b/i, icd: 'I48.91', desc: 'Unspecified atrial fibrillation' },
+  { pattern: /(LBBB|left\s+bundle\s+branch\s+block)/i, icd: 'I44.7',  desc: 'Left bundle-branch block, unspecified' },
+  { pattern: /(RBBB|right\s+bundle\s+branch\s+block)/i, icd: 'I45.10', desc: 'Unspecified right bundle-branch block' },
+  { pattern: /cardiomegaly/i,                  icd: 'I51.7',   desc: 'Cardiomegaly' },
+  // 血管（具體部位在前）
+  { pattern: /atherosclerosis.*(internal\s+carotid|ICA)/i, icd: 'I65.21', desc: 'Occlusion and stenosis of right internal carotid artery' },
+  { pattern: /atherosclerosis.*(vertebrobasilar|VB\b|vertebral)/i, icd: 'I65.01', desc: 'Occlusion and stenosis of vertebral artery' },
+  { pattern: /(P1\s+PCA|PCA\s+stenosis|posterior\s+cerebral\s+artery.*stenosis)/i, icd: 'I66.21', desc: 'Occlusion and stenosis of left posterior cerebral artery' },
+  { pattern: /(carotid\s+stenosis|carotid\s+atherosclerosis)/i, icd: 'I65.29', desc: 'Occlusion and stenosis of unspecified carotid artery' },
+  { pattern: /vascular\s+calcification/i,      icd: 'I70.90',  desc: 'Unspecified atherosclerosis' },
+  { pattern: /aortic\s+(calcification|atherosclerosis)/i, icd: 'I70.0', desc: 'Atherosclerosis of aorta' },
+
+  // 脊椎（特異在前）
+  { pattern: /spondylolisthesis/i,             icd: 'M43.10',  desc: 'Spondylolisthesis, site unspecified' },
+  { pattern: /compression\s+fracture/i,        icd: 'M48.50XA', desc: 'Collapsed vertebra, NEC, site unspecified, initial encounter' },
+  { pattern: /scoliosis/i,                     icd: 'M41.9',   desc: 'Scoliosis, unspecified' },
+  { pattern: /osteoporosis/i,                  icd: 'M81.0',   desc: 'Age-related osteoporosis without current pathological fracture' },
+  { pattern: /degenerative\s+disc\s+disease.*(L\d|lumbar|thoracolumbar)/i, icd: 'M51.36', desc: 'Other intervertebral disc degeneration, lumbar region' },
+  { pattern: /degenerative\s+disc\s+disease.*(C\d|cervical)/i, icd: 'M50.30', desc: 'Other cervical disc degeneration, unspecified cervical region' },
+  { pattern: /spondylosis.*cervical|cervical\s+spondylosis/i, icd: 'M47.812', desc: 'Spondylosis without myelopathy or radiculopathy, cervical region' },
+  { pattern: /spondylosis.*(lumbar|thoracic)|lumbar\s+spondylosis/i, icd: 'M47.816', desc: 'Spondylosis without myelopathy or radiculopathy, lumbar region' },
+  { pattern: /spondylosis|degenerative\s+disc/i, icd: 'M47.819', desc: 'Spondylosis without myelopathy or radiculopathy, site unspecified' },
+  { pattern: /(disc|disk)\s+(protrusion|herniation|bulging)/i, icd: 'M51.9', desc: 'Unspecified thoracic, thoracolumbar and lumbosacral intervertebral disc disorder' },
+
+  // 腦影像所見
+  { pattern: /(cortical\s+atrophy|cerebral\s+atrophy|brain\s+atrophy)/i, icd: 'G31.9', desc: 'Degenerative disease of nervous system, unspecified (cortical atrophy)' },
+  { pattern: /(periventricular\s+white\s+matter|white\s+matter\s+changes|leukoaraiosis)/i, icd: 'R90.82', desc: 'White matter disease, unspecified' },
+  { pattern: /(ventriculomegaly|hydrocephalus)/i, icd: 'G93.89', desc: 'Other specified disorders of brain' },
+
+  // 認知 / 失智
+  { pattern: /\bAD\s+MCI\b|alzheimer.*mci/i,   icd: 'G31.84',  desc: 'Mild cognitive impairment, so stated' },
+  { pattern: /\bMCI\b|mild\s+cognitive\s+impairment/i, icd: 'G31.84', desc: 'Mild cognitive impairment, so stated' },
+  { pattern: /alzheimer/i,                     icd: 'G30.9',   desc: 'Alzheimer\'s disease, unspecified' },
+  { pattern: /dementia/i,                      icd: 'F03.90',  desc: 'Unspecified dementia, unspecified severity' },
+
+  // ─ 婦科 ─
+  { pattern: /uterine\s+(myoma|fibroid|leiomyoma)/i, icd: 'D25.9', desc: 'Leiomyoma of uterus, unspecified' },
+  { pattern: /ovarian\s+(cyst|cysts)/i,        icd: 'N83.20',  desc: 'Unspecified ovarian cysts' },
+
+  // ─ 眼底（家醫常見）─
+  { pattern: /diabetic\s+retinopathy/i,        icd: 'E11.319', desc: 'T2DM with unspecified diabetic retinopathy without macular edema' },
+
+  // ─ 周邊神經 / 糖尿病足 ─
+  { pattern: /diabetic\s+(peripheral\s+)?neuropathy/i, icd: 'E11.42', desc: 'T2DM with diabetic polyneuropathy' },
+  { pattern: /diabetic\s+foot/i,               icd: 'E11.621', desc: 'T2DM with foot ulcer' },
+  { pattern: /(reduced\s+sudomotor|sudomotor\s+dysfunction)/i, icd: 'G90.09', desc: 'Other idiopathic peripheral autonomic neuropathy' },
+
+  // ─ 血管 ─
+  { pattern: /(arterial\s+stiffness|increased\s+pwv)/i, icd: 'I77.81', desc: 'Stenosis of artery' },
+  { pattern: /pad\s+suspected|peripheral\s+arterial\s+disease/i, icd: 'I73.9', desc: 'Peripheral vascular disease, unspecified' },
+];
+
+function lookupFreeTextIcd(dxText) {
+  for (const entry of FREE_TEXT_ICD_MAP) {
+    if (entry.pattern.test(dxText)) {
+      return { icd10: entry.icd, icd10_desc: entry.desc };
+    }
+  }
+  return null;
 }
 
 // 同診斷出現多次 → 合併、列出所有來源
@@ -4289,7 +4583,7 @@ function renderResults(totalParsed) {
   }
   html += `</div>`;
 
-  // ── 異常但未自動診斷（醫師判讀）──
+  // ── 異常但未自動診斷的資料準備 ──
   // 找出：所有 abnormal 項目，扣除被 dx rule 用作 evidence 的
   const usedKeysInDx = new Set();
   state.dx.forEach(d => d.evidence.forEach(ev => usedKeysInDx.add(ev.key)));
@@ -4303,40 +4597,13 @@ function renderResults(totalParsed) {
     return true;
   });
   // 去重（同一個 key 多次採樣只列一次）
-  const seenKeys = new Set();
+  const seenUnaKeys = new Set();
   const unassignedUnique = unassignedAbnormal.filter(item => {
-    if (seenKeys.has(item.key)) return false;
-    seenKeys.add(item.key);
+    if (seenUnaKeys.has(item.key)) return false;
+    seenUnaKeys.add(item.key);
     return true;
   });
-
-  if (unassignedUnique.length > 0 || state.unknown.length > 0) {
-    const totalChips = unassignedUnique.length + state.unknown.length;
-    html += `
-      <div class="output-section">
-        <div class="section-header">
-          <h3>⚠ 異常但未自動診斷 <span class="badge-count">${totalChips}</span></h3>
-        </div>
-        <div class="unassigned-note">以下項目請醫師依臨床判讀。</div>
-    `;
-    if (unassignedUnique.length > 0) {
-      html += `
-        <div class="unassigned-sublabel">數值異常、無對應診斷規則</div>
-        <div class="unassigned-list">
-          ${unassignedUnique.map(item => `<span class="unassigned-chip">${escHtml(item.key)}</span>`).join('')}
-        </div>
-      `;
-    }
-    if (state.unknown.length > 0) {
-      html += `
-        <div class="unassigned-sublabel" style="margin-top:10px">字典未收錄（無法判讀正常 / 異常）</div>
-        <div class="unassigned-list">
-          ${state.unknown.map(item => `<span class="unassigned-chip unknown" title="原始值：${escHtml(item.valueCell || '')}">${escHtml(item.key)}</span>`).join('')}
-        </div>
-      `;
-    }
-    html += `</div>`;
-  }
+  // 之後會在 Diagnosis 區塊內 inline 渲染（不再獨立 section）
 
   // ── Diagnosis ──
   const totalDxCount = state.dx.length + state.freeTextDx.length;
@@ -4390,12 +4657,17 @@ function renderResults(totalParsed) {
       const srcList = sortedSources.map(s =>
         `<span class="evidence-row"><span class="ev-date">${fmtYearMonth(s.date)}</span> <span class="ev-source">${escHtml(s.label)}</span></span>`
       ).join('');
+      // 查 ICD-10
+      const icdInfo = lookupFreeTextIcd(d.text);
+      const icdHtml = icdInfo
+        ? ` <span class="icd-tag" title="${escHtml(icdInfo.icd10_desc)}">${escHtml(icdInfo.icd10)}</span>`
+        : '';
 
       html += `
         <div class="dx-row">
           <div class="dx-left">
             <span class="num">${idx}.</span>
-            <span>${escHtml(d.text)} <span class="dx-tag">(${escHtml(tag)})</span></span>
+            <span><span class="ft-marker" title="從報告文字自動抽取，請醫師確認">🔎</span> ${escHtml(d.text)}${icdHtml} <span class="dx-tag">(${escHtml(tag)})</span></span>
           </div>
           <div class="dx-right">
             <div class="dx-right-label">來源詳情（不複製）</div>
@@ -4408,20 +4680,29 @@ function renderResults(totalParsed) {
 
     html += `</div>`;
   }
-  html += `</div>`;
 
-  // ── Pending reports notice ──
-  if (state.skipped.length > 0) {
-    const totalPending = state.skipped.reduce((s, x) => s + x.items.length, 0);
+  // ── inline 異常但未自動診斷（放在 Diagnosis 區內、dx-table 之後） ──
+  const hasUnassigned = unassignedUnique.length > 0 || state.unknown.length > 0;
+  if (hasUnassigned) {
+    const total = unassignedUnique.length + state.unknown.length;
+    let parts = [];
+    if (unassignedUnique.length > 0) {
+      parts.push(`<span class="ua-inline-group"><span class="ua-inline-label">數值異常</span> ${unassignedUnique.map(item => `<span class="ua-inline-chip">${escHtml(item.key)}</span>`).join('<span class="ua-sep">·</span>')}</span>`);
+    }
+    if (state.unknown.length > 0) {
+      parts.push(`<span class="ua-inline-group"><span class="ua-inline-label">字典未收錄</span> ${state.unknown.map(item => `<span class="ua-inline-chip unknown" title="原始值：${escHtml(item.valueCell || '')}">${escHtml(item.key)}</span>`).join('<span class="ua-sep">·</span>')}</span>`);
+    }
     html += `
-      <div class="pending-box">
-        <div class="title">⏳ 已開立但無結果（已跳過 ${totalPending} 項）</div>
-        <ul>
-          ${state.skipped.map(s => `<li><span class="type">${escHtml(s.type)}:</span> ${s.items.map(escHtml).join('、')}</li>`).join('')}
-        </ul>
+      <div class="ua-inline">
+        <span class="ua-inline-warn">⚠ ${total} 項異常／未收錄請醫師判讀</span>
+        ${parts.join('<span class="ua-group-sep">　</span>')}
       </div>
     `;
   }
+
+  html += `</div>`;
+
+  // ── Pending reports notice (removed: 醫師覺得多餘) ──
 
   area.innerHTML = html;
 

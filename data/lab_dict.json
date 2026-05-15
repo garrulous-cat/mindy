@@ -1464,7 +1464,8 @@
       "aliases": [
         "Folate",
         "Folic Acid",
-        "葉酸"
+        "葉酸",
+        "FOL"
       ],
       "unit": "ng/mL",
       "ref": [
@@ -2210,6 +2211,40 @@
       "ref": [
         0.5,
         2.0
+      ]
+    },
+    "Osteocalcin": {
+      "group": "bone",
+      "aliases": [
+        "Osteocalcin",
+        "OSTEOC",
+        "OC",
+        "骨鈣素",
+        "Bone Gla protein"
+      ],
+      "unit": "ng/mL",
+      "ref": [
+        11,
+        43
+      ]
+    },
+    "RPR": {
+      "group": "serology",
+      "aliases": [
+        "RPR",
+        "VDRL",
+        "RPR/VDRL",
+        "Syphilis screening",
+        "梅毒篩檢"
+      ],
+      "unit": "",
+      "is_qual": true,
+      "qual_neg": [
+        "-",
+        "Non-reactive",
+        "Negative",
+        "Neg",
+        "NR"
       ]
     }
   }
