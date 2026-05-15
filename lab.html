@@ -296,6 +296,41 @@
     color: var(--accent-orange);
   }
 
+  /* 異常但未自動診斷 chips */
+  .unassigned-note {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    line-height: 1.5;
+  }
+  .unassigned-sublabel {
+    font-size: 11.5px;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+  .unassigned-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .unassigned-chip {
+    display: inline-block;
+    padding: 4px 10px;
+    background: rgba(212, 168, 67, 0.10);
+    border: 1px solid rgba(212, 168, 67, 0.35);
+    border-radius: 12px;
+    font-size: 12.5px;
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--yellow, #d4a843);
+  }
+  .unassigned-chip.unknown {
+    background: rgba(128, 128, 128, 0.10);
+    border-color: rgba(128, 128, 128, 0.35);
+    color: var(--text-muted);
+    cursor: help;
+  }
+
   /* Diagnosis: 2-column with left-copyable, right-evidence */
   .dx-table {
     background: var(--bg-base);
@@ -331,6 +366,19 @@
     font-family: 'IBM Plex Mono', monospace;
     font-weight: 400;
     margin-left: 2px;
+  }
+  .dx-row .dx-left .icd-tag {
+    color: var(--accent);
+    font-size: 11px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 500;
+    background: rgba(74,158,255,0.10);
+    border: 1px solid rgba(74,158,255,0.30);
+    padding: 1px 6px;
+    border-radius: 3px;
+    margin-left: 6px;
+    cursor: help;
+    user-select: all;
   }
   .dx-row .dx-right {
     padding: 12px 14px;
@@ -516,7 +564,7 @@
     <span class="icon">🧪</span>
     <div>
       <h2>檢驗報告解讀</h2>
-      <p>從 HIS / LIS 複製檢驗結果（可多份不同日期一起貼）。系統會自動辨識項目、比對參考範圍、跨日整合「最近一次異常」，並產生可直接複製的 Objective 與 Diagnosis 段落。「已開立但無結果」的報告會自動跳過並提醒。</p>
+      <p>從成大醫院 LIS 複製檢驗結果（可多份不同日期一起貼）。系統會自動辨識項目、跨日整合「最近一次異常」，並產生可直接複製的 Objective 與 Diagnosis 段落。</p>
     </div>
   </div>
 
@@ -531,7 +579,7 @@
         id="labInput"
         spellcheck="false"
         autocomplete="off"
-        placeholder="貼上整份 LIS 報告（可包含多筆不同日期、不同檢體類型）"
+        placeholder="從成大醫院 LIS Ctrl + A 全選 → 複製 貼上&#10;&#10;貼上的內容僅在本機瀏覽器處理，不會上傳到任何伺服器"
       ></textarea>
 
       <div class="btn-row">
@@ -1164,7 +1212,27 @@ function parseTableSection(section) {
         key = ALIAS_MAP.get(norm(nonEmpty[0] + ' ' + nonEmpty[1]));
       }
       if (!key) {
-        if (currentItem && /[a-zA-Z\u4e00-\u9fff]/.test(raw)) {
+        // 判斷這行是不是「新項目」（有名字 + 值）vs「currentItem 的 note 延伸」
+        // 看起來像數值或結果：含數字、Non-reactive、Reactive、Positive、Negative
+        const looksLikeNewItem = nonEmpty.length >= 2 &&
+          /[A-Za-z\u4e00-\u9fff]/.test(nonEmpty[0]) &&
+          /\d|Non-reactive|Reactive|Positive|Negative|Trace|\+/i.test(nonEmpty[1]);
+
+        if (looksLikeNewItem) {
+          // 收集為 unknown，UI 提示醫師「字典未收錄」
+          results.push({
+            key: nonEmpty[0],
+            def: null,           // 標記為未收錄
+            unknown: true,
+            raw,
+            valueCell: nonEmpty[1],
+            num: null, qual: nonEmpty[1],
+            sampledAt: section.date,
+            sourceType: section.type,
+            flag: '?'
+          });
+          currentItem = null;   // 不要讓下一行誤接成這行的 note
+        } else if (currentItem && /[a-zA-Z\u4e00-\u9fff]/.test(raw)) {
           currentItem.notes = (currentItem.notes || '') + ' ' + raw.trim();
         }
         continue;
@@ -1616,10 +1684,21 @@ function parseLIS(text) {
   // 去重整合 free-text 診斷
   const freeTextDx = integrateFreeTextDx(freeTextItems);
 
-  return { results: allResults, skipped, demographics, freeTextDx };
+  // 分離出 unknown items（字典未收錄）— 不進入 integrate / dx 流程
+  const knownResults = allResults.filter(r => !r.unknown);
+  const unknownResults = allResults.filter(r => r.unknown);
+  // 去重 unknown（同名只列一次）
+  const unknownByKey = {};
+  for (const r of unknownResults) {
+    if (!unknownByKey[r.key]) unknownByKey[r.key] = r;
+  }
+  const unknownUnique = Object.values(unknownByKey);
+
+  return { results: knownResults, skipped, demographics, freeTextDx, unknown: unknownUnique };
 }
 
 function classifyResult(item, sex) {
+  if (item.unknown) return '?';  // 字典未收錄，無法判斷
   const def = item.def;
   if (def.is_qual) {
     const negs = (def.qual_neg || []).map(s => norm(s));
@@ -1734,7 +1813,53 @@ function applyDiagnosisRules(integrated) {
       triggeredIds.add(rule.id);
     }
   }
-  return triggered;
+  // 動態分級：依當下數值微調 rule.name / rule.icd10
+  return triggered.map(t => {
+    if (t.rule.id === 'ckd')               return refineCkdStage(t, integrated);
+    if (t.rule.id === 'diabetes_mellitus') return refineDmCode(t, integrated);
+    return t;
+  });
+}
+
+// CKD 自動分級（依 eGFR）
+function refineCkdStage(triggered, integrated) {
+  const egfrItem = integrated.find(it => it.key === 'eGFR');
+  const egfr = egfrItem ? egfrItem.num : null;
+  if (egfr == null) return triggered;  // 無 eGFR：用原本 N18.9
+
+  let stageLabel, icd10, icdDesc;
+  if (egfr >= 90)      { stageLabel = 'stage G1 (≥90)';   icd10 = 'N18.1';  icdDesc = 'CKD stage 1'; }
+  else if (egfr >= 60) { stageLabel = 'stage G2 (60–89)'; icd10 = 'N18.2';  icdDesc = 'CKD stage 2 (mild)'; }
+  else if (egfr >= 45) { stageLabel = 'stage G3a (45–59)';icd10 = 'N18.30'; icdDesc = 'CKD stage 3a (mild-moderate)'; }
+  else if (egfr >= 30) { stageLabel = 'stage G3b (30–44)';icd10 = 'N18.32'; icdDesc = 'CKD stage 3b (moderate-severe)'; }
+  else if (egfr >= 15) { stageLabel = 'stage G4 (15–29)'; icd10 = 'N18.4';  icdDesc = 'CKD stage 4 (severe)'; }
+  else                 { stageLabel = 'stage G5 (<15)';   icd10 = 'N18.5';  icdDesc = 'CKD stage 5'; }
+
+  // G1/G2 必須有蛋白尿才算 CKD；無蛋白尿不升級（但既然規則已觸發，代表 UACR 或臨床判斷已支持，仍標示）
+  return {
+    ...triggered,
+    rule: {
+      ...triggered.rule,
+      name: 'Chronic kidney disease, ' + stageLabel,
+      icd10, icd10_desc: icdDesc
+    }
+  };
+}
+
+// DM 自動分級（A1c ≥ 9 視為 with hyperglycemia）
+function refineDmCode(triggered, integrated) {
+  const a1cItem = integrated.find(it => it.key === 'HbA1c');
+  const a1c = a1cItem ? a1cItem.num : null;
+  if (a1c == null || a1c < 9) return triggered;  // 預設 E11.9
+  return {
+    ...triggered,
+    rule: {
+      ...triggered.rule,
+      name: 'Diabetes mellitus, with hyperglycemia',
+      icd10: 'E11.65',
+      icd10_desc: 'Type 2 diabetes mellitus with hyperglycemia'
+    }
+  };
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -1749,7 +1874,8 @@ const state = {
   integrated: [],
   skipped: [],
   dx: [],
-  freeTextDx: []
+  freeTextDx: [],
+  unknown: []
 };
 
 function escHtml(s) {
@@ -1784,7 +1910,7 @@ function runParse() {
     showToast('請先貼上 LIS 報告');
     return;
   }
-  const { results, skipped, demographics, freeTextDx } = parseLIS(text);
+  const { results, skipped, demographics, freeTextDx, unknown } = parseLIS(text);
   state.demographics = demographics;
   state.sex = demographics.sex || 'M';  // 沒抓到就預設男（影響極小）
   state.allResults = results;
@@ -1792,6 +1918,7 @@ function runParse() {
   state.skipped = skipped;
   state.dx = applyDiagnosisRules(state.integrated);
   state.freeTextDx = freeTextDx || [];
+  state.unknown = unknown || [];
   renderResults(results.length);
 }
 
@@ -1900,6 +2027,55 @@ function renderResults(totalParsed) {
   }
   html += `</div>`;
 
+  // ── 異常但未自動診斷（醫師判讀）──
+  // 找出：所有 abnormal 項目，扣除被 dx rule 用作 evidence 的
+  const usedKeysInDx = new Set();
+  state.dx.forEach(d => d.evidence.forEach(ev => usedKeysInDx.add(ev.key)));
+  const unassignedAbnormal = state.integrated.filter(item => {
+    const flag = item.flag || (item.latest && item.latest.flag);
+    const isAbn = flag === 'H' || flag === 'HH' || flag === 'L' || flag === 'LL';
+    if (!isAbn) return false;
+    if (usedKeysInDx.has(item.key)) return false;
+    // 排除 free-text only 項目（不適用）
+    if (item.def && item.def.is_qual && (item.qual || '').toLowerCase().includes('non-reactive')) return false;
+    return true;
+  });
+  // 去重（同一個 key 多次採樣只列一次）
+  const seenKeys = new Set();
+  const unassignedUnique = unassignedAbnormal.filter(item => {
+    if (seenKeys.has(item.key)) return false;
+    seenKeys.add(item.key);
+    return true;
+  });
+
+  if (unassignedUnique.length > 0 || state.unknown.length > 0) {
+    const totalChips = unassignedUnique.length + state.unknown.length;
+    html += `
+      <div class="output-section">
+        <div class="section-header">
+          <h3>⚠ 異常但未自動診斷 <span class="badge-count">${totalChips}</span></h3>
+        </div>
+        <div class="unassigned-note">以下項目請醫師依臨床判讀。</div>
+    `;
+    if (unassignedUnique.length > 0) {
+      html += `
+        <div class="unassigned-sublabel">數值異常、無對應診斷規則</div>
+        <div class="unassigned-list">
+          ${unassignedUnique.map(item => `<span class="unassigned-chip">${escHtml(item.key)}</span>`).join('')}
+        </div>
+      `;
+    }
+    if (state.unknown.length > 0) {
+      html += `
+        <div class="unassigned-sublabel" style="margin-top:10px">字典未收錄（無法判讀正常 / 異常）</div>
+        <div class="unassigned-list">
+          ${state.unknown.map(item => `<span class="unassigned-chip unknown" title="原始值：${escHtml(item.valueCell || '')}">${escHtml(item.key)}</span>`).join('')}
+        </div>
+      `;
+    }
+    html += `</div>`;
+  }
+
   // ── Diagnosis ──
   const totalDxCount = state.dx.length + state.freeTextDx.length;
   html += `
@@ -1933,7 +2109,7 @@ function renderResults(totalParsed) {
         <div class="dx-row">
           <div class="dx-left">
             <span class="num">${idx}.</span>
-            <span>${escHtml(d.rule.name)}</span>
+            <span>${escHtml(d.rule.name)}${d.rule.icd10 ? ` <span class="icd-tag" title="${escHtml(d.rule.icd10_desc || '')}">${escHtml(d.rule.icd10)}</span>` : ''}</span>
           </div>
           <div class="dx-right">
             <div class="dx-right-label">佐證數值（不複製）</div>
@@ -2052,7 +2228,7 @@ $('parseBtn').addEventListener('click', runParse);
 $('clearBtn').addEventListener('click', () => {
   $('labInput').value = '';
   state.demographics = { name: null, chartNo: null, sex: null, age: null, birthDate: null };
-  state.integrated = []; state.skipped = []; state.dx = [];
+  state.integrated = []; state.skipped = []; state.dx = []; state.unknown = [];
   $('resultMeta').style.display = 'none';
   $('resultArea').innerHTML = `<div class="result-empty"><div class="big">🧪</div>貼上檢驗結果後按「解析」</div>`;
 });

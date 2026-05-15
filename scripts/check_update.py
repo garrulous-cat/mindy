@@ -9,11 +9,13 @@ import re
 import json
 import subprocess
 import sys
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from bs4 import BeautifulSoup
 
 NHI_URL = "https://www.nhi.gov.tw/ch/np-2508-1.html"
 VERSION_FILE = Path("data/last_version.txt")
+LAST_CHECK_FILE = Path("data/last_check.txt")
 DATA_DIR = Path("data")
 
 HEADERS = {
@@ -110,6 +112,12 @@ def run_parser(pdf_path: Path):
 
 
 def main():
+    # 記錄這次檢查時間（用台灣時間 UTC+8）
+    tw_now = datetime.now(timezone(timedelta(hours=8)))
+    check_time_str = tw_now.strftime("%Y-%m-%d %H:%M")
+    LAST_CHECK_FILE.write_text(check_time_str, encoding="utf-8")
+    print(f"⏱  記錄檢查時間：{check_time_str}")
+
     try:
         pdf_url, new_version = get_latest_pdf_info()
     except Exception as e:

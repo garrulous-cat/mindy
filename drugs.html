@@ -231,7 +231,7 @@
     <span class="icon">💊</span>
     <div>
       <h1>藥品給付規定查詢</h1>
-      <p>全民健康保險藥品給付規定 · 快速全文搜尋</p>
+      <p>全民健康保險藥品給付規定</p>
     </div>
   </div>
 
@@ -261,7 +261,7 @@
   <div class="footer-meta">
     <span><span class="meta-label">健保署資料日期：</span><span id="nhiVersion" class="meta-mono">—</span></span>
     <span><span class="meta-label">本站最近更新：</span><span id="lastUpdate" class="meta-mono">—</span></span>
-    <span><span class="meta-label">自動更新頻率：</span><span class="meta-mono">每週一 10:00</span></span>
+    <span><span class="meta-label">最後檢查更新：</span><span id="nextUpdate" class="meta-mono">—</span></span>
   </div>
   資料來源：<a href="https://www.nhi.gov.tw/ch/cp-13108-67ddf-2508-1.html" target="_blank" rel="noopener">衛生福利部中央健康保險署</a> ·
   本站僅供查詢參考，以健保署官方公告為準
@@ -372,6 +372,17 @@ async function loadData() {
       const label = `民國${rocY}年${m}月${d}日`;
       document.getElementById('nhiVersion').textContent = label;
       document.getElementById('lastUpdate').textContent = label;
+    } catch(e) {}
+
+    // 載入「最後檢查時間」(由 GitHub Actions 每週一寫入，不論有無新版本都會更新)
+    try {
+      const cr = await fetch('data/last_check.txt');
+      if (cr.ok) {
+        const t = (await cr.text()).trim();  // "2026-05-15 11:32"
+        // 轉成 "2026/05/15 11:32"
+        const display = t.replace(/-/g, '/');
+        document.getElementById('nextUpdate').textContent = display;
+      }
     } catch(e) {}
 
     // 載入 changelog（若存在）
