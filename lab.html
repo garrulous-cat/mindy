@@ -278,6 +278,7 @@
   .section-copy-bar {
     display: flex;
     justify-content: flex-end;
+    gap: 6px;
     margin-bottom: 10px;
   }
 
@@ -4202,7 +4203,8 @@ const FREE_TEXT_TYPES = [
   { match: /內視鏡室檢查報告/,          label: '內視鏡',     short: 'EGD',       keywords: ['DIAGNOSIS', 'IMPRESSION'] },
   { match: /病理組織切片報告/,          label: '病理切片',   short: 'Pathology', keywords: ['PATHOLOGICAL DIAGNOSIS', 'DIAGNOSIS'] },
   { match: /細胞學檢查報告/,            label: '細胞學',     short: 'Cytology',  keywords: ['DIAGNOSIS', 'IMPRESSION', 'CYTOLOGIC DIAGNOSIS'] },
-  { match: /放射線部超音波檢查報告/,    label: '超音波',     short: 'US',        keywords: ['Impression', 'IMPRESSION', 'IMP'] },
+  // 超音波（要在 X 光 / 放射線 match 之前先匹配、否則「放射線部超音波」會被「放射線」吃掉）
+  { match: /超音波/,                    label: '超音波',     short: 'US',        keywords: ['Impression', 'IMPRESSION', 'IMP'] },
   { match: /(電腦斷層|CT)/,             label: 'CT',         short: 'CT',        keywords: ['Impression', 'IMPRESSION', 'IMP'] },
   { match: /磁振造影/,                  label: 'MRI',        short: 'MRI',       keywords: ['Impression', 'IMPRESSION', 'IMP'] },
   { match: /Ｘ光|X光|X-ray|放射線/,     label: 'X光',        short: 'XR',        keywords: ['Impression', 'IMPRESSION', 'IMP'] },
@@ -4855,21 +4857,26 @@ function integrateFreeTextDxRaw(items) {
   return mergePathologyIntoEndoscopy(integrated);
 }
 
-// 從診斷文字抽出嚴重程度/分級
+// 從診斷文字抽出嚴重程度/分級（嚴格、僅明確的等級才抽）
 function extractSeverity(text) {
-  // LA grade A/B/C/D (LA-A 也算)、grade A/B/C/D
-  let m = text.match(/\bLA[\s\-]*(?:grade\s+)?([A-D])\b/i);
-  if (m) return `LA-${m[1].toUpperCase()}`;
-  m = text.match(/\bgrade\s+([A-D]|[I1-4])\b/i);
+  // LA grade A/B/C/D — 保留原文「LA grade B」
+  let m = text.match(/\bLA[\s\-]*grade\s+([A-D])\b/i);
+  if (m) return `LA grade ${m[1].toUpperCase()}`;
+  // 「LA-A」「LA-B」這種寫法 → 還原成「LA grade B」
+  m = text.match(/\bLA[\-\s]+([A-D])\b/i);
+  if (m) return `LA grade ${m[1].toUpperCase()}`;
+  // grade A/B/C/D 或 grade I/II/III/IV
+  m = text.match(/\bgrade\s+([A-D]|I{1,4}V?|[1-4])\b/i);
   if (m) return `grade ${m[1].toUpperCase()}`;
   // BIRADs category 1-5
   m = text.match(/BIRADs?\s+category\s+([1-5])/i);
   if (m) return `BIRADs ${m[1]}`;
-  // mild / moderate / severe
-  m = text.match(/\b(mild|moderate|severe|acute|chronic|suppurative|hyperplastic)\b/i);
+  // mild / moderate / severe（明確嚴重度形容詞）
+  m = text.match(/\b(mild|moderate|severe)\b/i);
   if (m) return m[1].toLowerCase();
   // (suspected) (suspect)
   if (/\(suspect(?:ed)?\)/i.test(text)) return 'suspected';
+  // 注意：chronic / hyperplastic / suppurative / acute 不算 severity（是 type 或描述）
   return null;
 }
 
@@ -5454,10 +5461,11 @@ function renderResults(totalParsed) {
   let objHtml = '';
   const totalObjCount = state.integrated.length + state.freeTextDxRaw.length;
 
-  // 複製按鈕（右上角浮動）
+  // 複製按鈕（全部 + 僅現異常）
   if (totalObjCount > 0) {
     objHtml += `<div class="section-copy-bar">
-      <button class="btn primary small" id="copyObjBtn">複製</button>
+      <button class="btn small" id="copyObjCurBtn" title="僅複製目前 H/L 異常的 lab + 所有 free-text 報告">僅現異常</button>
+      <button class="btn primary small" id="copyObjBtn">全部複製</button>
     </div>`;
   }
 
@@ -5601,10 +5609,11 @@ function renderResults(totalParsed) {
   let dxHtml = '';
   const totalDxCount = state.dx.length + state.freeTextDx.length;
 
-  // 複製按鈕
+  // 複製按鈕（全部 + 僅現異常）
   if (totalDxCount > 0) {
     dxHtml += `<div class="section-copy-bar">
-      <button class="btn primary small" id="copyDxBtn">複製</button>
+      <button class="btn small" id="copyDxCurBtn" title="僅複製目前 H/L 異常的 lab 觸發診斷 + 所有 free-text 診斷">僅現異常</button>
+      <button class="btn primary small" id="copyDxBtn">全部複製</button>
     </div>`;
   }
 
@@ -5696,11 +5705,15 @@ function renderResults(totalParsed) {
   }
   dxArea.innerHTML = dxHtml;
 
-  // Wire copy buttons
+  // Wire copy buttons (4 個：每邊 1 個全部 + 1 個僅現異常)
   const objBtn = $('copyObjBtn');
-  if (objBtn) objBtn.addEventListener('click', copyObjective);
+  if (objBtn) objBtn.addEventListener('click', () => copyObjective('all'));
+  const objCurBtn = $('copyObjCurBtn');
+  if (objCurBtn) objCurBtn.addEventListener('click', () => copyObjective('current'));
   const dxBtn = $('copyDxBtn');
-  if (dxBtn) dxBtn.addEventListener('click', copyDiagnosis);
+  if (dxBtn) dxBtn.addEventListener('click', () => copyDiagnosis('all'));
+  const dxCurBtn = $('copyDxCurBtn');
+  if (dxCurBtn) dxCurBtn.addEventListener('click', () => copyDiagnosis('current'));
 }
 
 // 收合輸入區、顯示 summary
@@ -5776,53 +5789,65 @@ function formatFreeTextDx(d) {
 }
 
 // 從診斷文字中移除 severity 後綴（合併版複製時用、避免「Reflux esophagitis, LA grade B, 2021/04 grade A」）
+// 注意：只移除可被 extractSeverity 抽到的明確 severity
 function stripSeverityFromText(text) {
-  // 移除「, LA grade X」「, grade X」「, mild/moderate/severe/...」尾段
   return text
-    .replace(/,\s*LA[\s\-]*(?:grade\s+)?[A-D]\s*$/i, '')
-    .replace(/,\s*grade\s+[A-D1-4I]+\s*$/i, '')
-    .replace(/,\s*(?:mild|moderate|severe|acute|chronic|suppurative|hyperplastic)(?:\s+\w+)?\s*$/i, '')
+    .replace(/,\s*LA[\s\-]*grade\s+[A-D]\s*$/i, '')
+    .replace(/,\s*LA[\-\s]+[A-D]\s*$/i, '')
+    .replace(/,\s*grade\s+[A-D1-4IV]+\s*$/i, '')
+    .replace(/,\s*(?:mild|moderate|severe)\s*$/i, '')
     .trim();
 }
 
-function copyObjective() {
+function copyObjective(mode) {
+  // mode = 'all' (預設) 或 'current'（僅現異常：lab 過濾掉 flag=OK 的、即使有 pastAbnormal）
   const lines = [];
+  const currentOnly = mode === 'current';
 
   // ── 1) 數值表 — 依「採檢日期 + 檢查類型」分組 ──
   if (state.integrated.length > 0) {
-    const labGroups = new Map();
-    for (const item of state.integrated) {
-      const dateKey = (item.sampledAt || '').slice(0, 10);
-      const sourceGroup = labGroupName(item.sourceType);
-      const key = `${dateKey}|${sourceGroup}`;
-      if (!labGroups.has(key)) {
-        labGroups.set(key, { date: dateKey, group: sourceGroup, items: [] });
-      }
-      labGroups.get(key).items.push(item);
-    }
-    // 排序：日期新→舊
-    const sortedGroups = [...labGroups.values()].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+    // 「僅現異常」模式：只保留 flag = H/HH/L/LL 的（曾異常但目前 OK 的不要）
+    const filteredItems = currentOnly
+      ? state.integrated.filter(it => ['H', 'HH', 'L', 'LL'].includes(it.flag))
+      : state.integrated;
 
-    for (const grp of sortedGroups) {
-      lines.push(`${fmtDate(grp.date)} ${grp.group}:`);
-      for (const item of grp.items) {
-        const value = displayValue(item);
-        const unit = (item.def && item.def.unit) || '';
-        const flag = (item.flag === 'H' || item.flag === 'HH') ? ' (H)'
-                   : (item.flag === 'L' || item.flag === 'LL') ? ' (L)'
-                   : '';
-        let line = `  ${item.key}: ${value}${unit ? ' ' + unit : ''}${flag}`;
-        if (item.pastAbnormal) {
-          const pv = displayValue(item.pastAbnormal);
-          line += ` (past: ${pv} ${fmtDate(item.pastAbnormal.sampledAt)})`;
+    if (filteredItems.length > 0) {
+      const labGroups = new Map();
+      for (const item of filteredItems) {
+        const dateKey = (item.sampledAt || '').slice(0, 10);
+        const sourceGroup = labGroupName(item.sourceType);
+        const key = `${dateKey}|${sourceGroup}`;
+        if (!labGroups.has(key)) {
+          labGroups.set(key, { date: dateKey, group: sourceGroup, items: [] });
         }
-        lines.push(line);
+        labGroups.get(key).items.push(item);
       }
-      lines.push('');  // 分組間空一行
+      // 排序：日期新→舊
+      const sortedGroups = [...labGroups.values()].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+
+      for (const grp of sortedGroups) {
+        lines.push(`${fmtDate(grp.date)} ${grp.group}:`);
+        for (const item of grp.items) {
+          const value = displayValue(item);
+          const unit = (item.def && item.def.unit) || '';
+          const flag = (item.flag === 'H' || item.flag === 'HH') ? ' (H)'
+                     : (item.flag === 'L' || item.flag === 'LL') ? ' (L)'
+                     : '';
+          let line = `  ${item.key}: ${value}${unit ? ' ' + unit : ''}${flag}`;
+          // 「僅現異常」模式不顯示 past（焦點放當前異常）
+          if (item.pastAbnormal && !currentOnly) {
+            const pv = displayValue(item.pastAbnormal);
+            line += ` (past: ${pv} ${fmtDate(item.pastAbnormal.sampledAt)})`;
+          }
+          lines.push(line);
+        }
+        lines.push('');  // 分組間空一行
+      }
     }
   }
 
   // ── 2) Free-text 報告 — 依「日期 + 檢查」分組（用未合併版） ──
+  // free-text 在「僅現異常」模式下仍全部保留（依使用者選項 A）
   if (state.freeTextDxRaw.length > 0) {
     const ftGroups = new Map();
     for (const d of state.freeTextDxRaw) {
@@ -5851,10 +5876,14 @@ function copyObjective() {
   while (lines.length > 0 && lines[lines.length - 1] === '') lines.pop();
 
   navigator.clipboard.writeText(lines.join('\n'));
-  showToast('已複製 Objective');
+  showToast(currentOnly ? '已複製 Objective（僅現異常）' : '已複製 Objective');
 }
 
-function copyDiagnosis() {
+function copyDiagnosis(mode) {
+  // mode = 'all' (預設) 或 'current'（僅複製 lab rule 觸發的診斷+所有 free-text；不變、因為 lab rule 都是依現異常生成）
+  // 實際上 state.dx 是 applyDiagnosisRules(state.integrated) 結果、本身就只反映「現異常」的 lab rule
+  // 「僅現異常」模式：lab-rule dx 不變、free-text 全保留
+  // （依使用者選擇 A，free-text 不過濾）
   const lines = [];
   let idx = 1;
   state.dx.forEach(d => { lines.push(`${idx}. ${d.rule.name}`); idx++; });
@@ -5863,7 +5892,8 @@ function copyDiagnosis() {
     idx++;
   });
   navigator.clipboard.writeText(lines.join('\n'));
-  showToast('已複製 Diagnosis（' + lines.length + ' 條）');
+  const label = mode === 'current' ? '已複製 Diagnosis（僅現異常）' : '已複製 Diagnosis';
+  showToast(`${label}（${lines.length} 條）`);
 }
 
 function showToast(msg) {
