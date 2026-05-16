@@ -63,14 +63,109 @@
   /* page-intro 樣式由 assets/shared.css 提供 */
 
   /* Layout */
-  .work-grid {
+  .work-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .result-grid {
     display: grid;
-    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.4fr);
-    gap: 20px;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 16px;
   }
   @media (max-width: 1100px) {
-    .work-grid { grid-template-columns: 1fr; }
+    .result-grid { grid-template-columns: 1fr; }
     .container { padding: 12px; }
+  }
+
+  /* 輸入區可收合 */
+  .input-panel-title {
+    cursor: pointer;
+    user-select: none;
+    margin-bottom: 0;
+  }
+  .input-panel.collapsed .input-panel-title {
+    margin-bottom: 0;
+  }
+  .input-panel.collapsed #inputBody {
+    display: none;
+  }
+  .input-panel.collapsed {
+    padding-top: 14px;
+    padding-bottom: 14px;
+  }
+  .input-summary {
+    margin-left: 10px;
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+  .input-panel #inputBody {
+    margin-top: 14px;
+  }
+
+  /* 空狀態 */
+  .empty-state {
+    background: var(--bg-surface);
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-lg);
+    padding: 60px 20px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+  .empty-state .big {
+    font-size: 36px;
+    margin-bottom: 12px;
+  }
+
+  /* 警示橫條 */
+  .warning-banner {
+    background: rgba(212, 168, 67, 0.06);
+    border: 1px solid rgba(212, 168, 67, 0.30);
+    border-radius: var(--radius-lg);
+    padding: 12px 16px;
+    font-size: 12.5px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .warning-banner-warn {
+    color: var(--yellow, #d4a843);
+    font-weight: 500;
+    margin-right: 6px;
+  }
+  .warning-banner-group {
+    display: inline;
+  }
+  .warning-banner-label {
+    color: var(--text-light, #566880);
+    font-size: 11px;
+    margin-right: 4px;
+  }
+  .warning-banner-chip {
+    color: var(--yellow, #d4a843);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+  }
+  .warning-banner-chip.unknown {
+    color: var(--text-muted);
+    cursor: help;
+  }
+  .warning-banner-sep {
+    color: var(--text-light, #566880);
+    margin: 0 4px;
+  }
+  .warning-banner-group-sep {
+    display: inline-block;
+    margin: 0 8px;
+    color: var(--border);
   }
 
   .panel {
@@ -689,44 +784,63 @@
     </div>
   </div>
 
-  <div class="work-grid">
+  <div class="work-stack">
 
-    <!-- ── 左：輸入 ── -->
-    <section class="panel">
-      <div class="panel-title">輸入</div>
-
-      <textarea
-        class="lab-input"
-        id="labInput"
-        spellcheck="false"
-        autocomplete="off"
-        placeholder="從成大醫院 LIS Ctrl + A 全選 → 複製 貼上&#10;&#10;貼上的內容僅在本機瀏覽器處理，不會上傳到任何伺服器"
-      ></textarea>
-
-      <div class="btn-row">
-        <button class="btn primary" id="parseBtn">解析</button>
-        <button class="btn" id="clearBtn">清除</button>
-      </div>
-    </section>
-
-    <!-- ── 右：結果 ── -->
-    <section class="panel">
-      <div class="panel-title">
-        <span class="panel-title-inner">結果 <span id="resultMeta" class="status-pill" style="display:none"></span></span>
+    <!-- ── 輸入區（可收合） ── -->
+    <section class="panel input-panel" id="inputPanel">
+      <div class="panel-title input-panel-title" id="inputPanelTitle">
+        <span class="panel-title-inner">
+          <span id="inputCollapseIcon">▼</span> 輸入
+          <span id="inputSummary" class="input-summary" style="display:none"></span>
+        </span>
       </div>
 
-      <div id="resultArea">
-        <div class="result-empty">
-          <div class="big">🧪</div>
-          貼上檢驗結果後按「解析」
+      <div id="inputBody">
+        <textarea
+          class="lab-input"
+          id="labInput"
+          spellcheck="false"
+          autocomplete="off"
+          placeholder="從成大醫院 LIS Ctrl + A 全選 → 複製 貼上&#10;&#10;貼上的內容僅在本機瀏覽器處理，不會上傳到任何伺服器"
+        ></textarea>
+
+        <div class="btn-row">
+          <button class="btn primary" id="parseBtn">解析</button>
+          <button class="btn" id="clearBtn">清除</button>
         </div>
       </div>
     </section>
 
+    <!-- ── 上方警示橫條（異常但未自動診斷） ── -->
+    <div id="warningBanner" style="display:none"></div>
+
+    <!-- ── 結果區：Obj 左 / Dx 右 ── -->
+    <div class="result-grid" id="resultGrid" style="display:none">
+      <section class="panel">
+        <div class="panel-title">
+          <span class="panel-title-inner">Objective <span id="resultMeta" class="status-pill" style="display:none"></span></span>
+        </div>
+        <div id="objArea"></div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-title">
+          <span class="panel-title-inner">Diagnosis</span>
+        </div>
+        <div id="dxArea"></div>
+      </section>
+    </div>
+
+    <!-- ── 空狀態（首次未解析） ── -->
+    <div id="emptyState" class="empty-state">
+      <div class="big">🧪</div>
+      貼上檢驗結果後按「解析」
+    </div>
+
   </div>
 
   <div style="margin-top:32px; font-size:12px; color:var(--text-muted); text-align:center; line-height:1.8;">
-    參考範圍以成大檢驗報告公告值為準。診斷規則可在 <code style="font-family:'IBM Plex Mono',monospace">data/dx_rules.json</code> 編輯。<br>
+    參考範圍以成大檢驗報告公告值為準。診斷規則可在 <code style="font-family:'IBM Plex Mono',monospace'">data/dx_rules.json</code> 編輯。<br>
     本工具僅作個人臨床備忘，不取代臨床判斷。
   </div>
 
@@ -4829,32 +4943,40 @@ function runParse() {
 }
 
 function renderResults(totalParsed) {
-  const area = $('resultArea');
+  const objArea = $('objArea');
+  const dxArea = $('dxArea');
+  const resultGrid = $('resultGrid');
+  const emptyState = $('emptyState');
+  const warningBanner = $('warningBanner');
   const meta = $('resultMeta');
 
+  // 無法辨識：顯示錯誤、不收合輸入區、不顯示 grid
   if (totalParsed === 0 && state.skipped.length === 0) {
-    area.innerHTML = `
-      <div class="result-empty">
-        <div class="big">😕</div>
-        無法辨識任何檢驗項目。<br>
-        請確認貼上的是完整的成大 LIS 報告內容。
-      </div>`;
+    emptyState.style.display = '';
+    emptyState.innerHTML = `<div class="big">😕</div>無法辨識任何檢驗項目。<br>請確認貼上的是完整的成大 LIS 報告內容。`;
+    resultGrid.style.display = 'none';
+    warningBanner.style.display = 'none';
     meta.style.display = 'none';
+    // 不收合輸入區
     return;
   }
+
+  // 解析成功：隱藏 emptyState、顯示結果 grid、收合輸入區
+  emptyState.style.display = 'none';
+  resultGrid.style.display = '';
+  collapseInputPanel(totalParsed);
 
   meta.style.display = '';
   meta.textContent = `解析 ${totalParsed} 項 · 異常 ${state.integrated.length} 項`;
   meta.className = state.integrated.length === 0 ? 'status-pill ok' : 'status-pill';
 
-  let html = '';
-
-  // ── Patient context (從 LIS 抓取) ──
+  // ── 渲染 Patient context + Objective 區到 objArea ──
+  let objHtml = '';
   const d = state.demographics;
   if (d.name || d.chartNo || d.age != null || d.sex) {
     const sexLabel = d.sex === 'M' ? '男' : d.sex === 'F' ? '女' : '—';
     const ageLabel = d.age != null ? `${d.age} 歲` : '—';
-    html += `
+    objHtml += `
       <div class="pt-context">
         ${d.name ? `<span class="pt-field"><span class="pt-label">姓名</span><span class="pt-val">${escHtml(d.name)}</span></span>` : ''}
         ${d.chartNo ? `<span class="pt-field"><span class="pt-label">病歷號</span><span class="pt-val mono">${escHtml(d.chartNo)}</span></span>` : ''}
@@ -4864,9 +4986,8 @@ function renderResults(totalParsed) {
     `;
   }
 
-  // ── Objective ──
   const totalObjCount = state.integrated.length + state.freeTextDx.length;
-  html += `
+  objHtml += `
     <div class="output-section">
       <div class="section-header">
         <h3>📊 Objective <span class="badge-count">${totalObjCount}</span></h3>
@@ -4876,14 +4997,13 @@ function renderResults(totalParsed) {
 
   if (totalObjCount === 0) {
     if (totalParsed > 0) {
-      html += `<div class="objective-box" style="text-align:center;color:var(--accent-green);padding:20px">
+      objHtml += `<div class="objective-box" style="text-align:center;color:var(--accent-green);padding:20px">
         ✓ 所有解析項目均在正常範圍
       </div>`;
     }
   } else {
     // 數值表 — 依採檢日期 + 檢查類型分組
     if (state.integrated.length > 0) {
-      // 分組 key: "YYYY-MM-DD|sourceGroup"
       const labGroups = new Map();
       for (const item of state.integrated) {
         const dateKey = (item.sampledAt || '').slice(0, 10);
@@ -4894,12 +5014,11 @@ function renderResults(totalParsed) {
         }
         labGroups.get(key).items.push(item);
       }
-      // 排序：日期新→舊
       const sortedGroups = [...labGroups.values()].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
 
-      html += `<div class="objective-box" id="objBox">`;
+      objHtml += `<div class="objective-box" id="objBox">`;
       for (const grp of sortedGroups) {
-        html += `<div class="obj-group">
+        objHtml += `<div class="obj-group">
           <div class="obj-group-header">
             <span class="obj-group-date">${fmtDate(grp.date)}</span>
             <span class="obj-group-type">${escHtml(grp.group)}</span>
@@ -4914,90 +5033,108 @@ function renderResults(totalParsed) {
           const value = displayValue(item);
           const unit = (item.def && item.def.unit) ? ` ${item.def.unit}` : '';
 
-          let meta = '';
+          let pastMeta = '';
           if (item.pastAbnormal) {
             const pv = displayValue(item.pastAbnormal);
-            meta = `<span class="past">⚠ 曾異常 ${escHtml(pv)} (${fmtDate(item.pastAbnormal.sampledAt)})</span>`;
+            pastMeta = `<span class="past">⚠ 曾異常 ${escHtml(pv)} (${fmtDate(item.pastAbnormal.sampledAt)})</span>`;
           }
 
-          html += `
+          objHtml += `
             <div class="obj-row grouped">
               <span class="name">${escHtml(item.key)}</span>
               <span class="value ${valCls}${critCls}">${escHtml(value)}${escHtml(unit)}</span>
               <span>${flagBadge}</span>
-              <span class="meta">${meta}</span>
+              <span class="meta">${pastMeta}</span>
             </div>
           `;
         }
-        html += `</div>`;
+        objHtml += `</div>`;
       }
-      html += `</div>`;
+      objHtml += `</div>`;
     }
 
     // Free-text 報告列表 — 依日期+short 分組
     if (state.freeTextDx.length > 0) {
-      // 每個 freeTextDx 用「最近一個來源」當主日期、主 short
       const ftGroups = new Map();
-      for (const d of state.freeTextDx) {
-        const sourcesSorted = [...d.sources].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+      for (const dx of state.freeTextDx) {
+        const sourcesSorted = [...dx.sources].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
         const primary = sourcesSorted[0];
-        const dateKey = (primary.date || '').slice(0, 7);  // YYYY-MM
+        const dateKey = (primary.date || '').slice(0, 7);
         const shortKey = primary.short || 'Other';
         const key = `${dateKey}|${shortKey}`;
         if (!ftGroups.has(key)) {
           ftGroups.set(key, { date: dateKey, short: shortKey, items: [] });
         }
-        ftGroups.get(key).items.push(d);
+        ftGroups.get(key).items.push(dx);
       }
       const sortedFtGroups = [...ftGroups.values()].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
 
-      html += `<div class="ft-list" id="ftList">`;
+      objHtml += `<div class="ft-list" id="ftList">`;
       for (const grp of sortedFtGroups) {
-        html += `<div class="ft-group">
+        objHtml += `<div class="ft-group">
           <div class="ft-group-header">
             <span class="ft-group-date">${fmtYearMonth(grp.date)}</span>
             <span class="ft-group-short">${escHtml(grp.short)}</span>
           </div>
         `;
-        for (const d of grp.items) {
-          html += `
+        for (const dx of grp.items) {
+          objHtml += `
             <div class="ft-row grouped">
-              <span class="ft-text">${escHtml(d.text)}</span>
+              <span class="ft-text">${escHtml(dx.text)}</span>
             </div>
           `;
         }
-        html += `</div>`;
+        objHtml += `</div>`;
       }
-      html += `</div>`;
+      objHtml += `</div>`;
     }
   }
-  html += `</div>`;
+  objHtml += `</div>`;
+  objArea.innerHTML = objHtml;
 
-  // ── 異常但未自動診斷的資料準備 ──
-  // 找出：所有 abnormal 項目，扣除被 dx rule 用作 evidence 的
+  // ── 異常但未自動診斷的資料準備（用於上方 warning banner） ──
   const usedKeysInDx = new Set();
-  state.dx.forEach(d => d.evidence.forEach(ev => usedKeysInDx.add(ev.key)));
+  state.dx.forEach(dx => dx.evidence.forEach(ev => usedKeysInDx.add(ev.key)));
   const unassignedAbnormal = state.integrated.filter(item => {
     const flag = item.flag || (item.latest && item.latest.flag);
     const isAbn = flag === 'H' || flag === 'HH' || flag === 'L' || flag === 'LL';
     if (!isAbn) return false;
     if (usedKeysInDx.has(item.key)) return false;
-    // 排除 free-text only 項目（不適用）
     if (item.def && item.def.is_qual && (item.qual || '').toLowerCase().includes('non-reactive')) return false;
     return true;
   });
-  // 去重（同一個 key 多次採樣只列一次）
   const seenUnaKeys = new Set();
   const unassignedUnique = unassignedAbnormal.filter(item => {
     if (seenUnaKeys.has(item.key)) return false;
     seenUnaKeys.add(item.key);
     return true;
   });
-  // 之後會在 Diagnosis 區塊內 inline 渲染（不再獨立 section）
 
-  // ── Diagnosis ──
+  // ── 渲染上方 warning banner ──
+  const hasUnassigned = unassignedUnique.length > 0 || state.unknown.length > 0;
+  if (hasUnassigned) {
+    const total = unassignedUnique.length + state.unknown.length;
+    let parts = [];
+    if (unassignedUnique.length > 0) {
+      parts.push(`<span class="warning-banner-group"><span class="warning-banner-label">數值異常</span> ${unassignedUnique.map(item => `<span class="warning-banner-chip">${escHtml(item.key)}</span>`).join('<span class="warning-banner-sep">·</span>')}</span>`);
+    }
+    if (state.unknown.length > 0) {
+      parts.push(`<span class="warning-banner-group"><span class="warning-banner-label">字典未收錄</span> ${state.unknown.map(item => `<span class="warning-banner-chip unknown" title="原始值：${escHtml(item.valueCell || '')}">${escHtml(item.key)}</span>`).join('<span class="warning-banner-sep">·</span>')}</span>`);
+    }
+    warningBanner.className = 'warning-banner';
+    warningBanner.innerHTML = `
+      <span class="warning-banner-warn">⚠ ${total} 項異常／未收錄請醫師判讀</span>
+      ${parts.join('<span class="warning-banner-group-sep">　</span>')}
+    `;
+    warningBanner.style.display = '';
+  } else {
+    warningBanner.style.display = 'none';
+  }
+
+  // ── 渲染 Diagnosis 到 dxArea ──
+  let dxHtml = '';
   const totalDxCount = state.dx.length + state.freeTextDx.length;
-  html += `
+  dxHtml += `
     <div class="output-section">
       <div class="section-header">
         <h3>🩺 Diagnosis <span class="badge-count">${totalDxCount}</span></h3>
@@ -5007,28 +5144,28 @@ function renderResults(totalParsed) {
 
   if (totalDxCount === 0) {
     if (state.integrated.length > 0) {
-      html += `<div class="objective-box" style="text-align:center;color:var(--text-muted);padding:20px">
+      dxHtml += `<div class="objective-box" style="text-align:center;color:var(--text-muted);padding:20px">
         異常項目未觸發任何預設診斷規則
       </div>`;
     }
   } else {
-    html += `<div class="dx-table" id="dxTable">`;
+    dxHtml += `<div class="dx-table" id="dxTable">`;
     let idx = 1;
 
     // 數值型診斷
-    state.dx.forEach(d => {
-      const evList = d.evidence.map(ev => {
+    state.dx.forEach(dx => {
+      const evList = dx.evidence.map(ev => {
         const isPast = state.integrated.find(it => it.key === ev.key && it.pastAbnormal === ev);
         const pastTag = isPast ? `<span class="past-prefix">曾異常</span>` : '';
         const valCls = (ev.flag === 'L' || ev.flag === 'LL') ? 'low' : '';
         return `<span class="evidence-row"><span class="ev-date">${fmtDate(ev.sampledAt)}</span> ${pastTag}<span class="ev-item">${escHtml(ev.key)}:</span> <span class="ev-value ${valCls}">${escHtml(displayValue(ev))}</span></span>`;
       }).join('');
 
-      html += `
+      dxHtml += `
         <div class="dx-row">
           <div class="dx-left">
             <span class="num">${idx}.</span>
-            <span>${escHtml(d.rule.name)}${d.rule.icd10 ? ` <span class="icd-tag" title="${escHtml(d.rule.icd10_desc || '')}">${escHtml(d.rule.icd10)}</span>` : ''}</span>
+            <span>${escHtml(dx.rule.name)}${dx.rule.icd10 ? ` <span class="icd-tag" title="${escHtml(dx.rule.icd10_desc || '')}">${escHtml(dx.rule.icd10)}</span>` : ''}</span>
           </div>
           <div class="dx-right">
             <div class="dx-right-label">佐證數值（不複製）</div>
@@ -5039,12 +5176,10 @@ function renderResults(totalParsed) {
       idx++;
     });
 
-    // Free-text 診斷（病理、影像、內視鏡等）
-    state.freeTextDx.forEach(d => {
-      const sortedSources = [...d.sources].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
-      // 過濾掉 pathology source（這些已合併進 text，不該重複顯示）
+    // Free-text 診斷
+    state.freeTextDx.forEach(dx => {
+      const sortedSources = [...dx.sources].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
       const tagSources = sortedSources.filter(s => !(s.short in PATHOLOGY_TO_PROCEDURE));
-      // 去重（同短名 + 同日期只算一次）
       const seen = new Set();
       const uniqueTagSources = tagSources.filter(s => {
         const k = `${fmtYearMonth(s.date)}|${s.short}`;
@@ -5053,21 +5188,19 @@ function renderResults(totalParsed) {
         return true;
       });
       const tag = uniqueTagSources.map(s => `${fmtYearMonth(s.date)} ${s.short}`).join(' / ');
-      // 右欄列出中文 label 詳細來源（這個保留全部 source、含 pathology，方便醫師看完整來源）
       const srcList = sortedSources.map(s =>
         `<span class="evidence-row"><span class="ev-date">${fmtYearMonth(s.date)}</span> <span class="ev-source">${escHtml(s.label)}</span></span>`
       ).join('');
-      // 查 ICD-10
-      const icdInfo = lookupFreeTextIcd(d.text);
+      const icdInfo = lookupFreeTextIcd(dx.text);
       const icdHtml = icdInfo
         ? ` <span class="icd-tag" title="${escHtml(icdInfo.icd10_desc)}">${escHtml(icdInfo.icd10)}</span>`
         : '';
 
-      html += `
+      dxHtml += `
         <div class="dx-row">
           <div class="dx-left">
             <span class="num">${idx}.</span>
-            <span><span class="ft-marker" title="從報告文字自動抽取，請醫師確認">🔎</span> ${escHtml(d.text)}${icdHtml} <span class="dx-tag">(${escHtml(tag)})</span></span>
+            <span><span class="ft-marker" title="從報告文字自動抽取，請醫師確認">🔎</span> ${escHtml(dx.text)}${icdHtml} <span class="dx-tag">(${escHtml(tag)})</span></span>
           </div>
           <div class="dx-right">
             <div class="dx-right-label">來源詳情（不複製）</div>
@@ -5078,39 +5211,56 @@ function renderResults(totalParsed) {
       idx++;
     });
 
-    html += `</div>`;
+    dxHtml += `</div>`;
   }
-
-  // ── inline 異常但未自動診斷（放在 Diagnosis 區內、dx-table 之後） ──
-  const hasUnassigned = unassignedUnique.length > 0 || state.unknown.length > 0;
-  if (hasUnassigned) {
-    const total = unassignedUnique.length + state.unknown.length;
-    let parts = [];
-    if (unassignedUnique.length > 0) {
-      parts.push(`<span class="ua-inline-group"><span class="ua-inline-label">數值異常</span> ${unassignedUnique.map(item => `<span class="ua-inline-chip">${escHtml(item.key)}</span>`).join('<span class="ua-sep">·</span>')}</span>`);
-    }
-    if (state.unknown.length > 0) {
-      parts.push(`<span class="ua-inline-group"><span class="ua-inline-label">字典未收錄</span> ${state.unknown.map(item => `<span class="ua-inline-chip unknown" title="原始值：${escHtml(item.valueCell || '')}">${escHtml(item.key)}</span>`).join('<span class="ua-sep">·</span>')}</span>`);
-    }
-    html += `
-      <div class="ua-inline">
-        <span class="ua-inline-warn">⚠ ${total} 項異常／未收錄請醫師判讀</span>
-        ${parts.join('<span class="ua-group-sep">　</span>')}
-      </div>
-    `;
-  }
-
-  html += `</div>`;
-
-  // ── Pending reports notice (removed: 醫師覺得多餘) ──
-
-  area.innerHTML = html;
+  dxHtml += `</div>`;
+  dxArea.innerHTML = dxHtml;
 
   // Wire copy buttons
-  const obj = $('copyObjBtn');
-  if (obj) obj.addEventListener('click', copyObjective);
-  const dx = $('copyDxBtn');
-  if (dx) dx.addEventListener('click', copyDiagnosis);
+  const objBtn = $('copyObjBtn');
+  if (objBtn) objBtn.addEventListener('click', copyObjective);
+  const dxBtn = $('copyDxBtn');
+  if (dxBtn) dxBtn.addEventListener('click', copyDiagnosis);
+}
+
+// 收合輸入區、顯示 summary
+function collapseInputPanel(totalParsed) {
+  const panel = $('inputPanel');
+  if (!panel) return;
+  panel.classList.add('collapsed');
+  const icon = $('inputCollapseIcon');
+  if (icon) icon.textContent = '▶';
+  const summary = $('inputSummary');
+  if (summary) {
+    summary.textContent = `· 已解析 ${totalParsed} 項　[點此展開重編]`;
+    summary.style.display = '';
+  }
+}
+
+// 展開輸入區
+function expandInputPanel() {
+  const panel = $('inputPanel');
+  if (!panel) return;
+  panel.classList.remove('collapsed');
+  const icon = $('inputCollapseIcon');
+  if (icon) icon.textContent = '▼';
+  const summary = $('inputSummary');
+  if (summary) summary.style.display = 'none';
+}
+
+// 點 panel-title 切換展開／收合
+function toggleInputPanel() {
+  const panel = $('inputPanel');
+  if (!panel) return;
+  if (panel.classList.contains('collapsed')) {
+    expandInputPanel();
+  } else {
+    // 已展開但有結果 → 收合
+    if ($('resultGrid').style.display !== 'none') {
+      const totalParsed = state.allResults.length;
+      collapseInputPanel(totalParsed);
+    }
+  }
 }
 
 // 把 free-text 診斷格式化為 "Lipoma (2026/02 Pathology)" 樣式
@@ -5223,10 +5373,19 @@ $('parseBtn').addEventListener('click', runParse);
 $('clearBtn').addEventListener('click', () => {
   $('labInput').value = '';
   state.demographics = { name: null, chartNo: null, sex: null, age: null, birthDate: null };
-  state.integrated = []; state.skipped = []; state.dx = []; state.unknown = [];
+  state.integrated = []; state.skipped = []; state.dx = []; state.unknown = []; state.freeTextDx = [];
   $('resultMeta').style.display = 'none';
-  $('resultArea').innerHTML = `<div class="result-empty"><div class="big">🧪</div>貼上檢驗結果後按「解析」</div>`;
+  $('resultGrid').style.display = 'none';
+  $('warningBanner').style.display = 'none';
+  $('emptyState').style.display = '';
+  $('emptyState').innerHTML = `<div class="big">🧪</div>貼上檢驗結果後按「解析」`;
+  // 展開輸入區
+  expandInputPanel();
 });
+
+// 點輸入區標題切換展開／收合
+const inputTitle = $('inputPanelTitle');
+if (inputTitle) inputTitle.addEventListener('click', toggleInputPanel);
 
 $('labInput').addEventListener('keydown', e => {
   if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
