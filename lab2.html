@@ -74,6 +74,100 @@
   .dev-banner strong { color: #ffa726; }
   .dev-banner a { color: var(--accent-blue, #4a9eff); }
 
+  /* 疾病區塊（DM / Lipid / Thyroid） */
+  .disease-blocks-wrap {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .disease-block {
+    background: var(--bg-base);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px 14px;
+  }
+  .disease-block-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .disease-block-icon { font-size: 18px; }
+  .disease-block-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: 0.02em;
+  }
+  /* Primary 主指標 */
+  .db-primary-row {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+  .db-primary-name {
+    font-size: 13px;
+    color: var(--text-muted);
+    min-width: 60px;
+  }
+  .db-primary-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+  .db-primary-val.high { color: var(--accent-red, #ef5350); }
+  .db-primary-val.low { color: var(--accent-orange, #ffa726); }
+  /* Timeline */
+  .db-timeline {
+    margin: 6px 0 10px;
+    padding-left: 12px;
+    border-left: 2px solid rgba(74,158,255,0.20);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+  .db-timeline-arrow {
+    color: var(--accent-blue, #4a9eff);
+    font-size: 14px;
+    margin-right: 4px;
+  }
+  .db-timeline-row {
+    display: flex;
+    gap: 6px;
+    align-items: baseline;
+  }
+  .db-timeline-date { color: var(--text-light, #566880); min-width: 64px; }
+  .db-timeline-value { color: var(--text-primary); }
+  .db-current-mark {
+    color: var(--accent-blue);
+    font-weight: 500;
+    margin-left: 4px;
+  }
+  /* 副 lab */
+  .disease-block-secondary {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px dashed var(--border);
+    font-size: 12px;
+    line-height: 1.7;
+  }
+  .db-sec-item {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 4px;
+  }
+  .db-sec-name { color: var(--text-muted); }
+  .db-sec-val { font-family: 'JetBrains Mono', monospace; }
+  .db-sec-val.high { color: var(--accent-red, #ef5350); }
+  .db-sec-val.low { color: var(--accent-orange, #ffa726); }
+  .db-sec-sep { color: var(--text-light, #566880); margin: 0 2px; }
+
   /* 輸入區雙 tab */
   .input-tabs {
     display: flex;
@@ -907,6 +1001,9 @@
 
     <!-- ── 上方警示橫條（異常但未自動診斷） ── -->
     <div id="warningBanner" style="display:none"></div>
+
+    <!-- ── 疾病區塊：DM / Lipid / Thyroid（如果有對應 lab 才顯示） ── -->
+    <div id="diseaseBlocks" style="display:none"></div>
 
     <!-- ── 結果區：Obj 左 / Dx 右 ── -->
     <div class="result-grid" id="resultGrid" style="display:none">
@@ -5410,6 +5507,7 @@ const state = {
   freeTextDxRaw: [],
   unknown: [],
   history: {},   // { 'HbA1c': [{date, value, flag}, ...], ... }
+  diseaseBlocks: {},  // { dm: {block, primary[], secondary[]}, lipid: {...}, thyroid: {...} }
 };
 
 function escHtml(s) {
@@ -5489,6 +5587,8 @@ function runParse() {
 
   // 3) 用歷史 enrich integrated（加 timeline 屬性）
   enrichWithHistory(state.integrated, state.history);
+  // 4) 把 lab 依疾病分組
+  state.diseaseBlocks = groupByDisease(state.integrated, state.history);
 
   renderResults(results.length);
 }
@@ -5574,6 +5674,149 @@ function enrichWithHistory(integrated, history) {
     unique.sort((a, b) => (a.date || '').localeCompare(b.date || ''));
     item.timeline = unique;
   }
+}
+
+// 渲染疾病區塊 HTML
+function renderDiseaseBlocks(blocks) {
+  let html = '<div class="disease-blocks-wrap">';
+  for (const [_id, data] of Object.entries(blocks)) {
+    const { block, primary, secondary } = data;
+    html += `<div class="disease-block">
+      <div class="disease-block-header">
+        <span class="disease-block-icon">${block.icon}</span>
+        <span class="disease-block-label">${block.label}</span>
+      </div>`;
+
+    // 主指標 + timeline
+    if (primary.length > 0) {
+      for (const item of primary) {
+        html += renderDiseaseLabItem(item, true);
+      }
+    }
+
+    // 副 lab — 緊湊一行
+    if (secondary.length > 0) {
+      const sec = secondary.map(item => {
+        const value = displayValue(item);
+        const unit = (item.def && item.def.unit) ? ` ${item.def.unit}` : '';
+        const flag = item.flag;
+        const flagCls = (flag === 'H' || flag === 'HH') ? 'high'
+                      : (flag === 'L' || flag === 'LL') ? 'low' : '';
+        return `<span class="db-sec-item"><span class="db-sec-name">${escHtml(item.key)}</span> <span class="db-sec-val ${flagCls}">${escHtml(value)}${escHtml(unit)}</span>${flag !== 'OK' ? ` <span class="flag ${flag.toLowerCase()}">${flag}</span>` : ''}</span>`;
+      }).join('<span class="db-sec-sep"> · </span>');
+      html += `<div class="disease-block-secondary">${sec}</div>`;
+    }
+
+    html += '</div>';
+  }
+  html += '</div>';
+  return html;
+}
+
+// 渲染單一個疾病區塊內的 primary lab item（含 timeline）
+function renderDiseaseLabItem(item, isPrimary) {
+  const value = displayValue(item);
+  const unit = (item.def && item.def.unit) ? ` ${item.def.unit}` : '';
+  const flag = item.flag;
+  const valCls = (flag === 'H' || flag === 'HH') ? 'high'
+               : (flag === 'L' || flag === 'LL') ? 'low' : '';
+
+  let html = `<div class="db-primary-row">
+    <span class="db-primary-name">${escHtml(item.key)}</span>
+    <span class="db-primary-val ${valCls}">${escHtml(value)}${escHtml(unit)}</span>
+    ${flag !== 'OK' ? `<span class="flag ${flag.toLowerCase()}">${flag === 'HH' ? 'H!' : flag === 'LL' ? 'L!' : flag}</span>` : ''}
+  </div>`;
+
+  // Timeline
+  if (item.timeline && item.timeline.length > 1) {
+    const allValues = item.timeline.map(t => parseFloat(t.value)).filter(v => !isNaN(v));
+    const arrow = computeTrendArrow(allValues);
+    html += `<div class="db-timeline">
+      <span class="db-timeline-arrow">${arrow}</span>
+      ${item.timeline.map(t => {
+        const flagStr = t.flag ? ` <span class="flag ${t.flag.toLowerCase()}">${t.flag}</span>` : '';
+        const curMark = t.isCurrent ? ' <span class="db-current-mark">←現在</span>' : '';
+        return `<div class="db-timeline-row"><span class="db-timeline-date">${fmtYearMonth(t.date)}</span> <span class="db-timeline-value">${escHtml(t.value)}</span>${flagStr}${curMark}</div>`;
+      }).join('')}
+    </div>`;
+  }
+  return html;
+}
+
+// 渲染疾病區塊 HTML（end）
+const DISEASE_BLOCKS = [
+  {
+    id: 'dm',
+    label: '糖尿病控制',
+    icon: '🩸',
+    primary: ['HbA1c'],               // 主要監控指標
+    secondary: ['GLU AC', 'GLU PC', 'GLU random', 'eGFR', 'ALT', 'U-Microalbumin'],  // 副 lab
+  },
+  {
+    id: 'lipid',
+    label: '血脂控制',
+    icon: '💧',
+    primary: ['LDL-C', 'TC'],
+    secondary: ['HDL-C', 'TG', 'ALT', 'AST', 'CK'],
+  },
+  {
+    id: 'thyroid',
+    label: '甲狀腺控制',
+    icon: '🦋',
+    primary: ['TSH'],
+    secondary: ['Free T4', 'Free T3', 'Microsomal Ab', 'Thyroglobulin Ab', 'Anti-TSH receptor'],
+  },
+];
+
+// 把 integrated lab 分組到疾病區塊
+// 注意：同一個 lab 可能屬於多個區塊（例如 ALT 既屬 DM 又屬 Lipid 監測）→ 都列出來
+// 返回：{ dm: { primary: [...], secondary: [...] }, lipid: {...}, thyroid: {...} }
+function groupByDisease(integrated, history) {
+  const result = {};
+  for (const block of DISEASE_BLOCKS) {
+    const primaryItems = [];
+    const secondaryItems = [];
+
+    // 從 integrated 找
+    for (const item of integrated) {
+      if (block.primary.includes(item.key)) {
+        primaryItems.push(item);
+      } else if (block.secondary.includes(item.key)) {
+        secondaryItems.push(item);
+      }
+    }
+
+    // 從 history 找（這次 LIS 沒抓到、但歷史有的）
+    // 為這些 history-only item 建虛擬 integrated entry（沒有 isCurrent value）
+    for (const key of [...block.primary, ...block.secondary]) {
+      if (history[key] && !integrated.find(i => i.key === key)) {
+        // 從 history 抽出這個 lab 的最新值當作「主值」（但沒 isCurrent）
+        const arr = history[key];
+        const latest = arr[arr.length - 1];
+        const virtual = {
+          key,
+          num: parseFloat(latest.value) || null,
+          qual: latest.value,
+          flag: latest.flag || 'OK',
+          sampledAt: latest.date,
+          fromHistoryOnly: true,
+          timeline: arr.map(h => ({ ...h, isCurrent: false })),
+          def: { unit: '', is_qual: false },
+        };
+        if (block.primary.includes(key)) primaryItems.push(virtual);
+        else secondaryItems.push(virtual);
+      }
+    }
+
+    if (primaryItems.length > 0 || secondaryItems.length > 0) {
+      result[block.id] = {
+        block,
+        primary: primaryItems,
+        secondary: secondaryItems,
+      };
+    }
+  }
+  return result;
 }
 
 function renderResults(totalParsed) {
@@ -5783,6 +6026,15 @@ function renderResults(totalParsed) {
     warningBanner.style.display = '';
   } else {
     warningBanner.style.display = 'none';
+  }
+
+  // ── 渲染疾病區塊（DM / Lipid / Thyroid） ──
+  const diseaseEl = $('diseaseBlocks');
+  if (state.diseaseBlocks && Object.keys(state.diseaseBlocks).length > 0) {
+    diseaseEl.innerHTML = renderDiseaseBlocks(state.diseaseBlocks);
+    diseaseEl.style.display = '';
+  } else {
+    diseaseEl.style.display = 'none';
   }
 
   // ── 渲染 Diagnosis 到 dxArea ──
@@ -6098,9 +6350,11 @@ $('clearBtn').addEventListener('click', () => {
   state.demographics = { name: null, chartNo: null, sex: null, age: null, birthDate: null };
   state.integrated = []; state.skipped = []; state.dx = []; state.unknown = []; state.freeTextDx = []; state.freeTextDxRaw = [];
   state.history = {};   // 清掉歷史資料
+  state.diseaseBlocks = {};
   $('resultMeta').style.display = 'none';
   $('resultGrid').style.display = 'none';
   $('warningBanner').style.display = 'none';
+  $('diseaseBlocks').style.display = 'none';
   $('emptyState').style.display = '';
   $('emptyState').innerHTML = `<div class="big">🧪</div>貼上檢驗結果後按「解析」`;
   // 展開輸入區
